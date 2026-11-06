@@ -30,6 +30,11 @@ button{font:inherit;color:inherit}
 
 /* ---------- HUD ---------- */
 #hud{position:fixed;inset:0;pointer-events:none;font-family:var(--f-hud)}
+#stress{position:fixed;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 140px 40px rgba(255,61,40,.6);transition:opacity .2s}
+#stress.on{animation:stressPulse .42s ease-in-out infinite alternate}
+@keyframes stressPulse{from{opacity:.35}to{opacity:1}}
+.follow .aggr{display:inline-block;width:96px;height:8px;margin-left:12px;border-radius:4px;background:rgba(255,255,255,.16);vertical-align:middle;overflow:hidden}
+.follow .aggr b{display:block;height:100%;width:0;background:var(--blaze);transition:width .2s}
 .tl{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));padding:10px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:172px}
 .clock{font:700 36px/1 var(--f-hud);font-variant-numeric:tabular-nums;letter-spacing:.01em}
 .clock small{font-size:17px;color:var(--muted);margin-left:5px;font-weight:600}
@@ -341,6 +346,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 <div class="toast panel" id="toast"></div>
 
 <div id="hud" hidden>
+  <div id="stress"></div>
   <div class="tl panel">
     <div class="clock" id="clock">6:00<small>AM</small></div>
     <div class="wx" id="wxLbl">Clear skies</div>
@@ -366,7 +372,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
       <div><span class="lbl">Bottom</span><b id="sBottom">0.0 m</b></div>
     </div>
     <canvas id="trace" width="600" height="150" hidden></canvas>
-    <div class="follow" id="followLbl" hidden>Fish following</div>
+    <div class="follow" id="followLbl" hidden><span id="aggrTxt">Fish following</span><i class="aggr"><b id="aggrFill"></b></i></div>
   </div>
   <div class="bc">
     <div class="power panel" id="powerBox" hidden>
@@ -991,7 +997,7 @@ const Snd=(()=>{
     splash(s=1){noise(.3+.3*s,1600,260,.7,.32*Math.min(1.6,s));noise(.16,4200,1500,1,.12*s,'highpass');},
     whoosh(){noise(.42,300,2600,2,.13);},
     click(){tone(1700+Math.random()*400,.018,'square',.025);},
-    drag(){noise(.045,3600,3000,7,.09);tone(2500+Math.random()*300,.025,'square',.02);},
+    drag(k=1){noise(.045,3600*k,3000*k,7,.09);tone((2500+Math.random()*300)*k,.025,'square',.02);},
     pop(){noise(.13,900,380,3,.32);tone(230,.08,'sine',.12,0,.5);},
     bite(){tone(150,.2,'sine',.38,0,.55);noise(.08,600,300,2,.2);},
     snap(){noise(.09,5200,2000,1,.45,'highpass');tone(900,.16,'triangle',.18,0,.3);},
@@ -1149,6 +1155,25 @@ const Touch=(()=>{
       vis('#tTop',boat);document.body.classList.toggle('busy',fight||charge);}
   };
 })();
+/* =================== MOUSE =================== */
+// Mouse for browser players, written into the same virtual controller as keyboard, pad and touch:
+// left click = A (hold to cast, set the hook, land), right button = reel while fishing (drag to look on the boat),
+// wheel or middle click = twitch / pump, drag with the left button = look and aim.
+const Mouse=(()=>{
+  const st={a:0,rt:0,dx:0,dy:0,pulse:0};let drag=-1,lx=0,ly=0;
+  const gl=$('#gl');const fishing=()=>['retrieve','bite','fight','return'].includes(G.phase);
+  gl.addEventListener('contextmenu',e=>e.preventDefault());
+  gl.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||G.screen!=='game')return;Snd.init();Input.setDev('kb');lx=e.clientX;ly=e.clientY;
+    if(e.button===0){st.a=1;drag=0;}
+    else if(e.button===2){if(fishing())st.rt=1;else drag=2;}
+    else if(e.button===1){e.preventDefault();st.pulse=2;}});
+  addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||drag<0)return;st.dx+=e.clientX-lx;st.dy+=e.clientY-ly;lx=e.clientX;ly=e.clientY;});
+  addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')return;if(e.button===0)st.a=0;if(e.button===2)st.rt=0;if(e.button===drag)drag=-1;});
+  addEventListener('blur',()=>{st.a=st.rt=0;drag=-1;});
+  gl.addEventListener('wheel',e=>{if(G.screen!=='game')return;e.preventDefault();if(st.pulse===0)st.pulse=2;},{passive:false});
+  return{st,apply(s,dt){if(st.a)s.a=1;if(st.rt)s.rt=Math.max(s.rt,st.rt);if(st.pulse>0){if(st.pulse===2)s.rb=1;st.pulse--;}
+    if(st.dx||st.dy){const k=.0045/(1.9*Math.max(dt,1/120));s.rx+=st.dx*k;s.ry+=st.dy*k*.6;st.dx=st.dy=0;}}};
+})();
 /* =================== INPUT =================== */
 const Input=(()=>{
   const keys=new Set();let dev='kb',pad=null,blocked=false;
@@ -1180,7 +1205,7 @@ const Input=(()=>{
     if(K('ArrowLeft'))s.rx=-1;if(K('ArrowRight'))s.rx=1;if(K('ArrowUp'))s.ry=-1;if(K('ArrowDown'))s.ry=1;
     if(K('KeyF')||K('ShiftLeft')||K('ShiftRight'))s.rt=1;if(K('KeyG'))s.lt=1;
     for(const c of keys){const m=KM[c];if(m)s[m]=1;}
-    Touch.apply(s,dt);
+    Touch.apply(s,dt);Mouse.apply(s,dt);
     for(const k of B)p[k]=!!(s[k]&&!prev[k]);
     let d=null;
     if(s.up||s.ly<-.6)d='up';else if(s.down||s.ly>.6)d='down';else if(s.left||s.lx<-.6)d='left';else if(s.right||s.lx>.6)d='right';
@@ -1198,7 +1223,7 @@ const GLYPH={
   xbox:{a:'A',b:'B',x:'X',y:'Y',lb:'LB',rb:'RB',lt:'LT',rt:'RT',ls:'L stick',rs:'R stick',start:'Menu',back:'View'},
   ps:{a:'✕',b:'○',x:'□',y:'△',lb:'L1',rb:'R1',lt:'L2',rt:'R2',ls:'L stick',rs:'R stick',start:'Options',back:'Create'},
   touch:{a:'Cast',b:'Reel in',x:'Cam',y:'Tackle',lb:'◀',rb:'Twitch',lt:'Give line',rt:'Reel',ls:'Stick',rs:'Drag',start:'Menu',back:'Aquarium'},
-  kb:{a:'Space',b:'Backspace',x:'R',y:'T',lb:'Q',rb:'E',lt:'G',rt:'F',ls:'W A S D',rs:'Arrows',start:'Esc',back:'M'},
+  kb:{a:'Space · Click',b:'Backspace',x:'R',y:'T',lb:'Q',rb:'E · Wheel',lt:'G',rt:'F · Right-click',ls:'W A S D',rs:'Arrows · Drag',start:'Esc',back:'M'},
 };
 function key(id){const d=Input.dev;const t=GLYPH[d][id];let c='';if(['a','b','x','y'].includes(id)){if(d==='xbox')c=' x'+id;else if(d==='ps')c=' p'+id;}return`<span class="key${c}">${t}</span>`;}
 
@@ -2484,7 +2509,7 @@ function updHUD(dt){
   const L=G.lure,lu=LURE();
   $('#powerBox').hidden=G.phase!=='charge';
   if(G.phase==='charge'){const d=castDist();$('#powerFill').style.width=(G.power*100)+'%';$('#powerTxt').textContent=d.toFixed(0)+' m';}
-  const F=G.fight;$('#fightBox').hidden=!F;
+  const F=G.fight;$('#fightBox').hidden=!F;$('#stress').classList.toggle('on',!!F&&F.T>.92&&G.phase==='fight');
   if(F){const t=clamp(F.T,0,1.1);$('#tFill').style.width=(clamp(t,0,1)*100)+'%';$('#tMark').style.left=(clamp(t,0,1)*100)+'%';
     $('#tFill').style.background=t>.92?'var(--danger)':t>.75?'var(--warn)':t<.08?'var(--slack)':'var(--chart)';
     $('#tBar').style.boxShadow=F.breakM>.05?`0 0 ${8+F.breakM*20}px rgba(255,77,61,${.3+F.breakM*.6})`:F.slackM>.05?`0 0 ${8+F.slackM*20}px rgba(95,183,255,${.3+F.slackM*.6})`:'none';
@@ -2502,7 +2527,8 @@ function updHUD(dt){
   $('#sLine').textContent=lineOut.toFixed(1)+' m';
   $('#sDepth').textContent=(F?Math.max(0,-F.f.y):inW?Math.max(0,-L.y):0).toFixed(1)+' m';
   $('#sBottom').textContent=Math.max(0,inW?depthAt(L.x,L.z):F?depthAt(F.f.x,F.f.z):depthAt(G.boat.x,G.boat.z)).toFixed(1)+' m';
-  $('#followLbl').hidden=!(G.follower&&G.phase==='retrieve');$('#trace').hidden=!inW;if(inW)drawTrace();
+  $('#followLbl').hidden=!(G.follower&&G.phase==='retrieve');
+  if(G.follower){const a=G.follower.aggr||0;$('#aggrFill').style.width=(a*100)+'%';$('#aggrTxt').textContent=a<.35?'Fish following':a<.7?'Getting interested':'About to strike!';}$('#trace').hidden=!inW;if(inW)drawTrace();
   if(F){const st=F.T>1?'Breaking!':F.T>.92?'Drag slipping':F.T>.75?'Heavy':F.T<.08?'Slack!':F.st==='tired'?'Fish tired':'Good';$('#tState').textContent=st;
     $('#fDist').textContent=F.D.toFixed(1)+' m';
     $('#steerLbl').innerHTML=F.st==='jump'?'Jumping! Let go of the reel':(F.st==='run'||F.st==='dive')?`Running ${F.side>0?'right':'left'}. Push ${key('ls')} ${F.side>0?'left':'right'}`:F.landReady?`Close and tired. Press ${key('a')} to land it`:F.st==='tired'?'It gave up. Reel it in before it recovers':F.st==='rest'?`Catching its breath. ${key('rb')} pump and reel`:F.st==='charge'?'Swimming at you. Reel fast to take up slack':'';}
@@ -2561,7 +2587,7 @@ function landLure(){
   G.phase='retrieve';L.recent=0;L.idle=0;L.since=9;L.sinceLand=0;L.reeled=false;L.reelDist=0;L.trace=[];L.trT=0;L.impX=L.impZ=L.impY=0;L.defl=0;
   for(const fi of fishes){if(fi.state!=='wander'||fi.cool>0)continue;const dd=Math.hypot(fi.x-L.x,fi.z-L.z);
     if(dd<1.4&&(lu.noise>9||fi.ratio>.5)&&Math.random()<.5){fi.state='flee';fi.timer=2.5;fi.cool=12;}
-    else if(dd<6.5&&!G.follower&&Math.random()<(lu.pref[fi.sp]||0)*.75*activity()){fi.state='follow';fi.followT=0;fi.maxFollow=rnd(4,9);G.follower=fi;}}
+    else if(dd<6.5&&!G.follower&&Math.random()<(lu.pref[fi.sp]||0)*.75*activity()){fi.state='follow';fi.aggr=0;fi.followT=0;fi.maxFollow=rnd(4,9);G.follower=fi;}}
 }
 function startReturn(){G.phase='return';if(G.follower){loseFollower();}}
 function toBoat(){Music.setMode('calm');G.phase='boat';G.follower=null;G.biteFish=null;G.fight=null;reticle.visible=false;G.lockA=true;}
@@ -2581,8 +2607,9 @@ function engage(){
   if(G.follower){
     const f=G.follower;const dB=Math.hypot(L.x-G.boat.x,L.z-G.boat.z);
     if(f.followT>f.maxFollow||dB<4.5){loseFollower();return;}
-    const p=.13*triggerMult()*(.5+(lu.pref[f.sp]||0))*actionMult()*colorMult();
-    if(Math.random()<p){f.state='strike';}
+    const am=actionMult(),p=.13*triggerMult()*(.5+(lu.pref[f.sp]||0))*am*colorMult();
+    f.aggr=clamp((f.aggr||0)+p*.9-(am<.7?.03:0),0,1);
+    if(f.aggr>=1||Math.random()<p*.4){f.state='strike';}
     return;
   }
   const act=actionMult(),col=colorMult(),tm=activity();let best=null,bp=0;
@@ -2593,11 +2620,11 @@ function engage(){
     let p=pref*act*col*tm*wary*(1-eff/rad*.5)*.8;
     if(lu.cat==='top'&&(G.light<.65||W.cov>.6))p*=1.35;if(W.rain&&lu.noise>7.5)p*=1.15;if(lu.shape==='frog'&&f.zone==='lily')p*=1.3;if(lu.shape==='swim'&&f.ratio<.15)p*=.7;
     if(p>bp){bp=p;best=f;}}
-  if(best&&Math.random()<bp){best.state='follow';best.followT=0;best.maxFollow=rnd(4,9);G.follower=best;}
+  if(best&&Math.random()<bp){best.state='follow';best.aggr=0;best.followT=0;best.maxFollow=rnd(4,9);G.follower=best;}
 }
 function doBite(f){
   const lu=LURE();G.phase='bite';G.biteFish=f;G.biteT=lu.cat==='top'?.95:lu.cat==='bottom'?1.6:1.2;G.biteT0=G.biteT;f.state='bite';G.follower=null;
-  if(lu.cat==='top'){splash(G.lure.x,G.lure.z,1.3);Snd.splash(1.2);banner('BLOW-UP!','hot');}else{banner('BITE!','hot');bubble(G.lure.x,G.lure.y,G.lure.z,10,.15);}
+  if(lu.cat==='top'){splash(G.lure.x,G.lure.z,1.3);Snd.splash(1.2);banner('BLOW-UP!','hot','Press '+key('a')+' now!');}else{banner('BITE!','hot','Press '+key('a')+' now!');bubble(G.lure.x,G.lure.y,G.lure.z,10,.15);}
   Snd.bite();rumble(.7,.4,200);G.rodJerk=-.6;
 }
 function missBite(){const f=G.biteFish;if(f){f.state='flee';f.timer=2.5;f.cool=rnd(18,30);}G.biteFish=null;G.phase='retrieve';banner('Missed it','bad','Set the hook faster');Snd.fail();}
@@ -2699,7 +2726,7 @@ function updFight(dt,I,P){
   // line in and out
   const reelSpd=reel*2.6*(active?Math.max(.15,1-.8*pn*ef*(vF>0?1:.3)):1);
   let dD=vF*dt-reelSpd*dt;if(give>0&&vF>0)dD+=give*(.4+vF*.5)*dt;
-  if(F.T>.92){dD+=(F.T-.92)*6*dt;if(Math.random()<dt*14)Snd.drag();}
+  if(F.T>.92){dD+=(F.T-.92)*6*dt;if(Math.random()<dt*14)Snd.drag(1+clamp((F.T-.92)/.12,0,1)*.2);}
   else if(reel>.05&&Math.random()<dt*reel*16)Snd.click();
   const nD=clamp(F.D+dD,1.3,75),nA=F.ang+lat/Math.max(3,F.D)*dt;
   const nx=b.x+Math.cos(nA)*nD,nz=b.z+Math.sin(nA)*nD;
@@ -2742,7 +2769,7 @@ function updFish(dt){
     let tx=f.tx,tz=f.tz,ty=f.ty,spd=.45;
     if(f.state==='wander'){if(f.timer<=0||Math.hypot(f.x-f.tx,f.z-f.tz)<1)newWanderTarget(f);tx=f.tx;tz=f.tz;ty=f.ty;spd=.35+.25*activity();
       if(G.boat.speed>4&&Math.hypot(f.x-G.boat.x,f.z-G.boat.z)<7){f.state='flee';f.timer=2;f.cool=8;}}
-    else if(f.state==='follow'){f.followT+=dt;const dx=G.boat.x-L.x,dz=G.boat.z-L.z,d=Math.hypot(dx,dz)||1;tx=L.x-dx/d*(.35+f.len*.7);tz=L.z-dz/d*(.35+f.len*.7);ty=Math.min(L.y-.05,-.15);spd=Math.max(.6,L.recent+.6);
+    else if(f.state==='follow'){f.followT+=dt;const dx=G.boat.x-L.x,dz=G.boat.z-L.z,d=Math.hypot(dx,dz)||1;const gap=(.35+f.len*.7)*(1-.55*(f.aggr||0));tx=L.x-dx/d*gap;tz=L.z-dz/d*gap;ty=Math.min(L.y-.05,-.15);spd=Math.max(.6,L.recent+.6);
       if(G.phase!=='retrieve'||!G.follower){f.state='wander';f.cool=10;}}
     else if(f.state==='strike'){tx=L.x;tz=L.z;ty=Math.min(L.y,-.1);spd=4.5;if(Math.hypot(f.x-L.x,f.z-L.z)<.15+f.len*.45&&Math.abs(f.y-L.y)<.6){doBite(f);}
       if(G.phase!=='retrieve'&&G.phase!=='bite'){f.state='wander';}}
