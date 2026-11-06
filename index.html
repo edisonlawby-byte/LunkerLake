@@ -119,7 +119,16 @@ button{font:inherit;color:inherit}
 .btn.nav-focus span,.btn:focus-visible span{color:rgba(37,12,2,.75)}
 .btn.small{font-size:16px;padding:8px 14px}
 .btn.row{flex-direction:row;align-items:center;justify-content:space-between}
-.title-screen{background:linear-gradient(180deg,rgba(4,12,10,0) 30%,rgba(4,12,10,.78));place-items:end start}
+.title-screen{background:radial-gradient(ellipse 60% 75% at 50% 55%,rgba(4,12,10,.62),rgba(4,12,10,.12) 75%);place-items:center}
+.title-screen .twrap{width:min(600px,100%);align-items:center;text-align:center}
+.title-screen .ribbon{align-self:center}
+.title-screen .logo{font-size:clamp(56px,min(13vw,13vh),124px)}
+.title-screen .tag{font-size:17px;max-width:58ch}
+.title-screen .menu{width:100%;gap:8px}
+.title-screen .btn{align-items:center;text-align:center;font-size:23px;padding:11px 22px}
+.title-screen .btn span{font-size:15px}
+.title-screen .btn.nav-focus,.title-screen .btn:focus-visible{transform:scale(1.03)}
+.title-screen .foot{align-items:center}
 .twrap{display:flex;flex-direction:column;gap:14px;width:min(460px,100%);padding-bottom:12px}
 .ribbon{align-self:flex-start;font:700 13px var(--f-hud);letter-spacing:.2em;text-transform:uppercase;color:var(--blaze-ink);background:var(--chart);padding:5px 10px;border-radius:3px}
 .logo{font:400 clamp(58px,13vw,112px)/.86 var(--f-display);margin:0;color:var(--text);text-shadow:0 4px 0 #8a2d0a,0 10px 30px rgba(0,0,0,.5);letter-spacing:.01em}
@@ -521,6 +530,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
         <div class="lbl">Sound</div><div class="seg"><button class="nav" data-set="sound:on">On</button><button class="nav" data-set="sound:off">Off</button></div>
         <div class="lbl">Controller vibration</div><div class="seg"><button class="nav" data-set="rumble:on">On</button><button class="nav" data-set="rumble:off">Off</button></div>
         <div class="lbl">Music</div><div class="seg"><button class="nav" data-set="music:off">Off</button><button class="nav" data-set="music:low">Low</button><button class="nav" data-set="music:med">Medium</button><button class="nav" data-set="music:high">High</button></div>
+        <div class="lbl">Weather</div><div class="seg"><button class="nav" data-set="weather:natural">Natural</button><button class="nav" data-set="weather:clear">Clear</button><button class="nav" data-set="weather:cloudy">Cloudy</button><button class="nav" data-set="weather:mist">Mist</button><button class="nav" data-set="weather:rain">Rain</button></div>
         <div class="lbl">Weight units</div><div class="seg"><button class="nav" data-set="units:lb">lb / in</button><button class="nav" data-set="units:kg">kg / cm</button></div></div>
       <div class="sgroup wide"><h3>Controls</h3><table class="htbl" id="setCtl"></table></div>
     </div>
@@ -974,6 +984,7 @@ function fmtL(cm){return kgMode()?cm.toFixed(1)+' cm':(cm/2.54).toFixed(1)+' in'
 function fmtL2(cm){return kgMode()?(cm/2.54).toFixed(1)+' in':cm.toFixed(1)+' cm';}
 
 /* =================== AUDIO =================== */
+const RAIN_VOL=.022;
 const Snd=(()=>{
   let ctx=null,master=null,nb=null,amb=null,rainG=null,rainLvl=0;
   function init(){
@@ -983,7 +994,7 @@ const Snd=(()=>{
       master=ctx.createGain();master.gain.value=save.settings.sound?.55:0;master.connect(ctx.destination);
       nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
       const s=ctx.createBufferSource();s.buffer=nb;s.loop=true;const f=ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=380;amb=ctx.createGain();amb.gain.value=.04;s.connect(f);f.connect(amb);amb.connect(master);s.start();
-      const s2=ctx.createBufferSource();s2.buffer=nb;s2.loop=true;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=1500;rainG=ctx.createGain();rainG.gain.value=rainLvl*.06;s2.connect(hp);hp.connect(rainG);rainG.connect(master);s2.start(0,.7);
+      const s2=ctx.createBufferSource();s2.buffer=nb;s2.loop=true;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=350;const lp2=ctx.createBiquadFilter();lp2.type='lowpass';lp2.frequency.value=2600;lp2.Q.value=.4;rainG=ctx.createGain();rainG.gain.value=rainLvl*RAIN_VOL;s2.connect(hp);hp.connect(lp2);lp2.connect(rainG);rainG.connect(master);s2.start(0,.7);
     }catch(e){ctx=null;}
   }
   const ok=()=>ctx&&ctx.state==='running'&&save.settings.sound;
@@ -1006,7 +1017,7 @@ const Snd=(()=>{
     ui(){tone(900,.035,'sine',.05);},
     thump(s=1){tone(68,.28,'sine',.36*s,0,.55);noise(.14,420,120,1,.14*s,'lowpass');},
     chime(){tone(1320,.12,'sine',.07);tone(1760,.16,'sine',.05,.06);},
-    rain(v){rainLvl=v;if(rainG)rainG.gain.value=v*.06;},
+    rain(v){rainLvl=v;if(rainG)rainG.gain.setTargetAtTime(v*RAIN_VOL,ctx.currentTime,.8);},
     chirp(){const r=RG.id;
       if(r==='nw'){if(Math.random()<.35){tone(560,.9,'sine',.03,0,1.5);tone(840,1.2,'sine',.028,.85,.75);}else{const f=rnd(3000,3800);tone(f,.12,'sine',.025,0,.8);tone(f*.8,.18,'sine',.022,.16,.9);}return;}
       if(r==='sea'){if(Math.random()<.5){noise(1.6,6200,6000,9,.02,'bandpass');}else{const f=rnd(1600,2200);for(let k=0;k<3;k++)tone(f*(1+k*.12),.09,'sine',.03,k*.13,1.1);}return;}
@@ -3073,8 +3084,8 @@ function openScreen(id){
   requestAnimationFrame(()=>Nav.def());
 }
 function closeToGame(){G.inGame=true;G.screen='game';showOnly('none');$('#hud').hidden=false;G.lockA=true;Nav.cur=null;promptKey='';}
-function getSet(k){const st=save.settings;switch(k){case 'quality':return st.quality;case 'cam':return st.cam||'big';case 'shadow':return st.shadow===false?'off':'on';case 'look':return st.look||'normal';case 'invert':return st.invert?'on':'off';case 'sound':return st.sound?'on':'off';case 'rumble':return st.rumble?'on':'off';case 'units':return kgMode()?'kg':'lb';case 'music':return st.music||'med';}}
-function applySet(k,v){const st=save.settings;switch(k){case 'quality':setQuality(v,true);break;case 'cam':st.cam=v;break;case 'shadow':st.shadow=v==='on';break;case 'look':st.look=v;break;case 'invert':st.invert=v==='on';break;case 'sound':st.sound=v==='on';Snd.setOn(st.sound);break;case 'rumble':st.rumble=v==='on';if(st.rumble)rumble(.6,.6,200);break;case 'units':st.units=v;renderWell();break;case 'music':st.music=v;Music.setVol();break;}persist();syncSettings();}
+function getSet(k){const st=save.settings;switch(k){case 'quality':return st.quality;case 'cam':return st.cam||'big';case 'shadow':return st.shadow===false?'off':'on';case 'look':return st.look||'normal';case 'invert':return st.invert?'on':'off';case 'sound':return st.sound?'on':'off';case 'rumble':return st.rumble?'on':'off';case 'units':return kgMode()?'kg':'lb';case 'music':return st.music||'med';case 'weather':return st.weather||'natural';}}
+function applySet(k,v){const st=save.settings;switch(k){case 'quality':setQuality(v,true);break;case 'cam':st.cam=v;break;case 'shadow':st.shadow=v==='on';break;case 'look':st.look=v;break;case 'invert':st.invert=v==='on';break;case 'sound':st.sound=v==='on';Snd.setOn(st.sound);break;case 'rumble':st.rumble=v==='on';if(st.rumble)rumble(.6,.6,200);break;case 'units':st.units=v;renderWell();break;case 'music':st.music=v;Music.setVol();break;case 'weather':st.weather=v;if(G.inGame||G.screen!=='title')setWeather(pickWeather());break;}persist();syncSettings();}
 function syncSettings(){$$('[data-set]').forEach(b=>{const [k,v]=b.dataset.set.split(':');b.classList.toggle('on',getSet(k)===v);});}
 let settingsFrom='title';
 function openSettings(){settingsFrom=G.screen;$('#setCtl').innerHTML=ctlRowsHtml();syncSettings();openScreen('settings');}
@@ -3088,7 +3099,7 @@ function startMode(mode){
   populate();setTOD(G.hour);renderWell();openSpots('start');
 }
 function setWeather(id){G.weather=id;W=WEATHERS[id];U.cov.value=W.cov;U.rain.value=W.rain;U.wind.value=W.wind;U.waveAmp.value=W.amp;Snd.rain(W.rain);}
-function pickWeather(){const t=RG.weather;let q=Math.random()*100;for(const[k,w]of t){q-=w;if(q<=0)return k;}return 'clear';}
+function pickWeather(){const fx=save.settings.weather;if(fx&&fx!=='natural'&&WEATHERS[fx])return fx;const t=RG.weather;let q=Math.random()*100;for(const[k,w]of t){q-=w;if(q<=0)return k;}return 'clear';}
 function pickTarget(){const t=RG.targets;let q=Math.random()*t.reduce((a,b)=>a+b[1],0);for(const[s,w]of t){q-=w;if(q<=0)return s;}return t[0][0];}
 function cycleCam(){const o=['full','big','small','off'],nm={full:'Underwater',big:'Big inset',small:'Small inset',off:'Off'};const c=save.settings.cam||'big';save.settings.cam=o[(o.indexOf(c)+1)%o.length];persist();toast('Fishing camera: '+nm[save.settings.cam]);syncSettings();}
 function spotAt(x,z){let b=null,bd=1e9;for(const id of SPOT_IDS){const zn=ZBY[id];const d=Math.hypot(x-zn.x,z-zn.z)/(zn.r*1.7);if(d<1&&d<bd){bd=d;b=id;}}return b;}
@@ -3142,7 +3153,11 @@ let spotStripT=0;
 function drawSpotStrip(){
   const cv=$('#spotFish'),x=cv.getContext('2d');x.clearRect(0,0,344,52);const id=spotAt(G.boat.x,G.boat.z);
   if(!id){$('#spotCount').textContent='Open water';return;}
-  const here=fishHere(id);here.slice(0,12).forEach((f,i)=>drawFish2D(x,f.sp,15+i*28.5,26,clamp(f.len*70,16,27),{sil:true,silCol:isSpecial(f.sp,id)?'#ff6a2b':'rgba(214,232,222,.85)'}));
+  const here=fishHere(id),groups={};for(const f of here)groups[f.sp]=(groups[f.sp]||0)+1;
+  const sps=Object.keys(groups).sort((a,b)=>groups[b]-groups[a]).slice(0,4),cw=344/Math.max(sps.length,1);
+  x.font='700 22px "Barlow Condensed",sans-serif';x.textBaseline='middle';
+  sps.forEach((sp,i)=>{const col=isSpecial(sp,id)?'#ff6a2b':'rgba(214,232,222,.9)',L=Math.min(fitFishL(sp,cw-46,40),58);
+    drawFish2D(x,sp,i*cw+6+L/2,26,L,{sil:true,silCol:col});x.fillStyle=col;x.textAlign='left';x.fillText('\u00d7'+groups[sp],i*cw+10+L,27);});
   $('#spotCount').textContent=here.length+' fish here'+(G.target?' \u00b7 '+here.filter(f=>isTarget(f.sp)).length+' target':'');
 }
 function cycleLure(d){const n=LURES.length;equipLure((G.lureIdx+d+n)%n);Snd.ui();toast(LURE().name+' · '+COLORS[lureColorId(LURE())].name);}
@@ -3358,7 +3373,7 @@ addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight,false);ca
 
 /* =================== LOOP =================== */
 equipLure(save.settings.lastLure!=null?clamp(save.settings.lastLure,0,LURES.length-1):8);
-setWeather(Math.random()<.5?'clear':'cloudy');
+setWeather(save.settings.weather&&save.settings.weather!=='natural'&&WEATHERS[save.settings.weather]?save.settings.weather:Math.random()<.5?'clear':'cloudy');
 setTOD(6.6);G.hour=6.6;
 let last=performance.now(),padSeen=false,fpsAcc=0,fpsN=0,autoDrops=0;
 function frame(now){
