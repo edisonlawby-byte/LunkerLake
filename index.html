@@ -2273,7 +2273,11 @@ const G={screen:'title',mode:'free',hour:7,time:0,light:1,phase:'boat',camYaw:Ma
 const boat=new THREE.Group();scene.add(boat);
 const angler=new THREE.Group();const rodBase=new THREE.Group();const rodPitch=new THREE.Group();const rodSegs=[];const rodTip=new THREE.Object3D();
 const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
+// boat (original hull) with the angler, outboard and lights drafted with Gemini and adjusted to fit the game
 (function buildBoat(){
+  const lam = c => new THREE.MeshLambertMaterial({color: c});
+  const std = (c, m, r) => new THREE.MeshStandardMaterial({color: c, metalness: m, roughness: r});
+
   const hg=new THREE.BoxGeometry(2.1,.75,5.8,10,3,24);const p=hg.attributes.position;
   for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i);const t=clamp((-z-.4)/2.5,0,1);x*=1-.78*t*t;if(y<0){y+=t*.32;x*=.78+.22*t;}if(y>0)y+=t*.12;p.setXYZ(i,x,y,z);}
   hg.computeVertexNormals();
@@ -2281,9 +2285,6 @@ const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
   const stripe=new THREE.Mesh(hg,new THREE.MeshStandardMaterial({color:0xf2efe6,metalness:.2,roughness:.4}));stripe.scale.set(1.01,.25,1.005);stripe.position.y=.35;boat.add(stripe);
   const dg=new THREE.BoxGeometry(1.9,.06,5.4,10,1,24);const dp=dg.attributes.position;for(let i=0;i<dp.count;i++){const z=dp.getZ(i);const t=clamp((-z-.4)/2.5,0,1);dp.setX(i,dp.getX(i)*(1-.8*t*t));dp.setY(i,dp.getY(i)+t*.12);}dg.computeVertexNormals();
   const deck=new THREE.Mesh(dg,new THREE.MeshLambertMaterial({color:0x2c3a40}));deck.position.y=.5;boat.add(deck);
-  const motor=new THREE.Mesh(new THREE.BoxGeometry(.55,.8,.6),new THREE.MeshStandardMaterial({color:0x1b1d20,metalness:.4,roughness:.35}));motor.position.set(0,.85,3.05);boat.add(motor);
-  const cowl=new THREE.Mesh(new THREE.BoxGeometry(.5,.08,.56),new THREE.MeshStandardMaterial({color:0xd9d4c6,metalness:.2,roughness:.4}));cowl.position.set(0,1.28,3.05);boat.add(cowl);
-  const shaft=new THREE.Mesh(new THREE.BoxGeometry(.16,1,.18),new THREE.MeshLambertMaterial({color:0x222222}));shaft.position.set(0,.1,3.12);boat.add(shaft);
   const cons=new THREE.Mesh(new THREE.BoxGeometry(.7,.6,.5),new THREE.MeshLambertMaterial({color:0xe8e4d8}));cons.position.set(.5,.8,.6);boat.add(cons);
   const wind=new THREE.Mesh(new THREE.BoxGeometry(.66,.3,.02),new THREE.MeshPhongMaterial({color:0x9fc6d6,transparent:true,opacity:.45,shininess:100}));wind.position.set(.5,1.24,.36);wind.rotation.x=-.4;boat.add(wind);
   const wheel=new THREE.Mesh(new THREE.TorusGeometry(.12,.02,6,16),new THREE.MeshLambertMaterial({color:0x222222}));wheel.position.set(.5,1.16,.62);wheel.rotation.x=-.7;boat.add(wheel);
@@ -2295,27 +2296,192 @@ const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
   const tpost=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,1.1,6),tmg);tpost.position.set(.35,.65,-2.5);boat.add(tpost);
   const thead=new THREE.Mesh(new THREE.BoxGeometry(.18,.14,.28),new THREE.MeshLambertMaterial({color:0x1d1f22}));thead.position.set(.35,1.22,-2.5);boat.add(thead);
   for(const s of[-1,1]){const r=new THREE.Mesh(new THREE.CylinderGeometry(.012,.02,2.2,5),new THREE.MeshLambertMaterial({color:0x222222}));r.position.set(.82*s,1.3,2.0);r.rotation.x=.55;r.rotation.z=-.25*s;boat.add(r);}
-  // angler
-  const skin=new THREE.MeshLambertMaterial({color:0xc58b62}),jacket=new THREE.MeshLambertMaterial({color:0x3f5a32}),pants=new THREE.MeshLambertMaterial({color:0x2a2f38}),cap=new THREE.MeshLambertMaterial({color:0xff6a2b});
-  for(const s of[-1,1]){const l=new THREE.Mesh(new THREE.CylinderGeometry(.09,.1,.85,7),pants);l.position.set(.12*s,.43,0);angler.add(l);const shoe=new THREE.Mesh(new THREE.BoxGeometry(.13,.08,.26),new THREE.MeshLambertMaterial({color:0x3b2a1e}));shoe.position.set(.12*s,.04,-.05);angler.add(shoe);}
-  const torso=new THREE.Mesh(new THREE.CylinderGeometry(.2,.24,.7,10),jacket);torso.position.y=1.2;angler.add(torso);
-  const vest=new THREE.Mesh(new THREE.CylinderGeometry(.215,.245,.45,10),new THREE.MeshLambertMaterial({color:0xd9a441}));vest.position.y=1.28;angler.add(vest);
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.06,.07,.1,8),skin);neck.position.y=1.58;angler.add(neck);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.14,14,12),skin);head.position.y=1.72;angler.add(head);
-  const c1=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,.09,14),cap);c1.position.y=1.82;angler.add(c1);
-  const brim=new THREE.Mesh(new THREE.BoxGeometry(.2,.02,.16),cap);brim.position.set(0,1.79,-.17);angler.add(brim);
-  const shades=new THREE.Mesh(new THREE.BoxGeometry(.22,.045,.03),new THREE.MeshPhongMaterial({color:0x111111,shininess:90}));shades.position.set(0,1.74,-.135);angler.add(shades);
-  const armGeo=new THREE.CylinderGeometry(.045,.062,1,7);armGeo.translate(0,.5,0);
-  for(const s of[-1,1]){const m=new THREE.Mesh(armGeo,jacket);angler.add(m);const h=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),skin);angler.add(h);ARMS.push({m,h,sh:new V3(.2*s,1.47,-.06),hand:new V3(0,s>0?-.1:.15,0)});}
-  angler.position.set(0,.53,-1.4);boat.add(angler);
-  rodBase.position.set(.12,1.28,-.45);angler.add(rodBase);rodBase.add(rodPitch);
-  const rm=new THREE.MeshStandardMaterial({color:0x22262a,metalness:.3,roughness:.4}),grip=new THREE.MeshLambertMaterial({color:0x5a4030});
-  const gr=new THREE.Mesh(new THREE.CylinderGeometry(.025,.03,.35,6),grip);gr.position.y=-.1;rodPitch.add(gr);
-  const reel=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.05,12),new THREE.MeshStandardMaterial({color:0x9aa3a8,metalness:.8,roughness:.25}));reel.rotation.z=Math.PI/2;reel.position.set(0,.05,.05);rodPitch.add(reel);
-  let parent=rodPitch;const N=7,sl=.34;
-  for(let i=0;i<N;i++){const seg=new THREE.Group();seg.position.y=i===0?.07:sl;const r0=lerp(.02,.004,i/N),r1=lerp(.02,.004,(i+1)/N);const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r0,sl,5),rm);m.position.y=sl/2;seg.add(m);parent.add(seg);rodSegs.push(seg);parent=seg;}
-  rodTip.position.y=sl;parent.add(rodTip);
-  boat.traverse(o=>{if(o.isMesh)o.castShadow=true;});deck.receiveShadow=true;
+
+  // Outboard Engine
+  const outb = new THREE.Group();
+  outb.position.set(0, 0.7, 3.25);
+  const cowlG = new THREE.SphereGeometry(0.35, 16, 12);
+  cowlG.scale(0.8, 1.2, 1.0);
+  const cowl = new THREE.Mesh(cowlG, std(0x16181b, 0.35, 0.3));
+  outb.add(cowl);
+  const midSect = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.1, 0.8, 8), std(0x111111, 0.2, 0.4));
+  midSect.position.set(0, -0.6, 0.1);
+  outb.add(midSect);
+  const lower = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.3, 0.4), std(0x111111, 0.2, 0.4));
+  lower.position.set(0, -1.1, 0.15);
+  outb.add(lower);
+  const prop = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.1, 8), std(0x888888, 0.8, 0.3));
+  prop.rotation.x = Math.PI / 2;
+  prop.position.set(0, -1.1, 0.35);
+  outb.add(prop);
+  boat.add(outb);
+
+  // pedestal seat on the front deck, just behind where the angler stands
+  { const sg=new THREE.Group();sg.position.set(0,.85,-.75);
+    const ped=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.4,8),std(0x888888,.6,.4));ped.position.y=-.15;sg.add(ped);
+    const sb=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.09,14),lam(0x8a1a1a));sg.add(sb);
+    const bk=new THREE.Mesh(new THREE.BoxGeometry(.38,.26,.08),lam(0x8a1a1a));bk.position.set(0,.18,.15);bk.rotation.x=-.12;sg.add(bk);boat.add(sg); }
+  // Nav Lights
+  const navR = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshBasicMaterial({color: 0xff0000}));
+  navR.position.set(0.3, 1.05, -2.8);
+  boat.add(navR);
+  const navG = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshBasicMaterial({color: 0x00ff00}));
+  navG.position.set(-0.3, 1.05, -2.8);
+  boat.add(navG);
+  const navW = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.8, 6), lam(0xcccccc));
+  navW.position.set(0.8, 1.0, 2.7);
+  const navWBulb = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshBasicMaterial({color: 0xffffff}));
+  navWBulb.position.set(0.8, 1.4, 2.7);
+  boat.add(navW);
+  boat.add(navWBulb);
+
+  // --- ANGLER ---
+  const skin = lam(0xc58b62);
+  const jacket = lam(0x3f5a32);
+  const pants = lam(0x2a2f38);
+  const vest = lam(0xd9a441);
+  const cap = lam(0xff6a2b);
+
+  // Legs & Hips
+  const hips = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 10), pants);
+  hips.scale.set(1, 0.7, 0.8);
+  hips.position.y = 0.85;
+  angler.add(hips);
+
+  for (const s of [-1, 1]) {
+    const legPts = [new V3(0, 0, 0), new V3(0, -0.4, -0.06), new V3(0, -0.85, 0)];
+    const leg = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(legPts), 8, 0.07, 8, false), pants);
+    leg.position.set(0.12 * s, 0.85, 0);
+    angler.add(leg);
+    
+    const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), lam(0x3b2a1e));
+    shoe.scale.set(1, 0.6, 1.8);
+    shoe.position.set(0.12 * s, 0.05, -0.05);
+    angler.add(shoe);
+  }
+
+  // Torso
+  const torsoPts = [];
+  for (let i = 0; i <= 10; i++) torsoPts.push(new THREE.Vector2(0.16 - 0.02 * Math.cos(i / 10 * Math.PI), i / 10 * 0.6));
+  const torso = new THREE.Mesh(new THREE.LatheGeometry(torsoPts, 12), jacket);
+  torso.scale.set(1, 1, 0.7);
+  torso.position.y = 0.85;
+  angler.add(torso);
+
+  // Life Vest
+  const vestMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.45, 12, 1, true, 0, Math.PI * 2), vest);
+  vestMesh.scale.set(1, 1, 0.75);
+  vestMesh.position.y = 1.15;
+  angler.add(vestMesh);
+
+  // Neck & Head
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.15, 10), skin);
+  neck.position.y = 1.48;
+  angler.add(neck);
+  
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 14), skin);
+  head.scale.set(1, 1.1, 1);
+  head.position.y = 1.62;
+  angler.add(head);
+
+  // Nose & Ears
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.06, 8), skin);
+  nose.rotation.x = Math.PI / 2;
+  nose.position.set(0, 1.6, -0.13);
+  angler.add(nose);
+
+  for (const s of [-1, 1]) {
+    const ear = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), skin);
+    ear.scale.set(0.5, 1.2, 1);
+    ear.position.set(0.12 * s, 1.62, 0.02);
+    ear.rotation.y = 0.2 * s;
+    angler.add(ear);
+  }
+
+  // Cap
+  const capDome = new THREE.Mesh(new THREE.SphereGeometry(0.122, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), cap);
+  capDome.position.y = 1.67;
+  angler.add(capDome);
+  
+  const brimCurve = new THREE.CatmullRomCurve3([new V3(-0.1, 0, -0.1), new V3(0, 0.03, -0.22), new V3(0.1, 0, -0.1)]);
+  const brim = new THREE.Mesh(new THREE.TubeGeometry(brimCurve, 8, 0.015, 6, false), cap);
+  brim.position.y = 1.705;
+  angler.add(brim);
+
+  const brimFill = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.02, 12, 1, false, Math.PI, Math.PI), cap);
+  brimFill.scale.set(1, 1, 1.5);
+  brimFill.position.set(0, 1.705, -0.1);
+  angler.add(brimFill);
+
+  // Sunglasses
+  const shadesMat = new THREE.MeshPhongMaterial({color: 0x111111, shininess: 90});
+  for (const s of [-1, 1]) {
+    const lens = new THREE.Mesh(new THREE.SphereGeometry(0.035, 10, 8), shadesMat);
+    lens.scale.set(1.2, 0.8, 0.4);
+    lens.position.set(0.045 * s, 1.64, -0.115);
+    lens.rotation.y = -0.2 * s;
+    angler.add(lens);
+  }
+  const bridge = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.04, 4), shadesMat);
+  bridge.rotation.z = Math.PI / 2;
+  bridge.position.set(0, 1.65, -0.125);
+  angler.add(bridge);
+
+  // Arms
+  const armPts = [];
+  for (let i = 0; i <= 10; i++) armPts.push(new THREE.Vector2(0.035 + 0.015 * Math.sin(i / 10 * Math.PI), i / 10));
+  const armGeo = new THREE.LatheGeometry(armPts, 10);
+  
+  for (const s of [-1, 1]) {
+    const m = new THREE.Mesh(armGeo, jacket);
+    angler.add(m);
+    const h = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), skin);
+    h.scale.set(1, 1, 1.2);
+    angler.add(h);
+    ARMS.push({
+      m, h,
+      sh: new V3(0.22 * s, 1.42, 0),
+      hand: new V3(0, s > 0 ? -0.1 : 0.15, 0)
+    });
+  }
+
+  angler.position.set(0, 0.53, -1.4);
+  boat.add(angler);
+
+  // Rod
+  rodBase.position.set(0.12, 1.28, -0.45);
+  angler.add(rodBase);
+  rodBase.add(rodPitch);
+  
+  const rm = std(0x22262a, 0.3, 0.4);
+  const gr = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.03, 0.35, 8), lam(0x5a4030));
+  gr.position.y = -0.1;
+  rodPitch.add(gr);
+  
+  const reel = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.05, 12), std(0x9aa3a8, 0.8, 0.25));
+  reel.rotation.z = Math.PI / 2;
+  reel.position.set(0, 0.05, 0.05);
+  rodPitch.add(reel);
+  
+  let parent = rodPitch;
+  const N = 7, sl = 0.34;
+  for (let i = 0; i < N; i++) {
+    const seg = new THREE.Group();
+    seg.position.y = i === 0 ? 0.07 : sl;
+    const r0 = lerp(0.02, 0.004, i / N), r1 = lerp(0.02, 0.004, (i + 1) / N);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r0, sl, 6), rm);
+    m.position.y = sl / 2;
+    seg.add(m);
+    parent.add(seg);
+    rodSegs.push(seg);
+    parent = seg;
+  }
+  rodTip.position.y = sl;
+  parent.add(rodTip);
+
+  // Shadows
+  boat.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  deck.receiveShadow = true;
 })();
 const lineGeo=new THREE.BufferGeometry();const LN=32;lineGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(LN*3),3));
 const fishLine=new THREE.Line(lineGeo,new THREE.LineBasicMaterial({color:0xe7ff7a,transparent:true,opacity:.85}));fishLine.frustumCulled=false;fishLine.renderOrder=7;scene.add(fishLine);
@@ -3135,7 +3301,10 @@ function openSpots(from){
     const spec=G.target?(here.filter(f=>isTarget(f.sp)).length+' target'):('Specialty: '+(known(topSpecies(id))?SPECIES[topSpecies(id)].name:'unknown'));
     return`<button class="spcard nav" data-spot="${id}"${id===(cur||'lily')?' data-default':''}><h3>${ZBY[id].name}<small>${here.length} fish \u00b7 ${spec}</small></h3>${id===cur?'<span class="here">You are here</span>':''}<canvas width="520" height="200"></canvas><p>${SPOT_DESC[id]}</p><div class="chips">${chips}</div></button>`;}).join('');
   $$('#spgrid .spcard').forEach(el=>{const id=el.dataset.spot,x=el.querySelector('canvas').getContext('2d');const here=fishHere(id).slice(0,12);
-    here.forEach((f,i)=>{const col=i%6,row=(i/6)|0;drawFish2D(x,f.sp,44+col*86,52+row*96,clamp(f.len*150,34,80),{sil:true,silCol:isSpecial(f.sp,id)?'#ff6a2b':'rgba(214,232,222,.82)',flip:(i%2)===1});});
+    // each fish is scaled to fit its own cell (tail and fins included) so long fish never overlap their neighbours
+    here.forEach((f,i)=>{const col=i%6,row=(i/6)|0,e=fishPlan(f.sp).ext,flip=(i%2)===1;
+      const L=Math.min(clamp(f.len*150,30,80),fitFishL(f.sp,76,84));const cx=43+col*86-(e.x0+e.x1)/2*L*(flip?-1:1),cy=52+row*96+(e.y0+e.y1)/2*L;
+      drawFish2D(x,f.sp,cx,cy,L,{sil:true,silCol:isSpecial(f.sp,id)?'#ff6a2b':'rgba(214,232,222,.82)',flip});});
     if(!here.length){x.fillStyle='rgba(255,255,255,.5)';x.font='600 22px sans-serif';x.textAlign='center';x.fillText('Fished out. New fish arrive soon.',260,105);}});
   requestAnimationFrame(()=>Nav.def());
 }
