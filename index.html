@@ -241,6 +241,15 @@ table.wt{width:100%;border-collapse:collapse;font:600 17px var(--f-hud);font-var
 .spcard h3 small{font:600 13px var(--f-hud);color:var(--muted);letter-spacing:.06em;white-space:nowrap}
 .spcard p{margin:0;color:#cfdac6;font-size:15px}
 .spcard canvas{width:100%;height:auto;aspect-ratio:2.6/1;border-radius:8px;background:linear-gradient(#1b5550,#0c2c29)}
+.sptiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.sptile{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 6px 8px;border-radius:8px;background:linear-gradient(#17504b,#0c2c29);border:1px solid rgba(255,255,255,.08)}
+.sptile.tg{border-color:var(--blaze);box-shadow:inset 0 0 0 1px var(--blaze)}
+.sptile canvas{width:100%;height:auto;aspect-ratio:180/84;background:none;border-radius:0}
+.sptile .nm{font:600 13px/1.15 var(--f-hud);letter-spacing:.03em;text-align:center;color:var(--text)}
+.sptile .ct{position:absolute;top:5px;right:6px;font:700 13px var(--f-hud);padding:1px 6px;border-radius:10px;background:rgba(0,0,0,.45);color:var(--text)}
+.sptile.tg .ct{background:var(--blaze);color:var(--blaze-ink)}
+.sptile .star{font:700 10px var(--f-hud);letter-spacing:.12em;text-transform:uppercase;color:var(--blaze)}
+.spempty{grid-column:1/-1;padding:18px 8px;text-align:center;color:var(--muted);font-weight:600}
 .rggrid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
 .rgcard{border-top:4px solid var(--rc,var(--blaze))}
 .rgcard .where{font:600 13px var(--f-hud);letter-spacing:.12em;text-transform:uppercase;color:var(--rc,var(--muted))}
@@ -3089,16 +3098,16 @@ function openSpots(from){
   spotFrom=from;G.screen='spot';showOnly('spot');$('#hud').hidden=from==='start';
   $('#spotKicker').textContent=G.mode==='tour'?'Tournament day':'Free fishing';
   $('#spotHead').textContent=from==='start'?'Pick a fishing spot':'Move to another spot';
-  $('#spotHint').innerHTML=(G.target?`<span class="target">Target: ${SPECIES[G.target].name}</span> Only this species counts toward your bag.`:'Each spot holds about twelve fish. Orange shapes are the spot\u2019s specialty.')+`<br><b>${W.name}.</b> ${W.desc}`;
+  $('#spotHint').innerHTML=(G.target?`<span class="target">Target: ${SPECIES[G.target].name}</span> Only this species counts toward your bag.`:'Each spot holds about twelve fish. Orange fish are the spot\u2019s specialty.')+`<br><b>${W.name}.</b> ${W.desc}`;
   const cur=from==='start'?null:spotAt(G.boat.x,G.boat.z);
-  $('#spgrid').innerHTML=SPOT_IDS.map(id=>{const here=fishHere(id);const counts={};here.forEach(f=>{const k=f.sp;counts[k]=(counts[k]||0)+1;});
+  $('#spgrid').innerHTML=SPOT_IDS.map(id=>{const here=fishHere(id);const counts={};here.forEach(f=>{counts[f.sp]=(counts[f.sp]||0)+1;});
     const known=sp=>save.catches.some(c=>c.sp===sp);
-    const chips=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([sp,n])=>`<span class="chip${isSpecial(sp,id)?' tg':''}">${known(sp)?SPECIES[sp].name:'Unknown fish'} \u00d7${n}</span>`).join('');
-    const spec=G.target?(here.filter(f=>isTarget(f.sp)).length+' target'):('Specialty: '+(known(topSpecies(id))?SPECIES[topSpecies(id)].name:'unknown'));
-    return`<button class="spcard nav" data-spot="${id}"${id===(cur||'lily')?' data-default':''}><h3>${ZBY[id].name}<small>${here.length} fish \u00b7 ${spec}</small></h3>${id===cur?'<span class="here">You are here</span>':''}<canvas width="520" height="200"></canvas><p>${SPOT_DESC[id]}</p><div class="chips">${chips}</div></button>`;}).join('');
-  $$('#spgrid .spcard').forEach(el=>{const id=el.dataset.spot,x=el.querySelector('canvas').getContext('2d');const here=fishHere(id).slice(0,12);
-    here.forEach((f,i)=>{const col=i%6,row=(i/6)|0;drawFish2D(x,f.sp,44+col*86,52+row*96,clamp(f.len*150,34,80),{sil:true,silCol:isSpecial(f.sp,id)?'#ff6a2b':'rgba(214,232,222,.82)',flip:(i%2)===1});});
-    if(!here.length){x.fillStyle='rgba(255,255,255,.5)';x.font='600 22px sans-serif';x.textAlign='center';x.fillText('Fished out. New fish arrive soon.',260,105);}});
+    const list=Object.entries(counts).sort((a,b)=>(isSpecial(b[0],id)-isSpecial(a[0],id))||(b[1]-a[1]));
+    const tiles=list.map(([sp,n])=>`<div class="sptile${isSpecial(sp,id)?' tg':''}" data-sp="${sp}"><canvas width="180" height="84"></canvas><span class="nm">${known(sp)?SPECIES[sp].name:'Unknown fish'}</span><span class="ct">×${n}</span>${isSpecial(sp,id)?`<span class="star">${G.target?'Target':'Specialty'}</span>`:''}</div>`).join('')||'<div class="spempty">Fished out. New fish arrive soon.</div>';
+    const cnt=G.target?`${here.length} fish · ${here.filter(f=>isTarget(f.sp)).length} target`:`${here.length} fish`;
+    return`<button class="spcard nav" data-spot="${id}"${id===(cur||'lily')?' data-default':''}><h3>${ZBY[id].name}<small>${cnt}</small></h3>${id===cur?'<span class="here">You are here</span>':''}<p>${SPOT_DESC[id]}</p><div class="sptiles">${tiles}</div></button>`;}).join('');
+  $$('#spgrid .sptile').forEach(el=>{const sp=el.dataset.sp,x=el.querySelector('canvas').getContext('2d');const e=fishPlan(sp).ext,L=fitFishL(sp,150,62);
+    drawFish2D(x,sp,90-(e.x0+e.x1)/2*L,42+(e.y0+e.y1)/2*L,L,{sil:true,silCol:el.classList.contains('tg')?'#ff6a2b':'rgba(214,232,222,.85)'});});
   requestAnimationFrame(()=>Nav.def());
 }
 function travelTo(id){
