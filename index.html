@@ -127,8 +127,9 @@ button{font:inherit;color:inherit}
 .title-screen .twrap{width:min(600px,100%);align-items:center;text-align:center}
 .title-screen .ribbon{align-self:center}
 .title-screen .logo{font-size:0;line-height:0;text-shadow:none}.title-screen .logo img{height:clamp(110px,26vh,280px);width:auto;filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
-.title-screen .tag{font-size:17px;max-width:58ch}
-@media (max-height:820px){.title-screen .tag{display:none}.title-screen .btn{padding:8px 22px}}
+.title-screen .tag{font-size:17px;max-width:46ch}
+.mdesc{margin:0;height:2.7em;line-height:1.35;overflow:hidden;color:#d8e2cf;text-wrap:balance}
+#scr-pause .mdesc{height:1.4em;font-size:15px;color:var(--muted);white-space:nowrap;text-overflow:ellipsis}
 .title-screen .menu{width:100%;gap:8px}
 .title-screen .btn{align-items:center;text-align:center;font-size:23px;padding:11px 22px}
 .title-screen .btn span{font-size:15px}
@@ -348,7 +349,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 @media (max-height:520px){
   .logo{font-size:clamp(40px,11vh,64px)!important}
   .title-screen .logo{font-size:0!important}.title-screen .logo img{height:24vh}
-  .title-screen .tag{display:none}
+  .title-screen .tag{height:1.4em;font-size:14px;white-space:nowrap;text-overflow:ellipsis;max-width:100%}
   .twrap{gap:10px!important}
   .btn{padding:8px 14px;font-size:17px}
   .btn span{font-size:12px}
@@ -423,13 +424,13 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   <div class="twrap">
     <div class="ribbon" id="ribbon">World fishing tour</div>
     <h1 class="logo"><img src="img/logo.webp" alt="Angler's Bite" width="900" height="800"></h1>
-    <p class="tag">Four regions, six fishing spots each, thirty-two species and eleven lures. Fill a five-fish livewell with the day’s target species before the 3:00 PM weigh-in, or just fish and build your aquarium.</p>
+    <p class="tag mdesc" aria-live="polite">Bring in the five heaviest fish of the day’s target species before the 3:00 PM weigh-in.</p>
     <div class="menu">
-      <button class="btn nav" data-act="tour" data-default>Tournament day<span>Five heaviest fish of the day’s target species. Weigh-in at 3:00 PM.</span></button>
-      <button class="btn nav" data-act="free">Free fishing<span>No clock. Every species counts for the aquarium.</span></button>
-      <button class="btn nav" data-act="aqua">Aquarium<span>Your tank, species guide, catch log and records.</span></button>
-      <button class="btn nav" data-act="settings">Settings<span>Graphics, camera, sound and controls.</span></button>
-      <button class="btn nav" data-act="help">How to play</button>
+      <button class="btn nav" data-act="tour" data-default data-desc="Bring in the five heaviest fish of the day’s target species before the 3:00 PM weigh-in.">Tournament day</button>
+      <button class="btn nav" data-act="free" data-desc="No clock and no target. Every species you land goes into your aquarium.">Free fishing</button>
+      <button class="btn nav" data-act="aqua" data-desc="Your tank, species guide, catch log and records.">Aquarium</button>
+      <button class="btn nav" data-act="settings" data-desc="Graphics, camera, sound, weather and controls.">Settings</button>
+      <button class="btn nav" data-act="help" data-desc="Controls, lures and how the fish behave.">How to play</button>
     </div>
     <div class="foot"><span id="padStat">No controller found. Plug one in or pair it, then press any button.</span><span>Click once anywhere to turn on sound.</span></div>
   </div>
@@ -438,16 +439,17 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 <section class="screen" id="scr-pause" hidden>
   <div class="box">
     <h2 class="h2">Paused</h2>
+    <p class="mdesc" aria-live="polite">Back to the water.</p>
     <div class="menu">
-      <button class="btn nav" data-act="resume" data-default>Resume</button>
-      <button class="btn nav" data-act="spot">Change fishing spot<span>Travel to another part of the lake.</span></button>
-      <button class="btn nav" data-act="region" id="btnRegion">Travel to another region<span>Fish a different lake with its own species.</span></button>
-      <button class="btn nav" data-act="tackle">Tackle box</button>
-      <button class="btn nav" data-act="aqua">Aquarium</button>
-      <button class="btn nav" data-act="help">How to play</button>
-      <button class="btn nav" data-act="endday" id="btnEndDay">Weigh in now</button>
-      <button class="btn nav" data-act="settings">Settings<span>Graphics, camera, sound and controls.</span></button>
-      <button class="btn small nav" data-act="quit">Quit to title</button>
+      <button class="btn nav" data-act="resume" data-default data-desc="Back to the water.">Resume</button>
+      <button class="btn nav" data-act="spot" data-desc="Travel to another part of this lake.">Change fishing spot</button>
+      <button class="btn nav" data-act="region" id="btnRegion" data-desc="Fish a different lake with its own species.">Travel to another region</button>
+      <button class="btn nav" data-act="tackle" data-desc="Change lures and colors.">Tackle box</button>
+      <button class="btn nav" data-act="aqua" data-desc="Your tank, species guide, catch log and records.">Aquarium</button>
+      <button class="btn nav" data-act="help" data-desc="Controls, lures and how the fish behave.">How to play</button>
+      <button class="btn nav" data-act="endday" id="btnEndDay" data-desc="End the day now and weigh your livewell.">Weigh in now</button>
+      <button class="btn nav" data-act="settings" data-desc="Graphics, camera, sound, weather and controls.">Settings</button>
+      <button class="btn nav" data-act="quit" data-desc="Leave this trip and go back to the title screen.">Quit to title</button>
     </div>
   </div>
 </section>
@@ -3487,6 +3489,8 @@ function lureMove(l){
 ${mk.map(([mx,my],i)=>`<circle cx="${mx}" cy="${my}" r="7.5" fill="#c6ef4b" stroke="#0b2a33" stroke-width="1.5"/><text x="${mx}" y="${my+3.6}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10201b" font-family="Barlow Condensed,sans-serif">${i+1}</text>`).join('')}</svg>`;
   return{svg,steps};
 }
+function showDesc(e){const b=e.target.closest&&e.target.closest('[data-desc]');if(!b)return;const d=b.closest('.screen')&&b.closest('.screen').querySelector('.mdesc');if(d&&d.textContent!==b.dataset.desc)d.textContent=b.dataset.desc;}
+document.addEventListener('focusin',showDesc);document.addEventListener('mouseover',showDesc);
 function openTackle(){
   G.screen='tackle';showOnly('tackle');tackleSel=G.lureIdx;
   $('#lgrid').innerHTML=LURES.map((l,i)=>`<button class="lcard nav${i===G.lureIdx?' on':''}" data-lure="${i}"${i===G.lureIdx?' data-default':''}><canvas width="200" height="112"></canvas><span class="lglyph" title="${lureDepth(l).txt} · ${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}">${depthSvg(l,30)}</span><b>${l.name}</b><small>${l.type}</small></button>`).join('');
