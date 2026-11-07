@@ -96,7 +96,7 @@ button{font:inherit;color:inherit}
 .br{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;align-items:flex-end;max-width:42%}
 .prompt{display:flex;align-items:center;gap:8px;background:var(--panel);padding:4px 12px 4px 4px;border-radius:999px;border:1px solid var(--line);font:600 15px var(--f-hud);letter-spacing:.03em;white-space:nowrap}
 .prompt.hot{background:var(--blaze);color:var(--blaze-ink);border-color:var(--blaze);font-size:18px;animation:pulse .6s ease-in-out infinite}
-.key{min-width:28px;height:26px;padding:0 8px;border-radius:13px;display:inline-grid;place-items:center;font:700 13px/1 var(--f-hud);background:#e6ecdf;color:#10201b;letter-spacing:.02em}
+.key{white-space:nowrap;min-width:28px;height:26px;padding:0 8px;border-radius:13px;display:inline-grid;place-items:center;font:700 13px/1 var(--f-hud);background:#e6ecdf;color:#10201b;letter-spacing:.02em}
 .key.xa{background:#5cbd47;color:#0b1d07}.key.xb{background:#e2483d;color:#fff}.key.xx{background:#3d8be2;color:#fff}.key.xy{background:#e8c02e;color:#2a2205}
 .key.pa{background:#2d3640;color:#8fb4ff;font-size:16px}.key.pb{background:#2d3640;color:#ff7d7d;font-size:16px}.key.px{background:#2d3640;color:#ee97d8;font-size:16px}.key.py{background:#2d3640;color:#46d6ae;font-size:16px}
 .banner{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);font:400 clamp(34px,7vw,74px)/1 var(--f-display);color:var(--text);text-shadow:0 3px 0 rgba(0,0,0,.45),0 0 30px rgba(0,0,0,.4);letter-spacing:.02em;text-align:center;opacity:0;pointer-events:none;white-space:nowrap}
@@ -154,6 +154,10 @@ button{font:inherit;color:inherit}
 .lcard.on{border-color:var(--chart)}
 .lcard{position:relative}.lglyph{position:absolute;top:8px;right:8px;display:flex;gap:4px;align-items:flex-start;pointer-events:none}
 .lglyph svg,.lrun svg{display:block}.lrun{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.lrun>div{display:flex;gap:8px;align-items:center;font:600 15px var(--f-hud)}
+.lmove{background:#0c2a30;border:1px solid var(--line);border-radius:8px;padding:6px 6px 2px}.lmove svg{display:block;width:100%;height:auto}
+.lsteps{list-style:none;margin:0;padding:0;display:grid;gap:5px}.lsteps li{display:flex;gap:8px;align-items:baseline;font-size:15px;color:#cfdac6}
+.lsteps b{flex:none;width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;background:var(--chart);color:#10201b;font:700 12px/1 var(--f-hud)}
+.ldet{overflow-y:auto}
 .lrun small{display:block;font:600 11px var(--f-hud);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .lcard.nav-focus,.lcard:focus-visible{outline:2px solid var(--blaze);outline-offset:2px;background:var(--raise2)}
 .ldet{display:flex;flex-direction:column;gap:10px;background:var(--raise);border-radius:10px;padding:16px;border:1px solid var(--line);min-width:0}
@@ -3441,6 +3445,48 @@ function depthSvg(l,h){const D=lureDepth(l),y=d=>3+d/6*(h-10);let band;
   if(D.txt==='Bottom')band=`<rect x="3" y="${h-9}" width="10" height="4" rx="1" fill="#c6ef4b"/>`;else band=`<rect x="3" y="${y(D.a)}" width="10" height="${Math.max(3,y(D.b)-y(D.a))}" rx="1" fill="#c6ef4b"/>`;
   return `<svg width="16" height="${h}" viewBox="0 0 16 ${h}" aria-hidden="true"><rect x="1" y="1" width="14" height="${h-2}" rx="3" fill="#123a45" stroke="rgba(255,255,255,.25)"/><path d="M1 ${h-5}H15V${h-3}a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2Z" fill="#6b5a3a"/>${band}</svg>`;}
 function retrieveSvg(l,c){const r=RETRIEVE[l.ideal]||RETRIEVE.steady;return `<svg width="34" height="14" viewBox="0 0 34 14" aria-hidden="true"><path d="${r[1]}" fill="none" stroke="${c||'#eef3e4'}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
+// Side view of the water for the lure detail panel: where the lure lands, the path it takes back to the boat,
+// and numbered moments that match the steps listed under it. Depth scale is 0–6 m.
+function lureMove(l){
+  const W=320,H=128,S=20,X0=36,XB=284,y=d=>S+d*14.5,Bt=y(6.1),dv=(LPHYS[l.id]||{}).dive||l.dive||1;
+  const dm=v=>v.toFixed(1).replace(/\.0$/,'')+' m';let path='',extra='',mk=[],steps=[];
+  const crawl=(x0,x1,hop)=>{let d='',x=x0;while(x<x1){d+=` Q${x+8} ${Bt-hop} ${x+16} ${Bt} L${x+26} ${Bt}`;x+=26;}return d;};
+  switch(l.shape){
+    case 'popper':path=`M${X0} ${S}H${XB-14}`;for(const x of[86,146,206])extra+=`<path d="M${x-5} ${S-3}l-3 -7M${x} ${S-4}v-8M${x+5} ${S-3}l3 -7" stroke="#bfe4ff" stroke-width="1.4" fill="none"/>`;
+      mk=[[X0,S],[146,S],[176,S]];steps=['Lands and floats on top','Snap the rod: it pops and spits water','Rest: let the rings settle before the next pop'];break;
+    case 'frog':path=`M${X0} ${S}`;for(let x=X0;x<XB-14;x+=12)path+=` Q${x+6} ${S-4} ${x+12} ${S}`;
+      mk=[[X0,S],[120,S],[200,S]];steps=['Lands on the pads and floats','Twitch: it walks side to side across the top','Pause over open holes in the weeds'];break;
+    case 'buzz':path=`M${X0} ${S}H${XB-14}`;extra=`<path d="M160 ${S} Q168 ${y(1.4)} 190 ${y(2.6)}" stroke="#ff8a5c" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`;
+      mk=[[X0,S],[100,S],[190,y(2.6)]];steps=['Lands; start reeling right away','Reel steadily: the blade churns the surface','Stop reeling and it sinks'];break;
+    case 'spinner':{const d=1.3;path=`M${X0} ${S} C${X0+20} ${S} ${X0+30} ${y(d)} ${X0+60} ${y(d)} H${XB-40} Q${XB-24} ${y(d)} ${XB-14} ${S}`;
+      extra=`<path d="M170 ${y(d)} Q178 ${y(d+1)} 196 ${y(d+2.2)}" stroke="#ff8a5c" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`;
+      mk=[[X0+40,y(d)],[130,y(d)],[196,y(d+2.2)]];steps=['Lands and sinks while it settles','Slow roll: runs about '+dm(.7)+'–'+dm(1.6)+'; reel faster to keep it shallow','Stop: the blades flutter as it sinks'];break;}
+    case 'crank':{const d=dv;path=`M${X0} ${S} C${X0+44} ${S} ${X0+54} ${y(d)} ${X0+110} ${y(d)} H${XB-70} C${XB-40} ${y(d)} ${XB-30} ${S} ${XB-14} ${S}`;
+      extra=`<path d="M184 ${y(d)} Q190 ${y(d)-12} 196 ${y(d)-22}" stroke="#ff8a5c" stroke-width="2" stroke-dasharray="4 4" fill="none" marker-end="url(#ah)"/>`;
+      mk=[[X0,S],[X0+100,y(d)],[196,y(d)-22],[XB-36,y(d*.45)]];
+      steps=['Floats at rest after the cast','Reel: it dives to about '+dm(d)+(l.id==='deep'?' (needs a long cast to get there)':''),'Pause: it floats back up, then dives again','Rises as it gets close to the boat'];break;}
+    case 'jerk':{const d=dv;path=`M${X0} ${S} C${X0+16} ${S} ${X0+22} ${y(d)} ${X0+50} ${y(d)}`;let x=X0+50;
+      for(let i=0;i<4;i++){path+=` L${x+10} ${y(d)-5} L${x+20} ${y(d)+4} L${x+28} ${y(d)}`;x+=46;extra+=`<circle cx="${x-9}" cy="${y(d)}" r="3" fill="#ff8a5c"/>`;}
+      path+=` Q${XB-24} ${y(d)} ${XB-14} ${S}`;mk=[[X0+30,y(d)-6],[X0+50+46+10,y(d)-5],[X0+50+46*2-9,y(d)]];
+      steps=['A few turns of the reel: it dives to about '+dm(d),'Twitch: it darts side to side','Pause: it hangs in place (orange dots), when most bites come'];break;}
+    case 'worm':path=`M${X0} ${S} Q${X0+18} ${y(3)} ${X0+44} ${Bt}`+crawl(X0+44,XB-30,9);
+      mk=[[X0+24,y(3.2)],[130,Bt],[X0+44+26*4+8,Bt-9]];steps=['Sinks to the bottom: watch the line, many bites come on the fall','Crawl it slowly along the bottom','Twitch to hop it, then pause'];break;
+    case 'jig':path=`M${X0} ${S} L${X0+12} ${Bt}`+crawl(X0+12,XB-30,18);
+      mk=[[X0+8,y(3)],[X0+12+26*2+8,Bt-18],[X0+12+26*5,Bt]];steps=['Drops fast and goes straight to the bottom','Hop it off rocks and wood','Let it settle: big fish pick it up on the drop'];break;
+    case 'swim':{const d=dv;path=`M${X0} ${S} L${X0+8} ${y(d)} H${XB-50} Q${XB-28} ${y(d)} ${XB-14} ${S}`;
+      extra=`<path d="M${X0+14} ${S+4} V${y(d)-4}" stroke="#bfe4ff" stroke-width="1.2" stroke-dasharray="2 3"/>`;
+      mk=[[X0+6,y(d*.5)],[150,y(d)],[220,y(d)]];steps=['Let it sink: count to pick the depth (about 0.3 m a second)','Reel slowly: a straight, level glide','Keep it slow: big fish follow and strike'];break;}
+  }
+  const grid=[0,2,4,6].map(d=>`<text x="4" y="${y(d)+4}" fill="#8fb0a8" font-size="10" font-family="Barlow Condensed,sans-serif">${d} m</text><path d="M30 ${y(d)}H${W-4}" stroke="rgba(255,255,255,${d?'.06':'0'})"/>`).join('');
+  const boat=`<path d="M${XB-6} ${S-8}h28l-5 8h-20z" fill="#e8ece4"/><path d="M${XB+6} ${S-8}v-9" stroke="#e8ece4" stroke-width="1.4"/><path d="M${XB+6} ${S-17}L${XB-14} ${S}" stroke="rgba(255,255,255,.5)" stroke-width=".8"/>`;
+  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="How the ${l.name} moves"><defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5a66"/><stop offset="1" stop-color="#0b2a33"/></linearGradient>
+<marker id="ah" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L6 3L0 6z" fill="#ff8a5c"/></marker></defs>
+<rect x="30" y="${S}" width="${W-30}" height="${Bt-S}" fill="url(#wg)"/><path d="M30 ${Bt}H${W}V${H}H30Z" fill="#5a4a30"/><path d="M30 ${S}H${W}" stroke="#bfe4ff" stroke-width="1.5"/>${grid}${boat}
+<path d="M${X0-6} ${S-4}l3 -6M${X0} ${S-5}v-7M${X0+6} ${S-4}l-3 -6" stroke="#bfe4ff" stroke-width="1.2"/>
+<path d="${path}" stroke="#c6ef4b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>${extra}
+${mk.map(([mx,my],i)=>`<circle cx="${mx}" cy="${my}" r="7.5" fill="#c6ef4b" stroke="#0b2a33" stroke-width="1.5"/><text x="${mx}" y="${my+3.6}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#10201b" font-family="Barlow Condensed,sans-serif">${i+1}</text>`).join('')}</svg>`;
+  return{svg,steps};
+}
 function openTackle(){
   G.screen='tackle';showOnly('tackle');tackleSel=G.lureIdx;
   $('#lgrid').innerHTML=LURES.map((l,i)=>`<button class="lcard nav${i===G.lureIdx?' on':''}" data-lure="${i}"${i===G.lureIdx?' data-default':''}><canvas width="200" height="112"></canvas><span class="lglyph" title="${lureDepth(l).txt} · ${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}">${depthSvg(l,30)}</span><b>${l.name}</b><small>${l.type}</small></button>`).join('');
@@ -3451,10 +3497,10 @@ function openTackle(){
 function renderLdet(){
   const l=LURES[tackleSel],ci=save.settings.colors[l.id]||0;
   const best=Object.entries(l.pref).filter(([s])=>SPECIES[s].reg===RG.id&&!SPECIES[s].legend).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([s])=>SPECIES[s].name);
-  const lvl=v=>v>8.5?'Loud':v>6.5?'Medium':'Quiet';
+  const lvl=v=>v>8.5?'Loud':v>6.5?'Medium':'Quiet',mv=lureMove(l);
   $('#ldet').innerHTML=`<canvas width="300" height="168"></canvas><h3>${l.name}</h3><div class="chips"><span class="chip">${l.type}</span><span class="chip">Cast ${l.cast} m</span><span class="chip">${lvl(l.noise)}</span>${l.weedless?'<span class="chip">Weedless</span>':''}${l.big>.5?'<span class="chip">Trophy bait</span>':''}</div>
-  <div class="lrun"><div>${depthSvg(l,40)}<span><small>Runs</small>${lureDepth(l).txt}</span></div><div>${retrieveSvg(l)}<span><small>Retrieve</small>${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}</span></div></div>
-  <p>${l.how}</p><div><div class="lbl" style="margin-bottom:4px">How it moves</div><p>${LPHYS[l.id].act}</p></div><div><div class="lbl" style="margin-bottom:4px">Best for</div><p>${best.join(', ')}</p></div>
+  <div><div class="lbl" style="margin-bottom:6px">How it moves · ${lureDepth(l).txt} · ${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}</div><div class="lmove">${mv.svg}</div></div>
+  <ol class="lsteps">${mv.steps.map((t,i)=>`<li><b>${i+1}</b><span>${t}</span></li>`).join('')}</ol><p>${l.how}</p><div><div class="lbl" style="margin-bottom:4px">Best for</div><p>${best.join(', ')}</p></div>
   <div><div class="lbl" style="margin-bottom:6px">Color</div><div class="sw">${l.colors.map((c,i)=>`<button class="swb nav${i===ci?' on':''}" data-color="${i}"><i style="background:${COLORS[c].hex}"></i>${COLORS[c].name}</button>`).join('')}</div></div>
   <button class="btn nav row" data-act="equip">Use this lure ${key('a')}</button>`;
   drawLureIcon($('#ldet canvas').getContext('2d'),l,COLORS[l.colors[ci]].hex,300,168);
