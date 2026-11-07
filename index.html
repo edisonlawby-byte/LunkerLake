@@ -2273,7 +2273,9 @@ const G={screen:'title',mode:'free',hour:7,time:0,light:1,phase:'boat',camYaw:Ma
   landedT:0,curCatch:null,tourDone:false,zoneName:'',hudT:0,sonarT:0,wakeT:0,chirpT:3,ts:1,tsHold:0,shake:0,biteT0:1,weather:'clear'};
 const boat=new THREE.Group();scene.add(boat);
 const angler=new THREE.Group();const rodBase=new THREE.Group();const rodPitch=new THREE.Group();const rodSegs=[];const rodTip=new THREE.Object3D();
-const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
+const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3(),_el=new V3(),_hint=new V3(),_seg=new V3();
+// stretch a unit-length limb mesh (1 unit along +Y) from point a to point b
+function placeLimb(m,a,b){_seg.subVectors(b,a);const l=Math.max(.01,_seg.length());m.position.copy(a);m.scale.set(1,l,1);m.quaternion.setFromUnitVectors(UPV,_seg.multiplyScalar(1/l));}
 // boat (original hull) with the angler, outboard and lights drafted with Gemini and adjusted to fit the game
 (function buildBoat(){
   const lam = c => new THREE.MeshLambertMaterial({color: c});
@@ -2495,6 +2497,22 @@ const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
     for(const c of boat.children)if(c!==angler)c.visible=false;
     boat.add(m);
   },undefined,e=>console.warn('Boat model not loaded, using the built-in boat',e));
+})();
+// Angler model made in Blender (models/angler.glb): body, upper arm, forearm and hand. When it loads it replaces
+// the built-in figure and the arms get elbows; the rod is untouched. If it can't load, the built-in angler stays.
+(function loadAnglerModel(){
+  if(!THREE.GLTFLoader)return;
+  new THREE.GLTFLoader().load('models/angler.glb',gl=>{
+    const part=n=>{const o=gl.scene.getObjectByName(n);if(!o)throw new Error('missing '+n);o.parent.remove(o);o.position.set(0,0,0);o.quaternion.identity();o.scale.set(1,1,1);
+      o.traverse(c=>{if(!c.isMesh)return;c.castShadow=true;c.receiveShadow=true;const mt=c.material;
+        // cloth and skin: plain matte shading like the rest of the scene (the glossy sunglasses keep their shine)
+        if(mt&&!/Sunglasses|Lenses/.test(mt.name))c.material=new THREE.MeshLambertMaterial({color:mt.color,map:mt.map||null,name:mt.name});});return o;};
+    const body=part('AnglerBody'),up=part('AnglerUpperArm'),fo=part('AnglerForearm'),hd=part('AnglerHand');
+    for(const c of angler.children)if(c!==rodBase)c.visible=false;
+    body.name='anglerModel';angler.add(body);
+    for(const a of ARMS){const s=Math.sign(a.sh.x)||1;a.sh=new V3(.19*s,1.43,.01);
+      a.m=up.clone();a.f=fo.clone();a.h=hd.clone();angler.add(a.m,a.f,a.h);}
+  },undefined,e=>console.warn('Angler model not loaded, using the built-in angler',e));
 })();
 const lineGeo=new THREE.BufferGeometry();const LN=32;lineGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(LN*3),3));
 const fishLine=new THREE.Line(lineGeo,new THREE.LineBasicMaterial({color:0xe7ff7a,transparent:true,opacity:.85}));fishLine.frustumCulled=false;fishLine.renderOrder=7;scene.add(fishLine);
@@ -3073,7 +3091,12 @@ function updBoatVisual(dt){
   else{rodBase.rotation.y=lerp(rodBase.rotation.y,['retrieve','bite'].includes(G.phase)?-Input.s.lx*.35:0,dt*5);if(G.phase==='retrieve')bend=.08+Input.s.rt*.1;if(G.phase==='bite')bend=.45;if(G.phase==='landed'){pitch=1.4;bend=.05;}}
   rodPitch.rotation.x=-(Math.PI/2-pitch);rodSegs.forEach((s,i)=>{s.rotation.x=-bend/rodSegs.length;s.rotation.z=jit*Math.sin(G.time*47+i*1.3);});
   boat.updateMatrixWorld(true);
-  for(const a of ARMS){_aa.copy(a.hand);rodPitch.localToWorld(_aa);angler.worldToLocal(_aa);_ab.subVectors(_aa,a.sh);const len=Math.max(.05,_ab.length());a.m.position.copy(a.sh);a.m.scale.set(1,len,1);a.m.quaternion.setFromUnitVectors(UPV,_ab.multiplyScalar(1/len));a.h.position.copy(_aa);}
+  for(const a of ARMS){_aa.copy(a.hand);rodPitch.localToWorld(_aa);angler.worldToLocal(_aa);_ab.subVectors(_aa,a.sh);const len=Math.max(.05,_ab.length());
+    if(a.f){// upper arm + forearm: the elbow bends down, outward and back
+      const l1=.3,l2=.29,L=Math.min(len,l1+l2-.001),aa=(l1*l1-l2*l2+L*L)/(2*L),hh=Math.sqrt(Math.max(l1*l1-aa*aa,0));_ab.multiplyScalar(1/len);
+      _hint.set(Math.sign(a.sh.x)*.6,-1,.35).normalize();_hint.addScaledVector(_ab,-_hint.dot(_ab)).normalize();
+      _el.copy(a.sh).addScaledVector(_ab,aa).addScaledVector(_hint,hh);placeLimb(a.m,a.sh,_el);placeLimb(a.f,_el,_aa);a.h.position.copy(_aa);a.h.quaternion.copy(a.f.quaternion);}
+    else{a.m.position.copy(a.sh);a.m.scale.set(1,len,1);a.m.quaternion.setFromUnitVectors(UPV,_ab.multiplyScalar(1/len));a.h.position.copy(_aa);}}
 }
 function updLine(){
   rodTip.getWorldPosition(tipW);const L=G.lure,F=G.fight;let end=tmp;
