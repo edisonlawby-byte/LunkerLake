@@ -191,7 +191,11 @@ button{font:inherit;color:inherit}
 .apane{flex:1;min-height:0;overflow:auto;border-radius:10px}
 .tankwrap{display:flex;flex-direction:column;gap:10px;height:100%;min-height:0}
 #tank{width:100%;flex:1;min-height:220px;border-radius:10px;display:block;cursor:pointer;background:#0d3b3d}
-.showcase{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.showcase{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:4px}
+.tanktabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tanktabs .tab small{font-weight:500;opacity:.7;margin-left:6px;letter-spacing:.02em}
+.tanktabs .hint{margin-left:auto;font:500 13px var(--f-hud);color:var(--muted)}
+.crown{display:inline-block;width:1.15em;height:.8em;vertical-align:-.04em;margin-right:4px}
 .scb{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;padding:7px 10px;border-radius:6px;background:var(--raise);border:1px solid var(--line);cursor:pointer;font:600 14px/1.15 var(--f-hud)}
 .scb small{color:var(--muted);font-weight:500}
 .scb.on{border-color:var(--chart)}
@@ -920,6 +924,11 @@ const SP_ORDER=REG_ORDER.flatMap(r=>Object.keys(SPECIES).filter(k=>SPECIES[k].re
 const TIERS=[{id:'poor',name:'Poor',cut:0},{id:'small',name:'Small',cut:.07},{id:'decent',name:'Decent',cut:.2},{id:'huge',name:'Huge',cut:.4},{id:'monster',name:'Monster',cut:.72}];
 const TIER_COL=['var(--t-poor)','var(--t-small)','var(--t-decent)','var(--t-huge)','var(--t-monster)'];
 const TIER_HEX=['#8f9b94','#6fd0a0','#6aa9ff','#c48bff','#ffb21f'];
+// gold crown marks Monster-size fish everywhere they are listed
+const CROWN='<svg class="crown" viewBox="0 0 24 16" role="img" aria-label="Monster"><path d="M2 14.5h20l1.4-11-6.2 4.6L12 1 6.8 8.1.6 3.5z" fill="#ffc23d" stroke="#7a4d00" stroke-width="1.2" stroke-linejoin="round"/><circle cx="12" cy="10.5" r="1.6" fill="#e2402a"/></svg>';
+const crownIf=c=>c&&c.tier===4?CROWN:'';
+function drawCrown(x,cx,cy,s){x.save();x.translate(cx,cy);x.scale(s/24,s/24);x.translate(-12,-8);x.beginPath();x.moveTo(2,14.5);x.lineTo(22,14.5);x.lineTo(23.4,3.5);x.lineTo(17.2,8.1);x.lineTo(12,1);x.lineTo(6.8,8.1);x.lineTo(.6,3.5);x.closePath();
+  x.fillStyle='#ffc23d';x.strokeStyle='#7a4d00';x.lineWidth=1.4;x.lineJoin='round';x.fill();x.stroke();x.fillStyle='#e2402a';x.beginPath();x.arc(12,10.5,1.6,0,TAU);x.fill();x.restore();}
 function tierIdx(sp,w){const S=SPECIES[sp],r=(w-S.min)/(S.max-S.min);let i=0;TIERS.forEach((t,k)=>{if(r>=t.cut)i=k;});return i;}
 function tierW(sp,i){const S=SPECIES[sp];return S.min+(S.max-S.min)*TIERS[i].cut;}
 
@@ -3397,7 +3406,7 @@ function showCatch(){
   $('#cStars').innerHTML='★'.repeat(c.tier+1)+`<span class="off">${'★'.repeat(4-c.tier)}</span>`;
   $('#cW').textContent=fmtW(r.w);$('#cW2').textContent=fmtW2(r.w);$('#cL').textContent=fmtL(r.len);$('#cL2').textContent=fmtL2(r.len);
   $('#cLure').textContent=LBY[r.lure].name;$('#cSpot').textContent=r.zone+' · '+COLORS[r.color].name;
-  const tags=[];if(c.newSp)tags.push('<span class="ctag">New species</span>');if(c.pb)tags.push('<span class="ctag pb">Personal best</span>');if(r.clean)tags.push('<span class="ctag" style="background:#e6ecdf">Clean fight</span>');if(S.legend)tags.push('<span class="ctag pb">Legendary</span>');
+  const tags=[];if(c.newSp)tags.push('<span class="ctag">New species</span>');if(c.pb)tags.push('<span class="ctag pb">Personal best</span>');if(r.clean)tags.push('<span class="ctag" style="background:#e6ecdf">Clean fight</span>');if(S.legend)tags.push('<span class="ctag pb">Legendary</span>');if(c.tier===4)tags.unshift('<span class="ctag pb">'+CROWN+'Monster</span>');
   $('#ctags').innerHTML=tags.join('');$('#cNote').textContent=c.note||(c.tier===4?'A true monster. It goes straight to the front of the tank.':'');
   $('#cOkHint').innerHTML=key('a');
   requestAnimationFrame(()=>Nav.def());
@@ -3427,10 +3436,16 @@ function setAquaTab(t,first){aquaTab=t;$$('#tabs .tab[data-tab]').forEach(b=>b.c
   requestAnimationFrame(()=>{const tb=$(`#tabs .tab[data-tab="${t}"]`);if(first||!Nav.cur||!document.body.contains(Nav.cur))Nav.focus(tb);});}
 function best(sp){let b=null;for(const c of save.catches)if(c.sp===sp&&(!b||c.w>b.w))b=c;return b;}
 function emptyState(){return`<div class="empty"><b>The tank is empty</b><span>Every fish you land swims here. Start a tournament or go free fishing.</span></div>`;}
-const Tank={fish:[],sel:0,raf:0,last:0,plants:[],
-  build(){const pick=[];const used=new Set();for(const sp of SP_ORDER){const b=best(sp);if(b){pick.push(b);used.add(b);}}
-    const rest=save.catches.filter(c=>!used.has(c)).sort((a,b)=>b.w-a.w);for(const c of rest){if(pick.length>=12)break;pick.push(c);}
-    this.fish=pick.map(c=>({c,x:rnd(.15,.85),y:rnd(.2,.7),dir:Math.random()<.5?1:-1,sp:rnd(.025,.06),ph:Math.random()*TAU,bob:Math.random()*TAU}));
+const Tank={fish:[],sel:0,raf:0,last:0,plants:[],reg:null,
+  // regions that have at least one catch, in map order
+  regions(){const have=new Set(save.catches.map(c=>SPECIES[c.sp]&&SPECIES[c.sp].reg));return REG_ORDER.filter(r=>have.has(r));},
+  build(){const regs=this.regions();if(!regs.includes(this.reg))this.reg=regs.includes(RG.id)?RG.id:regs[0];
+    // one fish per species: your heaviest, so the tank stays readable (the Catch log lists every fish)
+    const pick=SP_ORDER.filter(sp=>SPECIES[sp].reg===this.reg).map(best).filter(Boolean);
+    const n=pick.length,maxLen=Math.max(...pick.map(c=>c.len));
+    this.fish=pick.map(c=>({c,lane:.45,x:rnd(.15,.85),dir:Math.random()<.5?1:-1,sp:rnd(.025,.05),ph:Math.random()*TAU,bob:Math.random()*TAU,rel:c.len/maxLen}));
+    // each fish gets its own lane; bigger fish swim lower
+    [...this.fish].sort((p,q)=>p.c.len-q.c.len).forEach((f,i)=>f.lane=n<2?.45:.14+.66*i/(n-1));
     this.plants=Array.from({length:14},()=>({x:Math.random(),h:rnd(.25,.6),ph:Math.random()*TAU,c:`hsl(${rnd(85,130)},45%,${rnd(22,34)}%)`}));},
   loop(now){const cv=$('#tank');if(!cv||G.screen!=='aqua'||aquaTab!=='tank'){this.raf=0;return;}const dt=Math.min(.05,(now-(this.last||now))/1000);this.last=now;this.draw(cv,dt,now/1000);this.raf=requestAnimationFrame(t=>this.loop(t));},
   draw(cv,dt,t){const r=cv.getBoundingClientRect(),W=Math.max(10,r.width),H=Math.max(10,r.height);const dp=Math.min(2,devicePixelRatio||1);if(cv.width!==Math.round(W*dp)){cv.width=Math.round(W*dp);cv.height=Math.round(H*dp);}
@@ -3440,23 +3455,27 @@ const Tank={fish:[],sel:0,raf:0,last:0,plants:[],
     const sandY=H*.86;x.fillStyle='#b9a47a';x.beginPath();x.moveTo(0,sandY);for(let i=0;i<=20;i++)x.lineTo(i/20*W,sandY+Math.sin(i*1.7)*6);x.lineTo(W,H);x.lineTo(0,H);x.closePath();x.fill();
     x.fillStyle='rgba(90,75,50,.45)';for(let i=0;i<40;i++){x.beginPath();x.ellipse(hash2(i,1)*W,sandY+8+hash2(i,2)*(H-sandY-10),3+hash2(i,3)*6,2+hash2(i,4)*3,0,0,TAU);x.fill();}
     for(const p of this.plants){x.strokeStyle=p.c;x.lineWidth=6;x.lineCap='round';const bx=p.x*W;for(let k=0;k<3;k++){x.beginPath();x.moveTo(bx+k*7,sandY+4);x.quadraticCurveTo(bx+k*7+Math.sin(t+p.ph+k)*16,sandY-p.h*H*.5,bx+k*7+Math.sin(t*.8+p.ph+k)*24,sandY-p.h*H*(1-k*.15));x.stroke();}}
-    const sc=W/260;
-    const list=[...this.fish].sort((a,b)=>a.y-b.y);
-    for(const f of list){f.x+=f.dir*f.sp*dt;if(f.x>.92){f.dir=-1;}if(f.x<.08){f.dir=1;}f.ph+=dt*5;const L=clamp(f.c.len*sc,46,W*.32);
-      const fy=(f.y+Math.sin(t*.7+f.bob)*.02)*sandY;
+    // size: relative to the biggest fish in this tank, and never taller than its lane
+    const n=this.fish.length,laneH=sandY*.66/Math.max(1,n-1)*1.05;
+    for(const f of this.fish){f.x+=f.dir*f.sp*dt;if(f.x>.9){f.dir=-1;}if(f.x<.1){f.dir=1;}f.ph+=dt*5;
+      const e=fishPlan(f.c.sp).ext;const L=Math.max(40,Math.min(W*.26*(.45+.55*f.rel),(n<2?sandY*.5:laneH)/Math.max(.2,e.y1-e.y0)));
+      const fy=(f.lane+Math.sin(t*.7+f.bob)*.012)*sandY;f.fy=fy;
       drawFish2D(x,f.c.sp,f.x*W,fy,L,{flip:f.dir<0,phase:f.ph});
-      if(this.fish[this.sel]===f){x.font='600 14px "Barlow Condensed",sans-serif';const lab=`${SPECIES[f.c.sp].name} · ${fmtW(f.c.w)} · ${TIERS[f.c.tier].name}`;const tw=x.measureText(lab).width+16;const lx=clamp(f.x*W-tw/2,6,W-tw-6),ly=Math.max(6,fy-L*fishDepth(f.c.sp)*.5-34);
+      if(f.c.tier===4)drawCrown(x,f.x*W,fy-e.y1*L-12,22);
+      if(this.fish[this.sel]===f){x.font='600 14px "Barlow Condensed",sans-serif';const lab=`${SPECIES[f.c.sp].name} · ${fmtW(f.c.w)} · ${TIERS[f.c.tier].name}`;const tw=x.measureText(lab).width+16;const lx=clamp(f.x*W-tw/2,6,W-tw-6),ly=Math.max(6,fy-e.y1*L-(f.c.tier===4?58:34));
         x.fillStyle='rgba(8,22,19,.85)';x.beginPath();x.roundRect?x.roundRect(lx,ly,tw,24,5):x.rect(lx,ly,tw,24);x.fill();x.fillStyle=TIER_HEX[f.c.tier];x.fillRect(lx,ly+20,tw,4);x.fillStyle='#eef3e4';x.fillText(lab,lx+8,ly+16);}}
     if(Math.random()<dt*6)this.bub.push({x:rnd(.05,.95)*W,y:sandY,r:rnd(1.5,4)});
     x.strokeStyle='rgba(220,255,250,.55)';x.lineWidth=1;this.bub=this.bub.filter(b=>{b.y-=dt*40;b.x+=Math.sin(b.y*.05)*.3;x.beginPath();x.arc(b.x,b.y,b.r,0,TAU);x.stroke();return b.y>0;});
   },bub:[],
-  hit(ev){const cv=$('#tank'),r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;const W=r.width,sandY=r.height*.86;let bi=-1,bd=1e9;this.fish.forEach((f,i)=>{const d=Math.hypot(f.x*W-mx,f.y*sandY-my);if(d<bd){bd=d;bi=i;}});if(bi>=0&&bd<120){this.sel=bi;this.syncChips();}},
+  hit(ev){const cv=$('#tank'),r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;const W=r.width,sandY=r.height*.86;let bi=-1,bd=1e9;this.fish.forEach((f,i)=>{const d=Math.hypot(f.x*W-mx,(f.fy||f.lane*sandY)-my);if(d<bd){bd=d;bi=i;}});if(bi>=0&&bd<120){this.sel=bi;this.syncChips();}},
   syncChips(){$$('.scb').forEach((b,i)=>b.classList.toggle('on',i===this.sel));}
 };
 function renderTank(){
   const P=$('#apane');if(!save.catches.length){P.innerHTML=emptyState();return;}
   Tank.build();Tank.sel=0;
-  P.innerHTML=`<div class="tankwrap"><canvas id="tank"></canvas><div class="showcase">${Tank.fish.map((f,i)=>`<button class="scb nav${i===0?' on':''}" data-tankfish="${i}">${SPECIES[f.c.sp].name}<small>${fmtW(f.c.w)} · ${TIERS[f.c.tier].name}</small></button>`).join('')}</div></div>`;
+  const regs=Tank.regions(),have=sp=>save.catches.some(c=>c.sp===sp),cnt=r=>SP_ORDER.filter(sp=>SPECIES[sp].reg===r&&have(sp)).length;
+  P.innerHTML=`<div class="tankwrap"><div class="tanktabs">${regs.map(r=>`<button class="tab nav${r===Tank.reg?' on':''}" data-tankreg="${r}">${REGIONS[r].name}<small>${cnt(r)}/8</small></button>`).join('')}<span class="hint">Your heaviest fish of each species. Every catch is in the Catch log.</span></div>
+  <canvas id="tank"></canvas><div class="showcase">${Tank.fish.map((f,i)=>`<button class="scb nav${i===0?' on':''}" data-tankfish="${i}">${crownIf(f.c)}${SPECIES[f.c.sp].name}<small>${fmtW(f.c.w)} · ${TIERS[f.c.tier].name}</small></button>`).join('')}</div></div>`;
   $('#tank').addEventListener('click',e=>Tank.hit(e));
   $$('.scb').forEach(b=>b.addEventListener('focus',()=>{Tank.sel=+b.dataset.tankfish;Tank.syncChips();}));
   if(!Tank.raf){Tank.last=0;Tank.raf=requestAnimationFrame(t=>Tank.loop(t));}
@@ -3470,7 +3489,7 @@ function renderSpecies(){
     <h4><span class="${known?'':'locked'}">${known?S.name:'Unknown fish'}</span><small>${cs.length} caught</small></h4>
     <div class="sci">${known?S.sci:'Not caught yet'}</div>
     <p>${known?S.about:(S.legend?S.legendHint:(S.reg!==RG.id?REGIONS[S.reg].name+'. ':'')+'Hint: '+S.where+'.')}</p>
-    ${known?`<dl class="kv"><dt>Where</dt><dd>${S.where}</dd><dt>Tip</dt><dd>${S.tip}</dd><dt>Fight</dt><dd>${S.fightTxt}</dd><dt>Record</dt><dd>${fmtW(b.w)} · ${fmtL(bl)} longest</dd><dt>Monster</dt><dd>${fmtW(tierW(sp,4))} and up</dd></dl>
+    ${known?`<dl class="kv"><dt>Where</dt><dd>${S.where}</dd><dt>Tip</dt><dd>${S.tip}</dd><dt>Fight</dt><dd>${S.fightTxt}</dd><dt>Record</dt><dd>${crownIf(b)}${fmtW(b.w)} · ${fmtL(bl)} longest</dd><dt>Monster</dt><dd>${fmtW(tierW(sp,4))} and up</dd></dl>
     <div class="tierbar">${TIERS.map((t,i)=>`<div><b style="color:${TIER_COL[i]}">${counts[i]}</b>${t.name}<small>${i<4?'< '+fmtW(tierW(sp,i+1)).replace(/ 0 oz$/,' '):''}${i===4?fmtW(tierW(sp,4)).replace(/ 0 oz$/,'')+'+':''}</small></div>`).join('')}</div>`:''}
     </article>`;})();}).join('')}</div>`;
   $$('.scard').forEach(el=>{const sp=el.dataset.sp,known=save.catches.some(c=>c.sp===sp),cv=el.querySelector('canvas'),x=cv.getContext('2d');const e=fishPlan(sp).ext,L=fitFishL(sp,430,175);drawFish2D(x,sp,240-(e.x0+e.x1)/2*L,100+(e.y0+e.y1)/2*L,L,{phase:.5,sil:!known,silCol:'#0a1d1a'});});
@@ -3481,7 +3500,7 @@ function renderLog(){
   const shown=rows.slice(0,300);
   P.innerHTML=`<div class="logbar"><span class="lbl">Sort</span><button class="tab nav${logSort==='new'?' on':''}" data-sort="new">Newest</button><button class="tab nav${logSort==='heavy'?' on':''}" data-sort="heavy">Heaviest</button><span class="hint" style="margin-left:auto">${save.catches.length} fish logged${save.catches.length>300?' · showing 300':''}</span></div>
   <div class="tblwrap"><table class="log"><thead><tr><th>Date</th><th>Species</th><th class="num">Weight</th><th class="num">Length</th><th>Tier</th><th>Rating</th><th>Lure</th><th>Spot</th><th>Mode</th></tr></thead><tbody>
-  ${shown.map(c=>{const d=new Date(c.t);return`<tr><td>${d.toLocaleDateString(undefined,{month:'short',day:'numeric'})} ${d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}</td><td>${SPECIES[c.sp].name}</td><td class="num">${fmtW(c.w)}</td><td class="num">${fmtL(c.len)}</td><td><span class="tpill" style="background:${TIER_COL[c.tier]}">${TIERS[c.tier].name}</span></td><td style="color:var(--t-monster)">${'★'.repeat(c.tier+1)}<span style="color:rgba(255,255,255,.18)">${'★'.repeat(4-c.tier)}</span></td><td>${LBY[c.lure]?LBY[c.lure].name:c.lure}</td><td>${c.zone}</td><td>${c.mode==='tour'?'Tournament':'Free'}</td></tr>`;}).join('')}
+  ${shown.map(c=>{const d=new Date(c.t);return`<tr><td>${d.toLocaleDateString(undefined,{month:'short',day:'numeric'})} ${d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}</td><td>${crownIf(c)}${SPECIES[c.sp].name}</td><td class="num">${fmtW(c.w)}</td><td class="num">${fmtL(c.len)}</td><td><span class="tpill" style="background:${TIER_COL[c.tier]}">${TIERS[c.tier].name}</span></td><td style="color:var(--t-monster)">${'★'.repeat(c.tier+1)}<span style="color:rgba(255,255,255,.18)">${'★'.repeat(4-c.tier)}</span></td><td>${LBY[c.lure]?LBY[c.lure].name:c.lure}</td><td>${c.zone}</td><td>${c.mode==='tour'?'Tournament':'Free'}</td></tr>`;}).join('')}
   </tbody></table></div>`;
 }
 function renderRecords(){
@@ -3518,7 +3537,7 @@ function renderHelp(){
 }
 // clicks
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-act],[data-set],[data-spot],[data-region],[data-lure],[data-color],[data-tab],[data-sort],[data-tankfish]');if(!t)return;Snd.init();Snd.ui();
+  const t=e.target.closest('[data-act],[data-set],[data-spot],[data-region],[data-lure],[data-color],[data-tab],[data-sort],[data-tankfish],[data-tankreg]');if(!t)return;Snd.init();Snd.ui();
   if(t.dataset.set){const [k,v]=t.dataset.set.split(':');applySet(k,v);return;}
   if(t.dataset.spot){travelTo(t.dataset.spot);return;}
   if(t.dataset.region){pickRegion(t.dataset.region);return;}
@@ -3527,6 +3546,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.tab){setAquaTab(t.dataset.tab);return;}
   if(t.dataset.sort){logSort=t.dataset.sort;renderLog();Nav.focus($(`[data-sort="${logSort}"]`));return;}
   if(t.dataset.tankfish!=null){Tank.sel=+t.dataset.tankfish;Tank.syncChips();return;}
+  if(t.dataset.tankreg){Tank.reg=t.dataset.tankreg;renderTank();Nav.def();return;}
   switch(t.dataset.act){
     case 'tour':openRegions('tour');break;case 'free':openRegions('free');break;
     case 'regback':G.regFrom==='pause'?openScreen('pause'):openScreen('title');break;
