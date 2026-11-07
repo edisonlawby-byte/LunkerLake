@@ -152,6 +152,9 @@ button{font:inherit;color:inherit}
 .lcard b{font:700 16px/1.1 var(--f-hud);letter-spacing:.02em}
 .lcard small{font:500 13px/1.1 var(--f-hud);color:var(--muted)}
 .lcard.on{border-color:var(--chart)}
+.lcard{position:relative}.lglyph{position:absolute;top:8px;right:8px;display:flex;gap:4px;align-items:flex-start;pointer-events:none}
+.lglyph svg,.lrun svg{display:block}.lrun{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.lrun>div{display:flex;gap:8px;align-items:center;font:600 15px var(--f-hud)}
+.lrun small{display:block;font:600 11px var(--f-hud);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .lcard.nav-focus,.lcard:focus-visible{outline:2px solid var(--blaze);outline-offset:2px;background:var(--raise2)}
 .ldet{display:flex;flex-direction:column;gap:10px;background:var(--raise);border-radius:10px;padding:16px;border:1px solid var(--line);min-width:0}
 .ldet canvas{width:100%;height:auto;aspect-ratio:100/56}
@@ -2572,8 +2575,53 @@ function lurePaint(g,hex,cid){
     c[i*3]=tmpc.r;c[i*3+1]=tmpc.g;c[i*3+2]=tmpc.b;}
   g.setAttribute('color',new THREE.BufferAttribute(c,3));return g;
 }
-function makeLureMesh(lu,hex){
-  const cid=lureColorId(lu);
+// Lures modelled in Blender (models/lures.glb). Each lure is a node "L_<id>" built in the same frame as the procedural
+// lures below; material names say how each part is coloured, and named pivots (Blade_kNN, Seg*, Leg*, Joint, TailFin,
+// Skirt) are what animateLure moves. Until the file loads (or if it fails) the procedural lures are used.
+let LureKit=null;const lureIconCache={};
+(function loadLureKit(){
+  if(!THREE.GLTFLoader)return;
+  new THREE.GLTFLoader().load('models/lures.glb',gl=>{const k={};for(const o of gl.scene.children)k[o.name]=o;LureKit=k;
+    for(const c in lureIconCache)delete lureIconCache[c];
+    if(lureMesh&&G.lureIdx!=null)equipLure(G.lureIdx);
+    if(G.screen==='tackle')openTackle();},undefined,()=>{});
+})();
+function makeLureFromKit(lu,hex,cid){
+  const root=new THREE.Group(),pv=LureKit['L_'+lu.id].clone(true);pv.position.set(0,0,0);pv.rotation.set(0,0,0);pv.scale.set(1,1,1);root.add(pv);
+  const U={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};
+  const ph=(c,o)=>new THREE.MeshPhongMaterial(Object.assign({color:new THREE.Color(c),shininess:40,specular:0x333333},o||{}));
+  const M={Body:new THREE.MeshPhongMaterial({vertexColors:true,shininess:90,specular:0x777777}),Tint:ph(hex,{shininess:70,specular:0x555555}),
+    Fin:ph(shade(hex,-.22),{side:THREE.DoubleSide}),SkirtCol:ph(hex,{side:THREE.DoubleSide,shininess:30}),SkirtDark:ph('#141414',{side:THREE.DoubleSide}),
+    Feather:ph('#efe7d2',{side:THREE.DoubleSide,shininess:5}),Metal:LMAT.metal,Gold:LMAT.gold,Clear:LMAT.clear,Dark:LMAT.dark,White:LMAT.white};
+  pv.traverse(o=>{const n=o.name||'';
+    if(o.isMesh){const mn=(o.material&&o.material.name)||'';
+      if(mn==='Body'){o.geometry=lurePaint(o.geometry.clone(),hex,cid);o.userData.own=true;o.material=M.Body;}else o.material=M[mn]||M.Tint;return;}
+    /* Blender's duplicate names (Skirt.001) arrive as Skirt001, so match on the stem */
+    if(/^Blade_k/.test(n))U.blades.push({o,axis:'z',k:(parseInt(n.slice(7,9))||10)/10});
+    else if(/^Seg\d/.test(n))U.tail.push(o);else if(/^Leg\d*$/.test(n))U.legs.push(o);
+    else if(/^Joint\d*$/.test(n))U.joint=o;else if(/^TailFin\d*$/.test(n))U.tailFin=o;else if(/^Skirt\d*$/.test(n))U.skirt=o;});
+  root.scale.setScalar(2.2);root.userData=U;return root;
+}
+// Tackle-box pictures are rendered from the same 3D lures, side-on with the nose to the right, and cached.
+let iconR=null,iconScene=null,iconCam=null;
+function lureIconCanvas(lu,cid,W,H){
+  const key=lu.id+'|'+cid+'|'+W+'x'+H;if(lureIconCache[key])return lureIconCache[key];
+  if(!iconR){try{iconR=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});}catch(e){return null;}
+    iconR.setClearColor(0,0);iconR.outputEncoding=renderer.outputEncoding;iconScene=new THREE.Scene();
+    iconScene.add(new THREE.HemisphereLight(0xf2f6ff,0x34443e,.8));const d=new THREE.DirectionalLight(0xffffff,.95);d.position.set(-2,3,1.5);iconScene.add(d);
+    const d2=new THREE.DirectionalLight(0xa8c8ff,.4);d2.position.set(1,-1,-2);iconScene.add(d2);iconCam=new THREE.PerspectiveCamera(16,1,.01,20);}
+  const s=2;iconR.setPixelRatio(1);iconR.setSize(W*s,H*s,false);
+  const m=makeLureMesh(lu,COLORS[cid].hex,cid);iconScene.add(m);m.updateMatrixWorld(true);
+  const box=new THREE.Box3().setFromObject(m),c=box.getCenter(new V3()),sz=box.getSize(new V3());
+  iconCam.aspect=W/H;const half=Math.max(sz.y,sz.z/iconCam.aspect)*.5*1.12,dist=half/Math.tan(iconCam.fov*Math.PI/360)+sz.x*.5;
+  iconCam.position.copy(c).addScaledVector(new V3(-1,.3,.22).normalize(),dist);iconCam.lookAt(c);iconCam.updateProjectionMatrix();
+  iconR.render(iconScene,iconCam);
+  const cv=document.createElement('canvas');cv.width=W*s;cv.height=H*s;cv.getContext('2d').drawImage(iconR.domElement,0,0);
+  iconScene.remove(m);m.traverse(o=>{if(o.isMesh&&o.userData.own)o.geometry.dispose();});
+  return lureIconCache[key]=cv;
+}
+function makeLureMesh(lu,hex,cid){
+  cid=cid||lureColorId(lu);if(LureKit&&LureKit['L_'+lu.id])return makeLureFromKit(lu,hex,cid);
   const root=new THREE.Group(),pv=new THREE.Group();root.add(pv);
   const bodyMat=new THREE.MeshPhongMaterial({vertexColors:true,shininess:90,specular:0x777777});
   const solid=new THREE.MeshPhongMaterial({color:new THREE.Color(hex),shininess:60,specular:0x444444});
@@ -2659,6 +2707,7 @@ function equipLure(i){
   drawLureIcon($('#lureIcon').getContext('2d'),lu,COLORS[lureColorId(lu)].hex,168,92);$('#lureName').textContent=lu.name;$('#lureMeta').textContent=COLORS[lureColorId(lu)].name+' · '+lu.type;
 }
 function drawLureIcon(ctx,lu,hex,W,H){
+  if(LureKit){const cid=Object.keys(COLORS).find(k=>COLORS[k].hex===hex)||lureColorId(lu),cv=lureIconCanvas(lu,cid,W,H);if(cv){ctx.clearRect(0,0,W,H);ctx.drawImage(cv,0,0,W,H);return;}}
   ctx.clearRect(0,0,W,H);ctx.save();ctx.translate(W/2,H/2);const s=Math.min(W/110,H/60);ctx.scale(s,s);
   const body=(rx,ry,x,y)=>{x=x||0;y=y||0;const g=ctx.createLinearGradient(0,y-ry,0,y+ry);g.addColorStop(0,shade(hex,-.38));g.addColorStop(.45,hex);g.addColorStop(1,shade(hex,.4));ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,TAU);ctx.fill();};
   const eye=(x,y,r)=>{r=r||3;ctx.fillStyle='#f4f1e0';ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(x+.6,y,r*.55,0,TAU);ctx.fill();};
@@ -3383,9 +3432,18 @@ function drawSpotStrip(){
 function cycleLure(d){const n=LURES.length;equipLure((G.lureIdx+d+n)%n);Snd.ui();toast(LURE().name+' · '+COLORS[lureColorId(LURE())].name);}
 // tackle
 let tackleSel=0;
+// Tackle-box glyphs: a little water column showing where the lure runs, and a line showing how to reel it.
+const RETRIEVE={steady:['Steady reel','M2 7H28M24 3L30 7L24 11'],twitch:['Twitch, pause','M2 9L7 3L12 11L17 3L22 11L27 5'],pause:['Crawl, pause','M2 7H10M14 4V10M18 4V10M22 7H31'],
+  hop:['Hop it','M2 12Q7 0 12 12Q17 0 22 12Q27 0 32 12'],pop:['Pop, rest','M2 9H13M17 7L21 2M17 9L25 9M17 11L21 14']};
+function lureDepth(l){const p=LPHYS[l.id]||{};if(l.cat==='top')return{a:0,b:.12,txt:'Surface'};if(l.cat==='bottom')return{a:6,b:6,txt:'Bottom'};
+  const d=p.dive||l.dive;return{a:Math.max(.2,d*.45),b:d,txt:(Math.max(.2,d*.45)).toFixed(1).replace(/\.0$/,'')+'–'+d.toFixed(1).replace(/\.0$/,'')+' m'};}
+function depthSvg(l,h){const D=lureDepth(l),y=d=>3+d/6*(h-10);let band;
+  if(D.txt==='Bottom')band=`<rect x="3" y="${h-9}" width="10" height="4" rx="1" fill="#c6ef4b"/>`;else band=`<rect x="3" y="${y(D.a)}" width="10" height="${Math.max(3,y(D.b)-y(D.a))}" rx="1" fill="#c6ef4b"/>`;
+  return `<svg width="16" height="${h}" viewBox="0 0 16 ${h}" aria-hidden="true"><rect x="1" y="1" width="14" height="${h-2}" rx="3" fill="#123a45" stroke="rgba(255,255,255,.25)"/><path d="M1 ${h-5}H15V${h-3}a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2Z" fill="#6b5a3a"/>${band}</svg>`;}
+function retrieveSvg(l,c){const r=RETRIEVE[l.ideal]||RETRIEVE.steady;return `<svg width="34" height="14" viewBox="0 0 34 14" aria-hidden="true"><path d="${r[1]}" fill="none" stroke="${c||'#eef3e4'}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
 function openTackle(){
   G.screen='tackle';showOnly('tackle');tackleSel=G.lureIdx;
-  $('#lgrid').innerHTML=LURES.map((l,i)=>`<button class="lcard nav${i===G.lureIdx?' on':''}" data-lure="${i}"${i===G.lureIdx?' data-default':''}><canvas width="200" height="112"></canvas><b>${l.name}</b><small>${l.type}</small></button>`).join('');
+  $('#lgrid').innerHTML=LURES.map((l,i)=>`<button class="lcard nav${i===G.lureIdx?' on':''}" data-lure="${i}"${i===G.lureIdx?' data-default':''}><canvas width="200" height="112"></canvas><span class="lglyph" title="${lureDepth(l).txt} · ${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}">${depthSvg(l,30)}</span><b>${l.name}</b><small>${l.type}</small></button>`).join('');
   $$('#lgrid .lcard').forEach((b,i)=>{const l=LURES[i];drawLureIcon(b.querySelector('canvas').getContext('2d'),l,COLORS[lureColorId(l)].hex,200,112);b.addEventListener('focus',()=>{tackleSel=i;renderLdet();});b.addEventListener('mouseenter',()=>{tackleSel=i;renderLdet();});});
   $('#tackleHint').innerHTML=`${G.light<.6?'Low light: bright or dark colors work best.':'Bright sun: natural colors work best.'} &nbsp;${key('lb')}${key('rb')} change color`;
   renderLdet();requestAnimationFrame(()=>Nav.def());
@@ -3395,6 +3453,7 @@ function renderLdet(){
   const best=Object.entries(l.pref).filter(([s])=>SPECIES[s].reg===RG.id&&!SPECIES[s].legend).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([s])=>SPECIES[s].name);
   const lvl=v=>v>8.5?'Loud':v>6.5?'Medium':'Quiet';
   $('#ldet').innerHTML=`<canvas width="300" height="168"></canvas><h3>${l.name}</h3><div class="chips"><span class="chip">${l.type}</span><span class="chip">Cast ${l.cast} m</span><span class="chip">${lvl(l.noise)}</span>${l.weedless?'<span class="chip">Weedless</span>':''}${l.big>.5?'<span class="chip">Trophy bait</span>':''}</div>
+  <div class="lrun"><div>${depthSvg(l,40)}<span><small>Runs</small>${lureDepth(l).txt}</span></div><div>${retrieveSvg(l)}<span><small>Retrieve</small>${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}</span></div></div>
   <p>${l.how}</p><div><div class="lbl" style="margin-bottom:4px">How it moves</div><p>${LPHYS[l.id].act}</p></div><div><div class="lbl" style="margin-bottom:4px">Best for</div><p>${best.join(', ')}</p></div>
   <div><div class="lbl" style="margin-bottom:6px">Color</div><div class="sw">${l.colors.map((c,i)=>`<button class="swb nav${i===ci?' on':''}" data-color="${i}"><i style="background:${COLORS[c].hex}"></i>${COLORS[c].name}</button>`).join('')}</div></div>
   <button class="btn nav row" data-act="equip">Use this lure ${key('a')}</button>`;
@@ -3631,7 +3690,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={get LureKit(){return LureKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
