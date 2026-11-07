@@ -561,6 +561,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 (function(){
 'use strict';
@@ -2482,6 +2483,18 @@ const ARMS=[];const UPV=new V3(0,1,0),_aa=new V3(),_ab=new V3();
   // Shadows
   boat.traverse(o => { if (o.isMesh) o.castShadow = true; });
   deck.receiveShadow = true;
+})();
+// Boat model made in Blender (models/boat.glb). When it loads it replaces the built-in hull, deck and fittings;
+// the angler and rod stay as they are. If it can't load (offline, or opened as a local file), the built-in boat stays.
+(function loadBoatModel(){
+  if(!THREE.GLTFLoader)return;
+  new THREE.GLTFLoader().load('models/boat.glb',gl=>{
+    const m=gl.scene;m.name='boatModel';
+    m.traverse(o=>{if(!o.isMesh)return;o.castShadow=true;o.receiveShadow=true;const mt=o.material;if(mt&&mt.metalness>.1)mt.metalness=.1;/* no reflection map in this scene, so keep metals from going dark */
+      if(mt&&mt.transparent){mt.depthWrite=false;o.castShadow=false;}});
+    for(const c of boat.children)if(c!==angler)c.visible=false;
+    boat.add(m);
+  },undefined,e=>console.warn('Boat model not loaded, using the built-in boat',e));
 })();
 const lineGeo=new THREE.BufferGeometry();const LN=32;lineGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(LN*3),3));
 const fishLine=new THREE.Line(lineGeo,new THREE.LineBasicMaterial({color:0xe7ff7a,transparent:true,opacity:.85}));fishLine.frustumCulled=false;fishLine.renderOrder=7;scene.add(fishLine);
