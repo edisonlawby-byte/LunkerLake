@@ -3,11 +3,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a1714">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<title>Lunker Lake</title>
+<title>Angler's Bite</title>
+<meta name="description" content="A 3D bass fishing game you play in the browser with a controller, mouse or touch. Four regions, 32 species, tournaments and an aquarium.">
+<meta property="og:title" content="Angler's Bite"><meta property="og:description" content="Free 3D fishing in your browser. Play with a controller, mouse or touch.">
+<meta property="og:image" content="https://fishing.edisonlawby.com/img/og.jpg"><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="img/icon-192.png"><link rel="apple-touch-icon" href="img/icon-192.png">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rye&family=Barlow+Condensed:wght@500;600;700&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: full-bleed 3D lake; HUD pinned to the corners like a boat console; menus are tackle-box panels over the live scene. Single dark look by design. */
 :root{
@@ -16,7 +20,7 @@
   --line:rgba(205,230,195,.16); --line2:rgba(205,230,195,.28); --text:#eef3e4; --muted:#9db4a6; --dim:#6f8b7f;
   --blaze:#ff6a2b; --blaze-ink:#250c02; --chart:#c6ef4b; --warn:#ffc23d; --danger:#ff4d3d; --slack:#5fb7ff;
   --t-poor:#8f9b94; --t-small:#6fd0a0; --t-decent:#6aa9ff; --t-huge:#c48bff; --t-monster:#ffb21f;
-  --f-display:"Alfa Slab One","Rockwell","Roboto Slab",Georgia,serif;
+  --f-display:"Rye","Alfa Slab One","Rockwell","Roboto Slab",Georgia,serif;
   --f-hud:"Barlow Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
   --f-body:"Barlow Semi Condensed",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
@@ -122,8 +126,9 @@ button{font:inherit;color:inherit}
 .title-screen{background:radial-gradient(ellipse 60% 75% at 50% 55%,rgba(4,12,10,.62),rgba(4,12,10,.12) 75%);place-items:center}
 .title-screen .twrap{width:min(600px,100%);align-items:center;text-align:center}
 .title-screen .ribbon{align-self:center}
-.title-screen .logo{font-size:clamp(56px,min(13vw,13vh),124px)}
+.title-screen .logo{font-size:0;line-height:0;text-shadow:none}.title-screen .logo img{height:clamp(110px,26vh,280px);width:auto;filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
 .title-screen .tag{font-size:17px;max-width:58ch}
+@media (max-height:820px){.title-screen .tag{display:none}.title-screen .btn{padding:8px 22px}}
 .title-screen .menu{width:100%;gap:8px}
 .title-screen .btn{align-items:center;text-align:center;font-size:23px;padding:11px 22px}
 .title-screen .btn span{font-size:15px}
@@ -335,6 +340,7 @@ body.touch .fight{padding:6px 10px 8px;gap:5px}
 body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 @media (max-height:520px){
   .logo{font-size:clamp(40px,11vh,64px)!important}
+  .title-screen .logo{font-size:0!important}.title-screen .logo img{height:24vh}
   .title-screen .tag{display:none}
   .twrap{gap:10px!important}
   .btn{padding:8px 14px;font-size:17px}
@@ -355,7 +361,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   <button class="tb tb-b tc" data-tk="b" id="tB">Reel in</button>
   <div class="ttop" id="tTop"><button class="tb tc" data-tk="start">&#9776; Menu</button><button class="tb tc" data-tk="y" id="tY">Tackle</button><button class="tb tc" data-tk="lb" id="tLB">&#9664; Lure</button><button class="tb tc" data-tk="rb" id="tRB2">Lure &#9654;</button><button class="tb tc" data-tk="x" id="tX">Cam</button></div>
 </div>
-<div id="rotate" hidden><div>Turn your phone sideways<small>Lunker Lake plays in landscape</small></div></div>
+<div id="rotate" hidden><div>Turn your phone sideways<small>Angler's Bite plays in landscape</small></div></div>
 <div class="toast panel" id="toast"></div>
 
 <div id="hud" hidden>
@@ -409,7 +415,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 <section class="screen title-screen" id="scr-title">
   <div class="twrap">
     <div class="ribbon" id="ribbon">World fishing tour</div>
-    <h1 class="logo">Lunker<br><em>Lake</em></h1>
+    <h1 class="logo"><img src="img/logo.webp" alt="Angler's Bite" width="900" height="800"></h1>
     <p class="tag">Four regions, six fishing spots each, thirty-two species and eleven lures. Fill a five-fish livewell with the day’s target species before the 3:00 PM weigh-in, or just fish and build your aquarium.</p>
     <div class="menu">
       <button class="btn nav" data-act="tour" data-default>Tournament day<span>Five heaviest fish of the day’s target species. Weigh-in at 3:00 PM.</span></button>
