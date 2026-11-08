@@ -173,6 +173,7 @@ button{font:inherit;color:inherit}
 .swb.on{border-color:var(--chart);color:var(--chart)}
 .swb.nav-focus,.swb:focus-visible{outline:2px solid var(--blaze);outline-offset:2px}
 .hint{font:500 14px var(--f-hud);color:var(--muted);letter-spacing:.03em}
+.credits p{margin:0 0 6px;line-height:1.45}.credits a{color:#cfe8b0}
 
 /* catch card */
 .catch{width:min(520px,100%);background:var(--solid);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -552,6 +553,10 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
         <div class="lbl">Weather</div><div class="seg"><button class="nav" data-set="weather:natural">Natural</button><button class="nav" data-set="weather:clear">Clear</button><button class="nav" data-set="weather:cloudy">Cloudy</button><button class="nav" data-set="weather:mist">Mist</button><button class="nav" data-set="weather:rain">Rain</button></div>
         <div class="lbl">Weight units</div><div class="seg"><button class="nav" data-set="units:lb">lb / in</button><button class="nav" data-set="units:kg">kg / cm</button></div></div>
       <div class="sgroup wide"><h3>Controls</h3><table class="htbl" id="setCtl"></table></div>
+      <div class="sgroup wide credits"><h3>Credits</h3>
+        <p class="hint">Squarebill Crank based on <a href="https://sketchfab.com/3d-models/fishing-lure-chubby-38-3-209706089c414a73b4c2907f2d34024d" target="_blank" rel="noopener">"Fishing lure Chubby 38 #3"</a> by <a href="https://sketchfab.com/Zverev" target="_blank" rel="noopener">Zverev Kirill</a>, licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Simplified, recoloured and brand name removed.</p>
+        <p class="hint">Largemouth, golden and spotted bass based on <a href="https://sketchfab.com/3d-models/model-67a-largemouth-bass-e60c457636b640629747c19feac4906c" target="_blank" rel="noopener">"Model 67A - Largemouth Bass"</a>, and bluegill based on <a href="https://sketchfab.com/3d-models/model-70b-bluegill-mesh-66d2aa9eda2d48e7910e5c910419f737" target="_blank" rel="noopener">"Model 70B - Bluegill Mesh"</a>, by <a href="https://sketchfab.com/DigitalLife3D" target="_blank" rel="noopener">DigitalLife3D</a>, licensed under <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Re-posed, resized and recoloured.</p>
+        <p class="hint">Everything else is original to Angler's Bite.</p></div>
     </div>
   </div>
 </section>
@@ -2183,8 +2188,9 @@ function fishTemplate(sp){
     extra.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),8,b.r||.004,5,false));}}
   if(lk.teeth==='fang'){for(const s of[-1,1]){const g=new THREE.ConeGeometry(.007,.05,6);g.translate(.94-.5,P.yAt(.94,.62)+.03,P.zAt(.94,P.yAt(.94,.6))*.6*s);extra.push(g);}}
   const extraGeo=extra.length?mergeGeos(extra.map(g=>g.index?g.toNonIndexed():g)):null;
-  const K=FishKit&&FishKit[sp];
-  return FT[sp]={P,geo:K?K.body:geo,eyeGeo0:eyeGeo,tex,bump:scaleBump(lk.sc==null?14:lk.sc),finTex,finGeo,eyeGeo:K?K.eye:eyeGeo,eyeTex:eyeTexture(E.col||'#c9a227',E.r>.04),extraGeo,H:P.yT(.55)-P.yB(.55),W:P.w(.7)*2};
+  const K=FishKit&&FishKit[sp];const SC=scanFor(sp);
+  if(SC&&SC.bodyTex==='paint'){const c=tex.image.getContext('2d');paintScanExtras(c,tex.image.width,tex.image.height,sp);tex.needsUpdate=true;}
+  return FT[sp]={scan:SC,P,geo:K?K.body:geo,eyeGeo0:eyeGeo,tex,bump:scaleBump(lk.sc==null?14:lk.sc),finTex,finGeo,eyeGeo:K?K.eye:eyeGeo,eyeTex:eyeTexture(E.col||'#c9a227',E.r>.04),extraGeo,H:P.yT(.55)-P.yB(.55),W:P.w(.7)*2};
 }
 function mergeGeos(list){let n=0;const hasUV=list.every(g=>g.attributes.uv);const L=list.map(g=>g.index?g.toNonIndexed():g);for(const g of L)n+=g.attributes.position.count;
   const pos=new Float32Array(n*3),uv=hasUV?new Float32Array(n*2):null;let o=0;for(const g of L){pos.set(g.attributes.position.array,o*3);if(uv)uv.set(g.attributes.uv.array,o*2);o+=g.attributes.position.count;}
@@ -2201,6 +2207,13 @@ function makeFishMesh(sp){
   const silver=lk.metal||0;
   const bodyMat=bendMat(new THREE.MeshPhongMaterial({map:T.tex,bumpMap:T.bump,bumpScale:.012,shininess:40+silver*60,specular:new THREE.Color(.16+silver*.35,.18+silver*.35,.17+silver*.35)}),uni);
   if(lk.glow){bodyMat.emissive=new THREE.Color(lk.glow);bodyMat.specular=new THREE.Color(0x9a7a30);}
+  if(T.scan){const S=T.scan;let mat;
+    if(S.bodyTex==='paint')mat=bendMat(new THREE.MeshPhongMaterial({map:T.tex,bumpMap:T.bump,bumpScale:.006,shininess:45,specular:new THREE.Color(.2,.21,.2)}),uni);
+    else mat=bendMat(new THREE.MeshStandardMaterial({map:S.map,normalMap:S.normal,normalScale:new THREE.Vector2(1,-1),roughness:.42,metalness:.05,envMap:ENV,envMapIntensity:.45}),uni);
+    if(lk.glow&&mat.emissive)mat.emissive=new THREE.Color(lk.glow).multiplyScalar(.5);
+    const body=new THREE.Mesh(S.body,mat);body.castShadow=true;g.add(body);let eye=null;
+    if(S.eye){eye=new THREE.Mesh(S.eye,bendMat(new THREE.MeshPhongMaterial({map:T.eyeTex,shininess:140,specular:0x8a8a8a}),uni));g.add(eye);}
+    g.userData={body,eye,uni,scan:true};return g;}
   const body=new THREE.Mesh(T.geo,bodyMat);body.castShadow=true;g.add(body);
   const finMat=bendMat(new THREE.MeshPhongMaterial({map:T.finTex,side:THREE.DoubleSide,transparent:true,alphaTest:.04,shininess:22,depthWrite:true}),uni);
   const fins=new THREE.Mesh(T.finGeo,finMat);g.add(fins);
@@ -2223,8 +2236,35 @@ let FishKit=null;
     for(const sp in k)if(!k[sp].body||!k[sp].eye)delete k[sp];
     FishKit=k;
     // swap the new bodies into templates and any fish already in the water
-    for(const sp in FT)if(k[sp]){FT[sp].geo=k[sp].body;FT[sp].eyeGeo=k[sp].eye;}
-    for(const f of fishes)if(f.mesh&&f.mesh.userData.body&&k[f.sp]){f.mesh.userData.body.geometry=k[f.sp].body;if(f.mesh.userData.eye)f.mesh.userData.eye.geometry=k[f.sp].eye;}
+    for(const sp in FT)if(k[sp]&&!FT[sp].scan){FT[sp].geo=k[sp].body;FT[sp].eyeGeo=k[sp].eye;}
+    for(const f of fishes)if(f.mesh&&f.mesh.userData.body&&!f.mesh.userData.scan&&k[f.sp]){f.mesh.userData.body.geometry=k[f.sp].body;if(f.mesh.userData.eye)f.mesh.userData.eye.geometry=k[f.sp].eye;}
+  },undefined,()=>{});
+})();
+// Scanned fish (models/scans.glb, Blender/scans.py): DigitalLife3D "Model 67A - Largemouth Bass" and "Model 70B - Bluegill
+// Mesh" (CC-BY-NC-4.0). The bass keeps its photo textures (re-tinted for the golden and spotted bass); the bluegill mesh
+// has no colours, so it wears the bluegill skin the game paints, wrapped on by skin coordinates made in Blender.
+let ScanKit=null;
+const SCAN_SPECIES={lm:{mesh:'scan_lm',tex:'lm'},sp:{mesh:'scan_lm',tex:'sp'},gd:{mesh:'scan_lm',tex:'gd'},bg:{mesh:'scan_bg',tex:'paint',eye:'scaneye_bg'}};
+function scanFor(sp){const d=SCAN_SPECIES[sp];if(!ScanKit||!d||!ScanKit[d.mesh])return null;
+  return {body:ScanKit[d.mesh],eye:d.eye?ScanKit[d.eye]:null,bodyTex:d.tex==='paint'?'paint':'photo',map:d.tex!=='paint'?ScanKit.tex[d.tex]:null,normal:ScanKit.tex.normal};}
+// extras painted on the skin of scanned fish that the code-built fish draw as separate parts (the bluegill's ear flap)
+function paintScanExtras(ctx,W,H,sp){const lk=SPECIES[sp].look;if(!lk.flap)return;const gu=(lk.gill||.74)+.005;
+  ctx.fillStyle=lk.flap;ctx.beginPath();ctx.ellipse(gu*W,.4*H,.03*W,.07*H,0,0,TAU);ctx.fill();}
+(function loadScanKit(){
+  if(!THREE.GLTFLoader)return;
+  const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/scans.glb',gl=>{const k={};
+    for(const scn of (gl.scenes&&gl.scenes.length?gl.scenes:[gl.scene]))scn.traverse(o=>{if(!o.isMesh)return;const g=o.geometry;
+      if(o.name!=='scan_lm'){const uv=g.attributes.uv;for(let i=0;i<uv.count;i++)uv.setY(i,1-uv.getY(i));uv.needsUpdate=true;}// painted skins use canvas textures
+      if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();k[o.name]=g;});
+    const tl=new THREE.TextureLoader(),tx=(n,srgb)=>{const t=tl.load('models/scans/'+n+'.jpg');t.flipY=false;t.anisotropy=4;return t;};
+    k.tex={lm:tx('lm_color'),sp:tx('sp_color'),gd:tx('gd_color'),normal:tx('lm_normal')};
+    ScanKit=k;
+    // rebuild scanned species, including fish already in the water
+    for(const sp in SCAN_SPECIES)delete FT[sp];
+    for(const f of fishes)if(f.mesh&&SCAN_SPECIES[f.sp]){const o=f.mesh,m=makeFishMesh(f.sp);m.position.copy(o.position);m.quaternion.copy(o.quaternion);m.rotation.order=o.rotation.order;m.rotation.copy(o.rotation);m.scale.copy(o.scale);m.visible=o.visible;
+      if(o.parent){o.parent.add(m);o.parent.remove(o);}f.mesh=m;}
   },undefined,()=>{});
 })();
 // ---------- 2D (aquarium, catch card, spot picker) ----------
@@ -2584,9 +2624,19 @@ const LURE=()=>LURES[G.lureIdx];
 const lureColorId=lu=>lu.colors[save.settings.colors[lu.id]||0];
 // Lures are modelled nose-forward along +Z (the line pulls toward the boat). Hooks, split rings and line ties are real
 // parts, and each lure has its own motion: cranks wobble, jerkbaits dart, poppers spit, worm tails wiggle, blades spin.
-const LMAT={metal:new THREE.MeshPhongMaterial({color:0xc6cbd0,shininess:120,specular:0xffffff}),dark:new THREE.MeshPhongMaterial({color:0x1a1a1a,shininess:60}),
-  white:new THREE.MeshPhongMaterial({color:0xf4f1e6,shininess:80}),clear:new THREE.MeshPhongMaterial({color:0xdcecff,transparent:true,opacity:.55,shininess:120,specular:0xffffff,side:THREE.DoubleSide}),
-  red:new THREE.MeshPhongMaterial({color:0xc8261e,shininess:60}),gold:new THREE.MeshPhongMaterial({color:0xe0b84a,shininess:120,specular:0xffffff})};
+// Soft sky-over-water reflection shared by glossy lures and scanned fish. A plain image (not a pre-filtered map), so it
+// also works in the separate renderer that draws the tackle-box pictures.
+const ENV=(()=>{const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,256);g.addColorStop(0,'#bcd6f0');g.addColorStop(.4,'#f4f8fb');g.addColorStop(.5,'#a9bcbc');g.addColorStop(.6,'#4f6a68');g.addColorStop(1,'#16211f');
+  x.fillStyle=g;x.fillRect(0,0,512,256);
+  for(const [cx,cy,r,a] of [[150,52,30,.95],[390,70,22,.7],[270,30,60,.25]]){const rg=x.createRadialGradient(cx,cy,1,cx,cy,r);rg.addColorStop(0,`rgba(255,253,240,${a})`);rg.addColorStop(1,'rgba(255,253,240,0)');x.fillStyle=rg;x.fillRect(cx-r,cy-r,r*2,r*2);}
+  const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;return t;})();
+const LMAT={metal:new THREE.MeshStandardMaterial({color:0xd6dadf,metalness:1,roughness:.2,envMap:ENV}),
+  dark:new THREE.MeshPhysicalMaterial({color:0x111111,roughness:.3,clearcoat:1,clearcoatRoughness:.04,envMap:ENV}),
+  white:new THREE.MeshPhysicalMaterial({color:0xf4f1e6,roughness:.35,clearcoat:1,clearcoatRoughness:.05,envMap:ENV}),
+  clear:new THREE.MeshPhysicalMaterial({color:0xdcecff,transparent:true,opacity:.42,roughness:.04,metalness:0,clearcoat:1,envMap:ENV,envMapIntensity:1.3,side:THREE.DoubleSide,depthWrite:false}),
+  red:new THREE.MeshPhysicalMaterial({color:0xc8261e,roughness:.35,clearcoat:1,clearcoatRoughness:.05,envMap:ENV}),
+  gold:new THREE.MeshStandardMaterial({color:0xe6bd52,metalness:1,roughness:.22,envMap:ENV})};
 // geometry kit (built once)
 const LG=(()=>{
   const hookArc=(L,r,tube)=>{const parts=[];const sh=new THREE.CylinderGeometry(tube,tube,L,5);sh.translate(0,-L/2,0);parts.push(sh);
@@ -2630,11 +2680,46 @@ let LureKit=null;const lureIconCache={};
     if(lureMesh&&G.lureIdx!=null)equipLure(G.lureIdx);
     if(G.screen==='tackle')openTackle();},undefined,()=>{});
 })();
+// Crankbaits: "Fishing lure Chubby 38 #3" by Zverev Kirill (CC-BY-4.0), simplified in Blender (Blender/chubby.py).
+// One body for all three cranks; the mid and deep divers get a bigger body and a longer diving lip. One paint texture
+// per colourway (head repainted, chrome foil kept, loaded when first needed), shared metal/roughness and normal maps.
+const CHUBBY_PAINTS=['fire','shad','craw','chart'];
+let ChubbyKit=null;
+(function loadChubby(){
+  if(!THREE.GLTFLoader)return;
+  const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/chubby.glb',gl=>{const k={};gl.scene.traverse(o=>{if(o.isMesh)k[o.name]=o.geometry;});if(!k.CH_Body)return;
+    // switch over only when every texture is in, so no lure (or cached tackle picture) is drawn black
+    const names=CHUBBY_PAINTS.map(c=>'paint_'+c).concat(['mr','normal']);let left=names.length;const tex={};
+    const done=()=>{if(--left)return;k.paint={};for(const c of CHUBBY_PAINTS)k.paint[c]=tex['paint_'+c];k.mr=tex.mr;k.normal=tex.normal;
+      ChubbyKit=k;for(const c in lureIconCache)delete lureIconCache[c];
+      if(lureMesh&&G.lureIdx!=null)equipLure(G.lureIdx);if(G.screen==='tackle')openTackle();};
+    const tl=new THREE.TextureLoader();
+    for(const n of names)tex[n]=tl.load('models/chubby/'+n+'.jpg',t=>{t.flipY=false;t.anisotropy=4;t.needsUpdate=true;done();},undefined,()=>{});},undefined,()=>{});
+})();
+function makeChubby(lu,cid){
+  const K=ChubbyKit,root=new THREE.Group(),pv=new THREE.Group();root.add(pv);
+  const pc=CHUBBY_PAINTS.includes(cid)?cid:'fire';
+  const body=new THREE.Mesh(K.CH_Body,new THREE.MeshPhysicalMaterial({map:K.paint[pc],metalnessMap:K.mr,roughnessMap:K.mr,metalness:1,roughness:1,
+    normalMap:K.normal,normalScale:new THREE.Vector2(1,-1),clearcoat:.8,clearcoatRoughness:.05,envMap:ENV,envMapIntensity:1.1}));
+  pv.add(body);if(K.CH_Ring)pv.add(new THREE.Mesh(K.CH_Ring,LMAT.metal));
+  // diving lip: longer and flatter the deeper the lure runs (squarebill keeps the model's own short lip)
+  const lip=lu.lip||.6;
+  if(lip>.8){const L=.012+.011*lip,w=.014+.003*lip,sh=new THREE.Shape();
+    sh.moveTo(-w*.42,0);sh.lineTo(w*.42,0);sh.quadraticCurveTo(w*.55,L*.6,w*.5,L*.92);sh.quadraticCurveTo(w*.48,L*1.05,w*.3,L*1.05);sh.lineTo(-w*.3,L*1.05);sh.quadraticCurveTo(-w*.48,L*1.05,-w*.5,L*.92);sh.quadraticCurveTo(-w*.55,L*.6,-w*.42,0);
+    const lg=new THREE.ShapeGeometry(sh,6);const m=new THREE.Mesh(lg,LMAT.clear);
+    m.position.set(0,-.006,.027);m.rotation.x=Math.PI/2+(lip>1.5?.42:.75);pv.add(m);
+    pv.scale.setScalar(lip>1.5?1.16:1.08);}
+  root.scale.setScalar(2.2);root.userData={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};return root;
+}
 function makeLureFromKit(lu,hex,cid){
   const root=new THREE.Group(),pv=LureKit['L_'+lu.id].clone(true);pv.position.set(0,0,0);pv.rotation.set(0,0,0);pv.scale.set(1,1,1);root.add(pv);
   const U={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};
   const ph=(c,o)=>new THREE.MeshPhongMaterial(Object.assign({color:new THREE.Color(c),shininess:40,specular:0x333333},o||{}));
-  const M={Body:new THREE.MeshPhongMaterial({vertexColors:true,shininess:90,specular:0x777777}),Tint:ph(hex,{shininess:70,specular:0x555555}),
+  const soft=['worm','frog','swim'].includes(lu.shape);// soft plastic: satin, not lacquered
+  const coat=o=>new THREE.MeshPhysicalMaterial(Object.assign({roughness:soft?.55:.34,metalness:0,clearcoat:soft?.15:1,clearcoatRoughness:soft?.3:.05,envMap:ENV,envMapIntensity:soft?.35:.9},o));
+  const M={Body:coat({vertexColors:true}),Tint:coat({color:new THREE.Color(hex)}),
     Fin:ph(shade(hex,-.22),{side:THREE.DoubleSide}),SkirtCol:ph(hex,{side:THREE.DoubleSide,shininess:30}),SkirtDark:ph('#141414',{side:THREE.DoubleSide}),
     Feather:ph('#efe7d2',{side:THREE.DoubleSide,shininess:5}),Metal:LMAT.metal,Gold:LMAT.gold,Clear:LMAT.clear,Dark:LMAT.dark,White:LMAT.white};
   pv.traverse(o=>{const n=o.name||'';
@@ -2665,7 +2750,7 @@ function lureIconCanvas(lu,cid,W,H){
   return lureIconCache[key]=cv;
 }
 function makeLureMesh(lu,hex,cid){
-  cid=cid||lureColorId(lu);if(LureKit&&LureKit['L_'+lu.id])return makeLureFromKit(lu,hex,cid);
+  cid=cid||lureColorId(lu);if(ChubbyKit&&(lu.id==='square'||lu.id==='crank'||lu.id==='deep'))return makeChubby(lu,cid);if(LureKit&&LureKit['L_'+lu.id])return makeLureFromKit(lu,hex,cid);
   const root=new THREE.Group(),pv=new THREE.Group();root.add(pv);
   const bodyMat=new THREE.MeshPhongMaterial({vertexColors:true,shininess:90,specular:0x777777});
   const solid=new THREE.MeshPhongMaterial({color:new THREE.Color(hex),shininess:60,specular:0x444444});
@@ -3778,7 +3863,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={get LureKit(){return LureKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
