@@ -2675,7 +2675,9 @@ function lurePaint(g,hex,cid){
 let LureKit=null;const lureIconCache={};
 (function loadLureKit(){
   if(!THREE.GLTFLoader)return;
-  new THREE.GLTFLoader().load('models/lures.glb',gl=>{const k={};for(const o of gl.scene.children)k[o.name]=o;LureKit=k;
+  const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/lures.glb',gl=>{const k={};for(const o of gl.scene.children)k[o.name]=o;LureKit=k;
     for(const c in lureIconCache)delete lureIconCache[c];
     if(lureMesh&&G.lureIdx!=null)equipLure(G.lureIdx);
     if(G.screen==='tackle')openTackle();},undefined,()=>{});
@@ -2713,6 +2715,44 @@ function makeChubby(lu,cid){
     pv.scale.setScalar(lip>1.5?1.16:1.08);}
   root.scale.setScalar(2.2);root.userData={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};return root;
 }
+// Painted lure finishes (models/lures/, painted by Blender/lure_tex.py on the texture layout from lures_detail.py):
+// foil and scales, gill slash, lateral line, frog skin, silicone with flake, worm ribs, hammered blades, 3D eyes.
+// Used only once every texture is in, so no lure or cached tackle picture is drawn half-finished.
+const LURE_TEX_SPEC={popper:['bone','frog','black'],buzz:['white','chart','black'],frog:['frog','white','black'],spinner:['white','chart','bnb'],
+  jerk:['shad','chart','bluegill'],jig:['gp','craw','bnb'],swim:['bluegill','shad','white']};
+const STRAND_COLS=['white','chart','black','bnb','gp','craw','frog','junebug'];
+let LureTex=null;
+(function loadLureTex(){
+  const names=['ribs_n','hammer_n','fin','feather','eye'];
+  for(const id in LURE_TEX_SPEC){names.push(id+'_mr',id+'_n');for(const c of LURE_TEX_SPEC[id])names.push(id+'_'+c);}
+  for(const c of STRAND_COLS)names.push('strand_'+c);
+  const T={},tl=new THREE.TextureLoader();let left=names.length;
+  for(const n of names)T[n]=tl.load('models/lures/'+n+'.jpg',t=>{t.flipY=false;t.anisotropy=4;
+      if(/^(strand_|ribs_n|hammer_n)/.test(n)){t.wrapS=t.wrapT=THREE.RepeatWrapping;}t.needsUpdate=true;
+      if(--left)return;LureTex=T;for(const c in lureIconCache)delete lureIconCache[c];
+      if(lureMesh&&G.lureIdx!=null)equipLure(G.lureIdx);if(G.screen==='tackle')openTackle();},undefined,()=>{});
+})();
+function lureTexMats(lu,hex,cid){
+  const T=LureTex,spec=LURE_TEX_SPEC[lu.id],pc=spec.includes(cid)?cid:spec[0],soft=lu.shape==='frog',sc=STRAND_COLS.includes(cid)?cid:null;
+  const body=new THREE.MeshPhysicalMaterial({map:T[lu.id+'_'+pc],metalnessMap:T[lu.id+'_mr'],roughnessMap:T[lu.id+'_mr'],metalness:1,roughness:1,
+    normalMap:T[lu.id+'_n'],normalScale:new THREE.Vector2(.8,-.8),clearcoat:soft?.12:1,clearcoatRoughness:soft?.45:.05,envMap:ENV,envMapIntensity:soft?.35:1});
+  const strand=(c,o)=>new THREE.MeshPhysicalMaterial(Object.assign({map:T['strand_'+(c||'white')],color:c?0xffffff:new THREE.Color(hex),roughness:.5,
+    clearcoat:.35,clearcoatRoughness:.3,envMap:ENV,envMapIntensity:.4},o||{}));
+  const skirt=strand(sc,{side:THREE.DoubleSide}),skirtDk=strand('black',{side:THREE.DoubleSide}),legs=strand(sc,{side:THREE.DoubleSide});
+  const worm=strand(sc,{normalMap:T.ribs_n,normalScale:new THREE.Vector2(.7,.7),clearcoat:.5});
+  const fin=new THREE.MeshPhysicalMaterial({map:T.fin,color:new THREE.Color(shade(hex,-.22)),side:THREE.DoubleSide,roughness:.45,clearcoat:.3,envMap:ENV,envMapIntensity:.4});
+  const feather=new THREE.MeshPhongMaterial({map:T.feather,side:THREE.DoubleSide,shininess:5});
+  const eye=new THREE.MeshPhysicalMaterial({map:T.eye,metalness:.45,roughness:.25,clearcoat:1,clearcoatRoughness:.02,envMap:ENV});
+  const blade=m=>{const c=m.clone();c.normalMap=T.hammer_n;c.normalScale=new THREE.Vector2(.6,.6);return c;},bm=blade(LMAT.metal),bg=blade(LMAT.gold);
+  return {pick(n,mn){
+    if(mn==='Body')return body;
+    if(/^EyeIris/.test(n))return eye;
+    if(/^(Wings|Willow)/.test(n))return mn==='Gold'?bg:bm;
+    if(mn==='SkirtCol')return skirt;if(mn==='SkirtDark')return skirtDk;if(mn==='Feather')return feather;
+    if(mn==='Tint')return /^(WormSeg|Paddle)/.test(n)?worm:legs;
+    if(mn==='Fin')return /^Claw/.test(n)?legs:fin;
+    return null;}};
+}
 function makeLureFromKit(lu,hex,cid){
   const root=new THREE.Group(),pv=LureKit['L_'+lu.id].clone(true);pv.position.set(0,0,0);pv.rotation.set(0,0,0);pv.scale.set(1,1,1);root.add(pv);
   const U={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};
@@ -2722,8 +2762,10 @@ function makeLureFromKit(lu,hex,cid){
   const M={Body:coat({vertexColors:true}),Tint:coat({color:new THREE.Color(hex)}),
     Fin:ph(shade(hex,-.22),{side:THREE.DoubleSide}),SkirtCol:ph(hex,{side:THREE.DoubleSide,shininess:30}),SkirtDark:ph('#141414',{side:THREE.DoubleSide}),
     Feather:ph('#efe7d2',{side:THREE.DoubleSide,shininess:5}),Metal:LMAT.metal,Gold:LMAT.gold,Clear:LMAT.clear,Dark:LMAT.dark,White:LMAT.white};
+  const TM=LureTex&&LURE_TEX_SPEC[lu.id]?lureTexMats(lu,hex,cid):null;
   pv.traverse(o=>{const n=o.name||'';
     if(o.isMesh){const mn=(o.material&&o.material.name)||'';
+      if(TM){const m=TM.pick(n,mn);if(m){o.material=m;return;}}
       if(mn==='Body'){o.geometry=lurePaint(o.geometry.clone(),hex,cid);o.userData.own=true;o.material=M.Body;}else o.material=M[mn]||M.Tint;return;}
     /* Blender's duplicate names (Skirt.001) arrive as Skirt001, so match on the stem */
     if(/^Blade_k/.test(n))U.blades.push({o,axis:'z',k:(parseInt(n.slice(7,9))||10)/10});
@@ -3863,7 +3905,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
