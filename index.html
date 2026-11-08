@@ -581,6 +581,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
 <script>
 (function(){
 'use strict';
@@ -2103,11 +2104,28 @@ function paintFins(ctx,sp,tx,ty,scale){
   ctx.restore();
 }
 function eyeTexture(col,big){
-  const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
-  const g=x.createRadialGradient(64,64,6,64,64,64);g.addColorStop(0,shade(col,.25));g.addColorStop(.7,col);g.addColorStop(.95,shade(col,-.55));g.addColorStop(1,'#111');x.fillStyle=g;x.fillRect(0,0,128,128);
-  x.fillStyle='#050505';x.beginPath();x.arc(66,64,big?30:24,0,TAU);x.fill();
-  x.fillStyle='rgba(255,255,255,.85)';x.beginPath();x.arc(52,48,9,0,TAU);x.fill();x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.arc(78,80,4,0,TAU);x.fill();
-  return new THREE.CanvasTexture(c);
+  // A fish eye has no white: the visible ball is a big dark pupil in a fibrous iris that darkens toward the socket.
+  // Drawn for the Blender eyeball, whose visible dome reaches about 84% of the texture radius.
+  const N=256,C=N/2,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');
+  x.fillStyle='#0a0a08';x.fillRect(0,0,N,N);
+  const R=C*.84,g=x.createRadialGradient(C,C,R*.2,C,C,R);
+  g.addColorStop(0,shade(col,.2));g.addColorStop(.5,col);g.addColorStop(.78,shade(col,-.3));g.addColorStop(.93,shade(col,-.72));g.addColorStop(1,'#0c0b09');
+  x.fillStyle=g;x.beginPath();x.arc(C,C,R,0,TAU);x.fill();
+  // iris fibres
+  const rng=mulberry(col.length*977+(big?3:1));x.lineCap='round';
+  for(let i=0;i<170;i++){const a=rng()*TAU,r0=R*(.42+rng()*.08),r1=R*(.7+rng()*.22),lt=rng()<.5;
+    x.strokeStyle=lt?`rgba(255,240,200,${.05+rng()*.1})`:`rgba(0,0,0,${.08+rng()*.14})`;x.lineWidth=1+rng()*1.6;
+    x.beginPath();x.moveTo(C+Math.cos(a)*r0,C+Math.sin(a)*r0);x.lineTo(C+Math.cos(a+.06)*r1,C+Math.sin(a+.06)*r1);x.stroke();}
+  // pupil, set slightly forward like a real fish lens, with a soft dark collar
+  const pr=R*(big?.5:.43),px=C+R*.05;
+  const pc=x.createRadialGradient(px,C,pr*.9,px,C,pr*1.25);pc.addColorStop(0,'rgba(0,0,0,.55)');pc.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=pc;x.beginPath();x.arc(px,C,pr*1.25,0,TAU);x.fill();
+  x.fillStyle='#030304';x.beginPath();x.arc(px,C,pr,0,TAU);x.fill();
+  // faint lens glint deep in the pupil; the real highlight comes from the glossy material
+  const lg=x.createRadialGradient(px-pr*.3,C-pr*.35,1,px-pr*.3,C-pr*.35,pr*.55);lg.addColorStop(0,'rgba(170,190,200,.28)');lg.addColorStop(1,'rgba(170,190,200,0)');
+  x.fillStyle=lg;x.beginPath();x.arc(px,C,pr,0,TAU);x.fill();
+  x.fillStyle='rgba(255,255,255,.7)';x.beginPath();x.arc(C-R*.28,C-R*.32,R*.055,0,TAU);x.fill();
+  const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t;
 }
 // one repeating tile of overlapping scales (two offset rows)
 function scaleTile(sc,edge,fade,bump){
@@ -2139,7 +2157,7 @@ function fishTemplate(sp){
   const NU=72,NV=32,pos=[],uv=[],idx=[];
   for(let i=0;i<=NU;i++){const k=i/NU,u=(1-Math.cos(k*Math.PI))/2;const yt=P.yT(u),yb=P.yB(u),w=P.w(u),mid=(yt+yb)/2,half=(yt-yb)/2;
     for(let j=0;j<=NV;j++){const ph=j/NV*TAU,cy=Math.cos(ph),sy=Math.sin(ph);pos.push(u-.5,mid+half*cy,w*Math.sign(sy)*Math.pow(Math.abs(sy),.85));uv.push(u,1-(j<=NV/2?j/(NV/2):(NV-j)/(NV/2)));}}
-  for(let i=0;i<NU;i++)for(let j=0;j<NV;j++){const a=i*(NV+1)+j,b=a+NV+1;idx.push(a,b,a+1,b,b+1,a+1);}
+  for(let i=0;i<NU;i++)for(let j=0;j<NV;j++){const a=i*(NV+1)+j,b=a+NV+1;idx.push(a,a+1,b,b,a+1,b+1);}
   const c0=pos.length/3;pos.push(-.5,(P.yT(0)+P.yB(0))/2,0);uv.push(0,.5);for(let j=0;j<NV;j++)idx.push(c0,j+1,j);
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(idx);geo.computeVertexNormals();
   // fins: flat shapes in the side plane; paired fins are swung out from the body
@@ -2156,7 +2174,7 @@ function fishTemplate(sp){
   const finGeo=mergeGeos(finGeos);
   // eyes
   const E=Object.assign({u:.885,t:.36,r:.034},lk.eye);const ex=E.u-.5,ey=P.yAt(E.u,E.t),ez=P.zAt(E.u,ey);
-  const eyeParts=[];for(const s of[-1,1]){const g=new THREE.SphereGeometry(E.r,18,12);g.scale(1,1,.32);const p=g.attributes.position,a=new Float32Array(p.count*2);for(let i=0;i<p.count;i++){a[i*2]=.5+p.getX(i)/E.r*.5*s;a[i*2+1]=.5+p.getY(i)/E.r*.5;}g.setAttribute('uv',new THREE.BufferAttribute(a,2));g.translate(ex,ey,(ez-E.r*.06)*s);eyeParts.push(g);}
+  const eyeParts=[];for(const s of[-1,1]){const g=new THREE.SphereGeometry(E.r,18,12);g.scale(1,1,.32);const p=g.attributes.position,a=new Float32Array(p.count*2);for(let i=0;i<p.count;i++){a[i*2]=.5+p.getX(i)/E.r*.42*s;a[i*2+1]=.5+p.getY(i)/E.r*.42;}g.setAttribute('uv',new THREE.BufferAttribute(a,2));g.translate(ex,ey,(ez-E.r*.06)*s);eyeParts.push(g);}
   const eyeGeo=mergeGeos(eyeParts);
   // barbels and fangs
   const extra=[];
@@ -2165,7 +2183,8 @@ function fishTemplate(sp){
     extra.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),8,b.r||.004,5,false));}}
   if(lk.teeth==='fang'){for(const s of[-1,1]){const g=new THREE.ConeGeometry(.007,.05,6);g.translate(.94-.5,P.yAt(.94,.62)+.03,P.zAt(.94,P.yAt(.94,.6))*.6*s);extra.push(g);}}
   const extraGeo=extra.length?mergeGeos(extra.map(g=>g.index?g.toNonIndexed():g)):null;
-  return FT[sp]={P,geo,tex,bump:scaleBump(lk.sc==null?14:lk.sc),finTex,finGeo,eyeGeo,eyeTex:eyeTexture(E.col||'#c9a227',E.r>.04),extraGeo,H:P.yT(.55)-P.yB(.55),W:P.w(.7)*2};
+  const K=FishKit&&FishKit[sp];
+  return FT[sp]={P,geo:K?K.body:geo,eyeGeo0:eyeGeo,tex,bump:scaleBump(lk.sc==null?14:lk.sc),finTex,finGeo,eyeGeo:K?K.eye:eyeGeo,eyeTex:eyeTexture(E.col||'#c9a227',E.r>.04),extraGeo,H:P.yT(.55)-P.yB(.55),W:P.w(.7)*2};
 }
 function mergeGeos(list){let n=0;const hasUV=list.every(g=>g.attributes.uv);const L=list.map(g=>g.index?g.toNonIndexed():g);for(const g of L)n+=g.attributes.position.count;
   const pos=new Float32Array(n*3),uv=hasUV?new Float32Array(n*2):null;let o=0;for(const g of L){pos.set(g.attributes.position.array,o*3);if(uv)uv.set(g.attributes.uv.array,o*2);o+=g.attributes.position.count;}
@@ -2185,10 +2204,29 @@ function makeFishMesh(sp){
   const body=new THREE.Mesh(T.geo,bodyMat);body.castShadow=true;g.add(body);
   const finMat=bendMat(new THREE.MeshPhongMaterial({map:T.finTex,side:THREE.DoubleSide,transparent:true,alphaTest:.04,shininess:22,depthWrite:true}),uni);
   const fins=new THREE.Mesh(T.finGeo,finMat);g.add(fins);
-  g.add(new THREE.Mesh(T.eyeGeo,bendMat(new THREE.MeshPhongMaterial({map:T.eyeTex,shininess:110,specular:0x666666}),uni)));
+  const eye=new THREE.Mesh(T.eyeGeo,bendMat(new THREE.MeshPhongMaterial({map:T.eyeTex,shininess:140,specular:0x8a8a8a}),uni));g.add(eye);
   if(T.extraGeo)g.add(new THREE.Mesh(T.extraGeo,bendMat(new THREE.MeshPhongMaterial({color:lk.barbelCol||shade(lk.back,.1),shininess:20}),uni)));
-  g.userData={body,uni};return g;
+  g.userData={body,eye,uni};return g;
 }
+// Blender fish (models/fish.glb, built by Blender/fish.py): one body and one pair of eyes per species, Draco-compressed.
+// Loads in the background; until then (or if it fails) the code-built body above is used.
+let FishKit=null;
+(function loadFishKit(){
+  if(!THREE.GLTFLoader)return;
+  const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/fish.glb',gl=>{const k={};
+    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|eye)_(\w+)$/.exec(o.name);if(!m)return;
+      const g=o.geometry,uv=g.attributes.uv;for(let i=0;i<uv.count;i++)uv.setY(i,1-uv.getY(i));uv.needsUpdate=true;// Blender UVs -> canvas textures
+      if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();
+      (k[m[2]]=k[m[2]]||{})[m[1]]=g;});
+    for(const sp in k)if(!k[sp].body||!k[sp].eye)delete k[sp];
+    FishKit=k;
+    // swap the new bodies into templates and any fish already in the water
+    for(const sp in FT)if(k[sp]){FT[sp].geo=k[sp].body;FT[sp].eyeGeo=k[sp].eye;}
+    for(const f of fishes)if(f.mesh&&f.mesh.userData.body&&k[f.sp]){f.mesh.userData.body.geometry=k[f.sp].body;if(f.mesh.userData.eye)f.mesh.userData.eye.geometry=k[f.sp].eye;}
+  },undefined,()=>{});
+})();
 // ---------- 2D (aquarium, catch card, spot picker) ----------
 const F2D={};
 function fish2DCache(sp){
@@ -2217,7 +2255,7 @@ function fish2DCache(sp){
   b.save();b.beginPath();for(const F of P.fins){if(!F.side)continue;F.poly.forEach(([x,y],i)=>i?b.lineTo(tx(x),ty(y)):b.moveTo(tx(x),ty(y)));b.closePath();}b.clip();b.globalAlpha=.88;b.drawImage(finCv,0,0);b.restore();
   // eye
   const E=Object.assign({u:.885,t:.36,r:.034,col:'#c9a227'},lk.eye);const ex=tx(E.u-.5),ey=ty(P.yAt(E.u,E.t)),er=E.r*S;
-  b.save();b.beginPath();b.arc(ex,ey,er,0,TAU);b.clip();b.drawImage(T.eyeTex.image,ex-er,ey-er,er*2,er*2);b.restore();b.strokeStyle='rgba(0,0,0,.35)';b.lineWidth=S*.004;b.beginPath();b.arc(ex,ey,er,0,TAU);b.stroke();
+  b.save();b.beginPath();b.arc(ex,ey,er,0,TAU);b.clip();b.drawImage(T.eyeTex.image,ex-er/.84,ey-er/.84,er*2/.84,er*2/.84);b.restore();b.strokeStyle='rgba(0,0,0,.35)';b.lineWidth=S*.004;b.beginPath();b.arc(ex,ey,er,0,TAU);b.stroke();
   // barbels and fangs
   b.strokeStyle=lk.barbelCol||shade(lk.back,.1);b.lineCap='round';
   for(const bb of (lk.barbels||[])){const sx=tx(bb.u-.5),sy=ty(P.yAt(bb.u,bb.t));b.lineWidth=Math.max(1.5,(bb.r||.004)*S*1.6);b.beginPath();b.moveTo(sx,sy);
@@ -3740,7 +3778,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={get LureKit(){return LureKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={get LureKit(){return LureKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
