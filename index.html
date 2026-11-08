@@ -2753,9 +2753,16 @@ function lureTexMats(lu,hex,cid){
     if(mn==='Fin')return /^Claw/.test(n)?legs:fin;
     return null;}};
 }
+// Silicone frog legs: each strand ripples from hip (0) to tip (3 cm back, -z) like real legs in the water.
+// uPh drives the ripple, uAmp its size (set every frame by animateLure).
+function legWaveMat(mat){const m=mat.clone(),uni={uPh:{value:0},uAmp:{value:.3}};
+  m.onBeforeCompile=sh=>{Object.assign(sh.uniforms,uni);
+    sh.vertexShader='uniform float uPh;uniform float uAmp;\n'+sh.vertexShader.replace('#include <begin_vertex>',
+      '#include <begin_vertex>\n  float la=clamp(-transformed.z/0.03,0.,1.);\n  transformed.x+=uAmp*la*la*sin(uPh-la*5.5)*0.0055;\n  transformed.y+=uAmp*la*la*cos(uPh*.5-la*4.)*0.0018;');};
+  m.customProgramCacheKey=()=>'legwave1';return {m,uni};}
 function makeLureFromKit(lu,hex,cid){
   const root=new THREE.Group(),pv=LureKit['L_'+lu.id].clone(true);pv.position.set(0,0,0);pv.rotation.set(0,0,0);pv.scale.set(1,1,1);root.add(pv);
-  const U={pv,blades:[],tail:[],skirt:null,legs:[],joint:null,tailFin:null,shape:lu.shape};
+  const U={pv,blades:[],tail:[],skirt:null,legs:[],legWave:[],joint:null,tailFin:null,shape:lu.shape};
   const ph=(c,o)=>new THREE.MeshPhongMaterial(Object.assign({color:new THREE.Color(c),shininess:40,specular:0x333333},o||{}));
   const soft=['worm','frog','swim'].includes(lu.shape);// soft plastic: satin, not lacquered
   const coat=o=>new THREE.MeshPhysicalMaterial(Object.assign({roughness:soft?.55:.34,metalness:0,clearcoat:soft?.15:1,clearcoatRoughness:soft?.3:.05,envMap:ENV,envMapIntensity:soft?.35:.9},o));
@@ -2765,8 +2772,10 @@ function makeLureFromKit(lu,hex,cid){
   const TM=LureTex&&LURE_TEX_SPEC[lu.id]?lureTexMats(lu,hex,cid):null;
   pv.traverse(o=>{const n=o.name||'';
     if(o.isMesh){const mn=(o.material&&o.material.name)||'';
-      if(TM){const m=TM.pick(n,mn);if(m){o.material=m;return;}}
-      if(mn==='Body'){o.geometry=lurePaint(o.geometry.clone(),hex,cid);o.userData.own=true;o.material=M.Body;}else o.material=M[mn]||M.Tint;return;}
+      if(TM){const m=TM.pick(n,mn);if(m)o.material=m;}
+      if(!TM||!TM.pick(n,mn)){if(mn==='Body'){o.geometry=lurePaint(o.geometry.clone(),hex,cid);o.userData.own=true;o.material=M.Body;}else o.material=M[mn]||M.Tint;}
+      if(/^LegStrands/.test(n)){const w=legWaveMat(o.material);o.material=w.m;U.legWave.push(w.uni);}
+      return;}
     /* Blender's duplicate names (Skirt.001) arrive as Skirt001, so match on the stem */
     if(/^Blade_k/.test(n))U.blades.push({o,axis:'z',k:(parseInt(n.slice(7,9))||10)/10});
     else if(/^Seg\d/.test(n))U.tail.push(o);else if(/^Leg\d*$/.test(n))U.legs.push(o);
@@ -2851,7 +2860,14 @@ function animateLure(dt){
     case 'crank':roll=Math.sin(t*26)*.55*Math.min(1,spd);yaw=Math.sin(t*26+1.3)*.1*Math.min(1,spd);pitch=vy<-.05?.45:vy>.05?-.3:0;if(L.onBottom&&spd>.3)pitch+=Math.sin(t*9)*.25;break;
     case 'jerk':{if(L.since<.05&&!L._tw){L._tw=1;L.dart=-(L.dart||1);}if(L.since>.05)L._tw=0;yaw=(L.dart||1)*.8*fresh;roll=Math.sin(t*15)*.16*Math.min(1,spd)+(L.dart||1)*.5*fresh;pitch=vy<-.05?.3:0;break;}
     case 'popper':pitch=L.y>-.05?(.32-.55*fresh):0;roll=Math.sin(t*2.1)*.06;if(fresh>.6&&Math.random()<dt*40)spray.emit(L.x+gauss()*.03,.05,L.z+gauss()*.03,gauss()*.35+(G.boat.x-L.x)*.03,rnd(.5,1.4),gauss()*.35+(G.boat.z-L.z)*.03,.5,.04);break;
-    case 'frog':pitch=L.y>-.05?.12:0;yaw=Math.sin(L.since*9)*.35*fresh;for(const[i,lg]of U.legs.entries())lg.rotation.y=(i?-1:1)*(.25+.5*fresh*Math.abs(Math.sin(L.since*14)));break;
+    case 'frog':{pitch=L.y>-.05?.12:0;yaw=Math.sin(L.since*9)*.35*fresh;
+      // swimming: legs kick out and back alternately while reeled (faster when reeled faster); a twitch is one strong kick with
+      // both legs; the strands ripple all the time, gently at rest
+      const sw=Math.min(1,spd);U.kick=(U.kick||0)+dt*(2.2+9*sw+6*fresh);
+      for(const[i,lg]of U.legs.entries()){const side=i?-1:1,st=Math.sin(U.kick+i*Math.PI);
+        lg.rotation.y=side*(.2+.32*sw*(.5+.5*st)+.55*fresh*Math.abs(Math.sin(L.since*14)));lg.rotation.x=.12*sw*Math.cos(U.kick+i*Math.PI);}
+      for(const[i,w]of(U.legWave||[]).entries()){w.uPh.value=U.kick*1.7+i*Math.PI;w.uAmp.value=.35+1.1*sw+1.3*fresh;}
+      break;}
     case 'buzz':roll=Math.sin(t*20)*.08*spd;pitch=L.y>-.05?-.1:.3;break;
     case 'spinner':pitch=vy<-.05?.5:0;roll=Math.sin(t*12)*.05;break;
     case 'worm':pitch=L.onBottom?(fresh>0?-.6*fresh:.05):vy<-.05?.55:(spd>.1?.1:0);break;
