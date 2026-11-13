@@ -556,6 +556,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
       <div class="sgroup wide credits"><h3>Credits</h3>
         <p class="hint">Squarebill Crank based on <a href="https://sketchfab.com/3d-models/fishing-lure-chubby-38-3-209706089c414a73b4c2907f2d34024d" target="_blank" rel="noopener">"Fishing lure Chubby 38 #3"</a> by <a href="https://sketchfab.com/Zverev" target="_blank" rel="noopener">Zverev Kirill</a>, licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Simplified, recoloured and brand name removed.</p>
         <p class="hint">Largemouth, golden and spotted bass based on <a href="https://sketchfab.com/3d-models/model-67a-largemouth-bass-e60c457636b640629747c19feac4906c" target="_blank" rel="noopener">"Model 67A - Largemouth Bass"</a>, and bluegill based on <a href="https://sketchfab.com/3d-models/model-70b-bluegill-mesh-66d2aa9eda2d48e7910e5c910419f737" target="_blank" rel="noopener">"Model 70B - Bluegill Mesh"</a>, by <a href="https://sketchfab.com/DigitalLife3D" target="_blank" rel="noopener">DigitalLife3D</a>, licensed under <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Re-posed, resized and recoloured.</p>
+        <p class="hint">High-quality fish skins (Ultra and High settings) are made from photos on iNaturalist: smallmouth bass by <a href="https://www.inaturalist.org/observations/237469183" target="_blank" rel="noopener">Quinn</a>, black crappie by <a href="https://www.inaturalist.org/observations/216948036" target="_blank" rel="noopener">Quinn</a>, barramundi by <a href="https://www.inaturalist.org/observations/344857787" target="_blank" rel="noopener">James H</a> and <a href="https://www.inaturalist.org/observations/44946496" target="_blank" rel="noopener">Raja bandi</a>, all licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Cut out, straightened, retouched and wrapped onto 3D models; shapes also traced from these photos.</p>
         <p class="hint">Everything else is original to Angler's Bite.</p></div>
     </div>
   </div>
@@ -2207,6 +2208,7 @@ float bW=pow(clamp((.32-transformed.x)/1.1,0.,1.),1.45);transformed.z+=sin(uBPh-
 transformed.z+=sin(uBPh+1.9)*uBAmp*.22*clamp((transformed.x-.15)/.35,0.,1.);`);};
   mat.customProgramCacheKey=()=>'fishbend1';return mat;}
 function makeFishMesh(sp){
+  const HQ=hqFor(sp);if(HQ)return makeHQFishMesh(sp,HQ);
   const T=fishTemplate(sp),lk=T.P.lk;const g=new THREE.Group();g.rotation.order='YZX';
   const uni={ph:{value:0},amp:{value:.05}};
   const silver=lk.metal||0;
@@ -2242,7 +2244,7 @@ let FishKit=null;
     FishKit=k;
     // swap the new bodies into templates and any fish already in the water
     for(const sp in FT)if(k[sp]&&!FT[sp].scan){FT[sp].geo=k[sp].body;FT[sp].eyeGeo=k[sp].eye;}
-    for(const f of fishes)if(f.mesh&&f.mesh.userData.body&&!f.mesh.userData.scan&&k[f.sp]){f.mesh.userData.body.geometry=k[f.sp].body;if(f.mesh.userData.eye)f.mesh.userData.eye.geometry=k[f.sp].eye;}
+    for(const f of fishes)if(f.mesh&&f.mesh.userData.body&&!f.mesh.userData.scan&&!f.mesh.userData.hq&&k[f.sp]){f.mesh.userData.body.geometry=k[f.sp].body;if(f.mesh.userData.eye)f.mesh.userData.eye.geometry=k[f.sp].eye;}
   },undefined,()=>{});
 })();
 // Scanned fish (models/scans.glb, Blender/scans.py): DigitalLife3D "Model 67A - Largemouth Bass" and "Model 70B - Bluegill
@@ -2272,6 +2274,48 @@ function paintScanExtras(ctx,W,H,sp){const lk=SPECIES[sp].look;if(!lk.flap)retur
       if(o.parent){o.parent.add(m);o.parent.remove(o);}f.mesh=m;}
   },undefined,()=>{});
 })();
+// High-quality fish for the Ultra and High settings (models/fish_hq.glb + models/hq/, Blender/hq_fish.py): bodies traced
+// from real photos of each species, wearing the photo itself as skin, with a scale/edge normal map, sculpted gill
+// covers and jaws, fins cut from the photo and the real eye. Loaded only when Ultra or High is chosen; Medium and Low
+// keep the lighter fish above. Photo credits are listed in Settings > Credits.
+const HQ_SPECIES=['sm','cr','br'];
+let HQKit=null,HQLoading=false;
+function hqOn(){return save.settings.quality==='ultra'||save.settings.quality==='high';}
+function hqFor(sp){return hqOn()&&HQKit&&HQKit[sp]?HQKit[sp]:null;}
+// rebuild the meshes of fish already in the water (after the HQ kit loads or the quality setting changes)
+function refreshFishMeshes(list){
+  for(const f of fishes)if(f.mesh&&list.includes(f.sp)){const o=f.mesh,m=makeFishMesh(f.sp);if(!!o.userData.hq===!!m.userData.hq)continue;
+    m.position.copy(o.position);m.rotation.order=o.rotation.order;m.quaternion.copy(o.quaternion);m.scale.copy(o.scale);m.visible=o.visible;
+    if(o.parent){o.parent.add(m);o.parent.remove(o);}f.mesh=m;}
+}
+function loadHQKit(){
+  if(HQKit||HQLoading||!THREE.GLTFLoader)return;HQLoading=true;
+  const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/fish_hq.glb',gl=>{const k={};
+    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|fins|eye)_(\w+)$/.exec(o.name);if(!m)return;const g=o.geometry;
+      if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();(k[m[2]]=k[m[2]]||{})[m[1]]=g;});
+    const tl=new THREE.TextureLoader(),tx=n=>{const t=tl.load('models/hq/'+n+'.jpg');t.flipY=false;t.anisotropy=8;return t;};
+    for(const sp in k){if(!k[sp].body||!k[sp].fins||!k[sp].eye){delete k[sp];continue;}
+      Object.assign(k[sp],{skin:tx(sp+'_skin'),nrm:tx(sp+'_nrm'),atlas:tx(sp+'_atlas'),atlasA:tx(sp+'_atlas_a')});}
+    HQKit=k;HQLoading=false;refreshFishMeshes(HQ_SPECIES);
+  },undefined,()=>{HQLoading=false;});
+}
+function makeHQFishMesh(sp,K){
+  const lk=SPECIES[sp].look,g=new THREE.Group();g.rotation.order='YZX';
+  const uni={ph:{value:0},amp:{value:.05}};
+  // wet skin: the photo already carries its colour and shading, so a soft clear coat gives the wet sheen
+  const bm=new THREE.MeshPhysicalMaterial({map:K.skin,normalMap:K.nrm,normalScale:new THREE.Vector2(.9,-.9),roughness:.52,metalness:0,
+    clearcoat:.4,clearcoatRoughness:.22,envMap:ENV,envMapIntensity:.5});
+  if(lk.glow)bm.emissive=new THREE.Color(lk.glow).multiplyScalar(.4);
+  const body=new THREE.Mesh(K.body,bendMat(bm,uni));body.castShadow=true;g.add(body);
+  const fins=new THREE.Mesh(K.fins,bendMat(new THREE.MeshStandardMaterial({map:K.atlas,alphaMap:K.atlasA,alphaTest:.4,side:THREE.DoubleSide,
+    roughness:.55,metalness:0,envMap:ENV,envMapIntensity:.3}),uni));fins.castShadow=true;g.add(fins);
+  const eye=new THREE.Mesh(K.eye,bendMat(new THREE.MeshPhysicalMaterial({map:K.atlas,roughness:.1,metalness:0,clearcoat:1,clearcoatRoughness:.03,
+    envMap:ENV,envMapIntensity:1}),uni));g.add(eye);
+  g.userData={body,eye,uni,hq:true};return g;
+}
+if(hqOn())loadHQKit();
 // ---------- 2D (aquarium, catch card, spot picker) ----------
 const F2D={};
 function fish2DCache(sp){
@@ -3452,7 +3496,8 @@ function applyQuality(){
   setShadowRange(Q.shadowR);U.detail.value=Q.detail;
   buildPP();
 }
-function setQuality(q,manual){save.settings.quality=q;if(manual)save.settings.qManual=true;persist();Q=QUAL[q];applyQuality();syncSettings();}
+function setQuality(q,manual){save.settings.quality=q;if(manual)save.settings.qManual=true;persist();Q=QUAL[q];applyQuality();syncSettings();
+  if(hqOn())loadHQKit();refreshFishMeshes(HQ_SPECIES);}
 // Planar reflection: mirror the camera under the water plane, clip everything below it, render to a texture the water shader samples.
 const reflCam=new THREE.PerspectiveCamera();const _rv=new V3(),_rt=new V3(),_rq=new THREE.Vector4(),_rp=new THREE.Plane(),_rc=new THREE.Vector4();const REFL_HIDE=[];
 function renderReflection(){
@@ -3926,7 +3971,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
