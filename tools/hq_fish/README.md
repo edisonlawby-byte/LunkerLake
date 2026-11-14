@@ -15,7 +15,8 @@ paragraph in index.html).
 |---|---|
 | HQ done (27) | sm smallmouth, cr black crappie, br barramundi, sp spotted bass, pk northern pike, cf channel catfish, wa walleye, yp yellow perch, lt lake trout, bu burbot, ts giant snakehead, mu muskie (hand-traced `mask_poly`), hs striped snakehead, hb hampala barb (Commons photos), bg bluegill (photo skin on the 3D scan via `scan_hq.py`), **Amazon:** bp butterfly peacock bass, pr red-bellied piranha, rtc redtail catfish, wf wolf fish (Hoplias aimara), bt brook trout (iNat 150-obs set #257, photo was belly-up: flipped vertically, fingers cut off by the outline), ar silver arowana (iNat incl. non-research-grade, aquarium shot, graded from yellow to silver), ap arapaima (iNat non-research-grade #97, aquarium), rt rainbow trout (juvenile on a tray, iNat 150-obs #313), pb speckled peacock bass (Commons, CC BY-SA, `ccand` #3), py payara (game species is *Hydrolycus armatus*, not *H. scomberoides*; iNat CC0 obs 122030483, top fish), gg giant gourami (iNat non-research-grade #22, aquarium, CC BY-SA), ma Malaysian mahseer (Commons CC BY-SA, `ccand3` ma_c3, barbels added) |
 | Scan, no HQ needed | lm largemouth (scan already photo-textured), gd golden largemouth (scan texture repainted natural gold, all settings) |
-| No usable licensed photo yet | tm tiger muskie (no Commons category; iNat has head crops only), rc Asian redtail catfish (Commons: none usable), fb giant featherback (one bent fish in a net; iNat 0 photos of Chitala lopis); rc also only 2 iNat photos |
+| Repainted from a relative (no usable photos) | tm tiger muskie (muskie mesh + skin repainted with tiger bars), rc Asian redtail catfish (channel catfish mesh, spots removed, grey-olive, red tail) |
+| Still the old model | fb giant featherback (no usable photo of Chitala lopis or C. chitala) |
 | Built, not shipped (no clear win) | first tries kept in overrides/old: ar #1 (dirty, leaf litter), ap #5 (crumpled tail), rt #97/#113 (leaves / washed-out) |
 
 Rare species: drop the research-grade filter (`quality_grade`) in inat_candidates.py to get many more aquarium photos (check species by eye). Aquarium side shots work well.
@@ -30,6 +31,11 @@ Photo skin on a scan: `python3 scan_hq.py <scan.glb> <body obj> <eye obj> <key> 
 
 Rule: only ship a fish if the in-game side-by-side clearly beats the current one. Otherwise leave it.
 For species with no usable licensed photo, improve the existing model instead (colours, markings, eye) — don't force it.
+
+## Game-side features (Nov 14)
+- Swim: `bendMat` in index.html — head-to-tail body wave, amplitude envelope after Videler (small head yaw, minimum ~1/4 back, max at tail), tail-fin lag; per-species wavelength/amplitude in `SWIM`.
+- Far fish: photo-real fish beyond `HQ_FAR` (18 m) draw their light model (`userData.lo`).
+- 2D pictures (aquarium, species guide, catch card): rendered from the same 3D fish (`sprite3D`, 8 swim frames).
 
 ## Setup (fresh cloud container)
 
