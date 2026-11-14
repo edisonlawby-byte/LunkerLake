@@ -32,7 +32,7 @@ for key, ts in spec.items():
         fn = f"{key}_c{len(meta)}.jpg"
         if not os.path.exists(os.path.join(out, fn)):
             try:
-                u = ii['url']; w = next((x for x in (1920, 1280, 960) if ii['width'] >= x), 0)  # standard thumb steps on upload.wikimedia.org
+                u = ii['url'].split('?')[0]; w = next((x for x in (1920, 1280, 960) if ii['width'] >= x), 0)  # standard thumb steps on upload.wikimedia.org
                 if w and not u.lower().endswith('.png'):
                     d_, f_ = u.rsplit('/', 1); u = d_.replace('/commons/', '/commons/thumb/') + '/' + f_ + f'/{w}px-' + f_
                 data = get(u, tries=6)
