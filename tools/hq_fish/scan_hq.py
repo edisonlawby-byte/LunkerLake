@@ -53,7 +53,7 @@ ul = me.uv_layers[0] if me.uv_layers else me.uv_layers.new(name='UVMap')
 for p in me.polygons:
     for li in p.loop_indices:
         vi = me.loops[li].vertex_index
-        ul.data[li].uv = (float(uvx[vi]), float(uvy[vi]))
+        ul.data[li].uv = (float(np.clip(uvx[vi], .01, .99)), float(np.clip(uvy[vi], .01, .99)))
 # eye: the scan eyeball's own disc coordinates -> the iris in the atlas (bottom-middle tile)
 el = eye.data.uv_layers[0]
 for li in range(len(el.data)):
@@ -78,14 +78,28 @@ FH, FW = full.shape[:2]
 fu_ = FU['u0'] + (np.arange(FW) + .5) / FW * (FU['u1'] - FU['u0'])
 fv_ = FU['v1'] - (np.arange(FH) + .5) / FH * (FU['v1'] - FU['v0'])
 inb = (fv_[:, None] < np.interp(fu_, U, TOP)[None, :]) & (fv_[:, None] > -np.interp(fu_, U, BOT)[None, :]) & (fu_[None, :] > 0)
-known = (inb | (fa > .5)).astype(np.uint8)
+sat = cv2.cvtColor(full, cv2.COLOR_BGR2HSV)[..., 1]
+known = (inb | ((fa > .5) & (sat > int(os.environ.get('FIN_SAT', 45))))).astype(np.uint8)  # grey backdrop is not fin
 known = cv2.erode(known, np.ones((5, 5), np.uint8))
-sm_ = cv2.resize(full, (FW // 4, FH // 4), interpolation=cv2.INTER_AREA)
-kn_ = cv2.resize(known, (FW // 4, FH // 4), interpolation=cv2.INTER_NEAREST)
-fill = cv2.inpaint(sm_, (1 - kn_) * 255, 12, cv2.INPAINT_TELEA)
-fill = cv2.GaussianBlur(cv2.resize(fill, (FW, FH), interpolation=cv2.INTER_CUBIC), (0, 0), 3)
+# fill = smoothly spread colours of the known fish pixels only (normalised blur), so nothing comes from the background
+kf = known.astype(np.float32)
+num = sum(cv2.GaussianBlur(full.astype(np.float32) * kf[..., None], (0, 0), sg) for sg in (20, 80))
+den = sum(cv2.GaussianBlur(kf, (0, 0), sg) for sg in (20, 80))[..., None]
+fill = num / np.maximum(den, 1e-4)
+fill[den[..., 0] < 1e-3] = np.median(full[known > 0], 0)
+fill = (fill * .85).astype(np.uint8)  # fins read a little darker/translucent
 w_ = cv2.GaussianBlur(known.astype(np.float32), (0, 0), 2)[..., None]
 full = (full * w_ + fill * (1 - w_)).astype(np.uint8)
+# the flank itself comes from the cleaned skin (fins, hands and the photo's eye painted out by rectify.py)
+skin = cv2.imread(os.path.join(HERE, 'out', SP, 'skin.jpg'))
+SH_, SW_ = skin.shape[:2]
+tp_, bt_ = np.interp(fu_, U, TOP)[None, :], np.interp(fu_, U, BOT)[None, :]
+tt_ = (tp_ - fv_[:, None]) / np.maximum(tp_ + bt_, 1e-4)
+mx = np.broadcast_to((np.clip(fu_, 0, .9995) * SW_)[None, :], tt_.shape).astype(np.float32)
+my = (np.clip(tt_, 0, .9995) * SH_).astype(np.float32)
+flank = cv2.remap(skin, mx, my, cv2.INTER_LINEAR)
+wb = cv2.GaussianBlur((inb & (tt_ > .03) & (tt_ < .97)).astype(np.float32), (0, 0), 3)[..., None]
+full = (full * (1 - wb) + flank * wb).astype(np.uint8)
 cv2.imwrite(os.path.join(HQ, f'{SP}_skin.jpg'), full, [cv2.IMWRITE_JPEG_QUALITY, 88])
 g = cv2.cvtColor(full, cv2.COLOR_BGR2GRAY).astype(np.float32) / 255
 h = cv2.GaussianBlur(g, (0, 0), 1) - cv2.GaussianBlur(g, (0, 0), 6)

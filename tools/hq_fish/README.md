@@ -13,10 +13,13 @@ paragraph in index.html).
 
 | | species |
 |---|---|
-| HQ done (11) | sm smallmouth, cr black crappie, br barramundi, sp spotted bass, pk northern pike, cf channel catfish, wa walleye, yp yellow perch, lt lake trout, bu burbot, ts giant snakehead |
-| Keep 3D scan, upgrade skin only | lm largemouth, gd golden largemouth (recolour of lm), bg bluegill — the pipeline's own body came out worse than the scans (blocky head). Plan: keep the scan mesh (models/scans.glb) and project a licensed photo skin onto it in Blender; gd = better gold recolour |
-| Tried, no usable photo yet | mu muskie (pale/scratched), tm tiger muskie (only 9 photos, head crops), bt brook trout + rt rainbow trout (not ranked yet, many photos exist — easy next win), hs striped snakehead (doubled head; try another photo), gg giant gourami (damaged fish), hb hampala (red clamp over body), ma mahseer (1 photo), rc Asian redtail catfish (0), fb giant featherback Chitala lopis (0) |
-| Not started | Amazon: pb speckled peacock bass, bp butterfly peacock bass, pr red-bellied piranha, py payara, ar silver arowana, rtc redtail catfish, wf wolf fish (Hoplias aimara), ap arapaima |
+| HQ done (16) | sm smallmouth, cr black crappie, br barramundi, sp spotted bass, pk northern pike, cf channel catfish, wa walleye, yp yellow perch, lt lake trout, bu burbot, ts giant snakehead, mu muskie (hand-traced `mask_poly`), hs striped snakehead, hb hampala barb (Commons photos), bg bluegill (photo skin on the 3D scan via `scan_hq.py`) |
+| Scan, no HQ needed | lm largemouth (scan already photo-textured), gd golden largemouth (scan texture repainted natural gold, all settings) |
+| No usable licensed photo yet | tm tiger muskie, ma mahseer (1 photo), rc Asian redtail catfish (Commons: none usable), fb giant featherback (one bent fish in a net), gg giant gourami (aquarium shots at angles only); bt brook trout + rt rainbow trout not tried yet (many photos exist) |
+| Not started | Amazon: pb, bp, pr, py, ar, rtc, wf, ap |
+
+Wikimedia Commons (`commons_get.py`, licences CC0/CC BY/CC BY-SA/PD) often has clean studio/specimen side photos when iNaturalist doesn't; it rate-limits hard, so batch requests and expect waits. CC BY-SA photos make the derived skin CC BY-SA: say so in the credits.
+Photo skin on a scan: `python3 scan_hq.py <scan.glb> <body obj> <eye obj> <key> build` after `hq_fish.py build <key>` (needs the rectified photo in out/<key>).
 
 Rule: only ship a fish if the in-game side-by-side clearly beats the current one. Otherwise leave it.
 For species with no usable licensed photo, improve the existing model instead (colours, markings, eye) — don't force it.
