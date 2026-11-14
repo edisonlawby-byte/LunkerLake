@@ -556,7 +556,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
       <div class="sgroup wide credits"><h3>Credits</h3>
         <p class="hint">Squarebill Crank based on <a href="https://sketchfab.com/3d-models/fishing-lure-chubby-38-3-209706089c414a73b4c2907f2d34024d" target="_blank" rel="noopener">"Fishing lure Chubby 38 #3"</a> by <a href="https://sketchfab.com/Zverev" target="_blank" rel="noopener">Zverev Kirill</a>, licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Simplified, recoloured and brand name removed.</p>
         <p class="hint">Largemouth, golden and spotted bass based on <a href="https://sketchfab.com/3d-models/model-67a-largemouth-bass-e60c457636b640629747c19feac4906c" target="_blank" rel="noopener">"Model 67A - Largemouth Bass"</a>, and bluegill based on <a href="https://sketchfab.com/3d-models/model-70b-bluegill-mesh-66d2aa9eda2d48e7910e5c910419f737" target="_blank" rel="noopener">"Model 70B - Bluegill Mesh"</a>, by <a href="https://sketchfab.com/DigitalLife3D" target="_blank" rel="noopener">DigitalLife3D</a>, licensed under <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Re-posed, resized and recoloured.</p>
-        <p class="hint">High-quality fish skins (Ultra and High settings) are made from photos on iNaturalist: smallmouth bass by <a href="https://www.inaturalist.org/observations/237469183" target="_blank" rel="noopener">Quinn</a>, black crappie by <a href="https://www.inaturalist.org/observations/216948036" target="_blank" rel="noopener">Quinn</a>, barramundi by <a href="https://www.inaturalist.org/observations/344857787" target="_blank" rel="noopener">James H</a> and <a href="https://www.inaturalist.org/observations/44946496" target="_blank" rel="noopener">Raja bandi</a>, all licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Cut out, straightened, retouched and wrapped onto 3D models; shapes also traced from these photos.</p>
+        <p class="hint">High-quality fish skins (Ultra and High settings) are made from photos on iNaturalist: smallmouth bass and black crappie by <a href="https://www.inaturalist.org/observations/237469183" target="_blank" rel="noopener">Quinn</a> and <a href="https://www.inaturalist.org/observations/216948036" target="_blank" rel="noopener">Quinn</a>, barramundi by <a href="https://www.inaturalist.org/observations/344857787" target="_blank" rel="noopener">James H</a> and <a href="https://www.inaturalist.org/observations/44946496" target="_blank" rel="noopener">Raja bandi</a>, spotted bass by <a href="https://www.inaturalist.org/observations/249712107" target="_blank" rel="noopener">Nick Tobler</a>, northern pike by <a href="https://www.inaturalist.org/observations/362809899" target="_blank" rel="noopener">Евгений Маринкин</a>, channel catfish by <a href="https://www.inaturalist.org/observations/87648375" target="_blank" rel="noopener">aarongunnar</a>, all <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Cut out, straightened, retouched and wrapped onto 3D models; shapes also traced from these photos.</p>
         <p class="hint">Everything else is original to Angler's Bite.</p></div>
     </div>
   </div>
@@ -2278,7 +2278,7 @@ function paintScanExtras(ctx,W,H,sp){const lk=SPECIES[sp].look;if(!lk.flap)retur
 // from real photos of each species, wearing the photo itself as skin, with a scale/edge normal map, sculpted gill
 // covers and jaws, fins cut from the photo and the real eye. Loaded only when Ultra or High is chosen; Medium and Low
 // keep the lighter fish above. Photo credits are listed in Settings > Credits.
-const HQ_SPECIES=['sm','cr','br'];
+const HQ_SPECIES=['sm','cr','br','sp','cf','pk'];  // largemouth, golden and bluegill keep their 3D scans for now
 let HQKit=null,HQLoading=false;
 function hqOn(){return save.settings.quality==='ultra'||save.settings.quality==='high';}
 function hqFor(sp){return hqOn()&&HQKit&&HQKit[sp]?HQKit[sp]:null;}
@@ -2293,16 +2293,17 @@ function loadHQKit(){
   const ld=new THREE.GLTFLoader();
   if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
   ld.load('models/fish_hq.glb',gl=>{const k={};
-    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|fins|eye)_(\w+)$/.exec(o.name);if(!m)return;const g=o.geometry;
+    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|fins|eye)_(\w+)$/.exec(o.name);if(!m||!HQ_SPECIES.includes(m[2]))return;const g=o.geometry;
       if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();(k[m[2]]=k[m[2]]||{})[m[1]]=g;});
-    const tl=new THREE.TextureLoader(),tx=n=>{const t=tl.load('models/hq/'+n+'.jpg');t.flipY=false;t.anisotropy=8;return t;};
-    for(const sp in k){if(!k[sp].body||!k[sp].fins||!k[sp].eye){delete k[sp];continue;}
-      Object.assign(k[sp],{skin:tx(sp+'_skin'),nrm:tx(sp+'_nrm'),atlas:tx(sp+'_atlas'),atlasA:tx(sp+'_atlas_a')});}
+    for(const sp in k)if(!k[sp].body||!k[sp].fins||!k[sp].eye)delete k[sp];
     HQKit=k;HQLoading=false;refreshFishMeshes(HQ_SPECIES);
   },undefined,()=>{HQLoading=false;});
 }
+// textures load the first time a species is needed (only the fish in the water at the current spot), ~1.2 MB each
+function hqTextures(sp,K){if(K.skin)return;const tl=new THREE.TextureLoader(),tx=n=>{const t=tl.load('models/hq/'+n+'.jpg');t.flipY=false;t.anisotropy=8;return t;};
+  Object.assign(K,{skin:tx(sp+'_skin'),nrm:tx(sp+'_nrm'),atlas:tx(sp+'_atlas'),atlasA:tx(sp+'_atlas_a')});}
 function makeHQFishMesh(sp,K){
-  const lk=SPECIES[sp].look,g=new THREE.Group();g.rotation.order='YZX';
+  hqTextures(sp,K);const lk=SPECIES[sp].look,g=new THREE.Group();g.rotation.order='YZX';
   const uni={ph:{value:0},amp:{value:.05}};
   // wet skin: the photo already carries its colour and shading, so a soft clear coat gives the wet sheen
   const bm=new THREE.MeshPhysicalMaterial({map:K.skin,normalMap:K.nrm,normalScale:new THREE.Vector2(.9,-.9),roughness:.52,metalness:0,
