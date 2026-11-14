@@ -6,6 +6,14 @@ img = cv2.imread(sys.argv[1]); out = sys.argv[2]
 x0, y0, x1, y1 = map(int, sys.argv[3].split(','))
 spec = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else {}
 S = .5  # work at half resolution
+if spec.get('mask_poly'):  # outline traced by hand (hard backgrounds): use it as the mask directly
+    m = np.zeros(img.shape[:2], np.uint8)
+    cv2.fillPoly(m, [np.array(spec['mask_poly'], np.int32)], 255)
+    m = cv2.GaussianBlur(m, (0, 0), 1.5); m = np.where(m > 127, 255, 0).astype(np.uint8)
+    cv2.imwrite(out, m)
+    ov = img.copy(); ov[m == 0] = (ov[m == 0] * .3).astype(np.uint8)
+    cv2.imwrite(out.replace('.png', '_ov.jpg'), cv2.resize(ov, None, fx=.6, fy=.6), [cv2.IMWRITE_JPEG_QUALITY, 85])
+    print('mask (hand)', out); sys.exit(0)
 sm = cv2.resize(img, None, fx=S, fy=S, interpolation=cv2.INTER_AREA)
 mask = np.zeros(sm.shape[:2], np.uint8)
 bg, fg = np.zeros((1, 65)), np.zeros((1, 65))
