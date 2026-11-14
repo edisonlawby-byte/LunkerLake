@@ -27,7 +27,8 @@ FAM = {'bass': dict(pec=(.2, .075), mouth=-1.1, pel=.14), 'sunfish': dict(pec=(.
        'knife': dict(pec=(.1, .045), mouth=-.4, pel=.04)}
 FAMILY = {'lm': 'bass', 'sp': 'bass', 'sm': 'bass', 'gd': 'bass', 'bg': 'sunfish', 'cr': 'sunfish', 'cf': 'catfish', 'pk': 'pike',
           'wa': 'perch', 'yp': 'perch', 'mu': 'pike', 'tm': 'pike', 'lt': 'trout', 'bt': 'trout', 'rt': 'trout', 'bu': 'burbot',
-          'ts': 'snakehead', 'hs': 'snakehead', 'hb': 'carp', 'ma': 'carp', 'gg': 'sunfish', 'rc': 'catfish', 'fb': 'knife', 'br': 'bass'}
+          'ts': 'snakehead', 'hs': 'snakehead', 'hb': 'carp', 'ma': 'carp', 'gg': 'sunfish', 'rc': 'catfish', 'fb': 'knife', 'br': 'bass', 'pb': 'bass', 'bp': 'bass', 'pr': 'sunfish', 'py': 'trout', 'ar': 'knife',
+          'rtc': 'catfish', 'wf': 'snakehead', 'ap': 'snakehead'}
 fam = FAM[FAMILY.get(KEY, 'bass')]
 
 img = cv2.imread(PH)

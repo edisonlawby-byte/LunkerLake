@@ -1,5 +1,5 @@
 """Fish silhouette from a side photo with OpenCV GrabCut (rectangle start, optional polygons forced to background
-or foreground), cleaned to the largest blob. python3 -I seg.py <img> <out mask png> x0,y0,x1,y1 [spec.json]"""
+or foreground, or a hand-traced 'outline' polygon with a 'band' in px), cleaned to the largest blob. python3 -I seg.py <img> <out mask png> x0,y0,x1,y1 [spec.json]"""
 import sys, json
 import numpy as np, cv2
 img = cv2.imread(sys.argv[1]); out = sys.argv[2]
@@ -21,6 +21,14 @@ cv2.grabCut(sm, mask, (int(x0 * S), int(y0 * S), int((x1 - x0) * S), int((y1 - y
 def poly(key, val):
     for p in spec.get(key, []):
         cv2.fillPoly(mask, [np.array(p, np.float32).__mul__(S).astype(np.int32)], val)
+if 'outline' in spec:  # hand-traced fish outline (photo px): outside a band -> background, inside -> foreground
+    o = np.zeros(sm.shape[:2], np.uint8)
+    cv2.fillPoly(o, [(np.array(spec['outline'], np.float32) * S).astype(np.int32)], 255)
+    b = max(3, int(spec.get('band', 24) * S))
+    mask[:] = cv2.GC_BGD
+    mask[cv2.dilate(o, np.ones((b, b), np.uint8)) > 0] = cv2.GC_PR_BGD
+    mask[o > 0] = cv2.GC_PR_FGD
+    mask[cv2.erode(o, np.ones((b, b), np.uint8)) > 0] = cv2.GC_FGD
 if spec:
     poly('bg', cv2.GC_BGD); poly('fg', cv2.GC_FGD); poly('pfg', cv2.GC_PR_FGD)
     cv2.grabCut(sm, mask, None, bg, fg, 4, cv2.GC_INIT_WITH_MASK)
