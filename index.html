@@ -615,13 +615,29 @@ const REGIONS={
    blurb:'A classic bass lake: lily pads, a ferry village, a flooded forest and a lighthouse point.',
    shore:[17,.5,10,1.3,6,2.1],
    spots:{lily:['Lily Pad Cove','A marshy cove of willows, cattails and lily pads, 1–2 m deep. Weedless lures only.'],weeds:['Weed Flats','Grass beds off a farm meadow with a windmill, 1.5–3 m deep.'],dock:['Old Ferry Dock','The ferry dock, boathouse and lakeside cabins, 2–4 m.'],stumps:['Stump Field','A flooded forest of dead trees and sunken logs, 3–5 m.'],rocks:['Granite Point','Granite cliffs under the lighthouse, with a sharp drop-off, 2–5 m.'],channel:['The Channel','Marked by red and green buoys. The deepest water in the lake, 8–14 m.']},
-   fish:{lily:{lm:7,bg:3},weeds:{pk:5.5,bg:4.5},dock:{cr:6,sp:4},stumps:{sp:5,lm:3,cr:2},rocks:{sm:7.5,sp:2.5},channel:{cf:6,sm:4}},
-   legend:['lm','gd',.025],targets:[['lm',3],['sm',2],['sp',2],['cr',1],['cf',1],['pk',1]],
+   fish:{lily:{lm:7,bg:3},weeds:{pk:5.5,bg:4.5},dock:{cr:6,bg:4},stumps:{lm:5,cr:3,pk:2},rocks:{pk:5,lm:5},channel:{pk:5,lm:3,cr:2}},
+   legend:['lm','gd',.025],targets:[['lm',3],['pk',2],['cr',2],['bg',1]],group:'USA: Lunker Lake & Bluff Reservoir',tab:'USA',
    rivals:[['Hank Dobbins',1.05],['Rosa Delgado',1.15],['Earl Pruitt',.95],['Mei-Lin Chou',1.1],['Dusty Varner',.85],['June Okafor',1.0],['Tomás Rey',.9]],
    weather:[['clear',33],['cloudy',25],['overcast',17],['mist',12],['rain',13]],
    pal:{sand:[.66,.6,.42],mud:[.36,.34,.24],deep:[.16,.2,.16],weed:[.22,.32,.14],wet:[.52,.47,.33],rockUW:.42,landLo:[.27,.38,.15],landHi:[.47,.42,.17],meadow:[.6,.5,.25],rockLand:[.47,.46,.43],marsh:[.2,.3,.15],timber:[.37,.31,.22],high:[.28,.3,.22],
      shallow:[.3,.5,.4],deepW:[.05,.17,.19],uw:[.07,.24,.22],hillA:[.12,.16,.15],hillB:[.21,.25,.24],grassMead:[.1,.5,.42],grass:[.16,.35,.26]},
    hills:[[1050,120,330,0],[1500,260,560,0]],haze:1,cliff:9,trees:'temperate',music:'us'},
+ us2:{id:'us2',base:'us',name:'Bluff Reservoir',where:'Ozarks, USA',accent:'#ff9a3c',
+   blurb:'A deep, clear highland reservoir: limestone bluffs, a concrete dam, a highway bridge, a marina and drowned timber. No lily pads.',
+   shore:[32,-.49,9,2.4,5,1.1],shoreX:[[4,8,.3],[7,5,1.2]],deep:1.35,noPads:true,brush:'lily',noDock:true,noWillow:true,weedScale:.25,
+   zones:{lily:{ang:3.0,frac:.8,r:20,depth:1.6,str:.85},weeds:{ang:-2.2,frac:.7,r:24,depth:2.6,str:.8},dock:{ang:1.25,frac:.86,r:16,depth:4.5,str:.55},
+     stumps:{ang:2.15,frac:.68,r:22,depth:5.5,str:.6},rocks:{ang:-1.0,frac:.8,r:18,depth:6.5,str:.75}},
+   ch:{x1:-62,z1:14,x2:78,z2:-2},clear:[[-.24,6,12],[-.12,6,12],[0,6,12],[.12,6,12],[.24,6,12],[-.5,10,13],[.5,10,13],[1.14,11,12],[1.25,4,10],[1.36,4,9]],chz:{x:4,z:4},cliffs:[[-1.0,16,.2],[0,12,.32],[-1.5,7,.12]],damAng:0,
+   spots:{lily:['Creek Arm','A brushy creek arm with drowned willows and buck brush, 1–2 m deep.'],weeds:['Gravel Flats','A broad gravel and chunk-rock flat with sparse grass, 2–3 m.'],
+     dock:['The Marina','Covered boat slips, a fuel dock and the launch ramp. Shade and baitfish under every slip.'],stumps:['Standing Timber','A drowned forest of grey trunks standing in 5 m of water.'],
+     rocks:['Bluff Wall','Sheer limestone bluffs dropping straight into deep, clear water.'],channel:['Dam & Bridge','The old river channel running under the highway bridge to the dam: the deepest water in the lake.']},
+   fish:{lily:{sp:4,lm:3,cr:3},weeds:{sm:6,sp:4},dock:{cr:6,sp:4},stumps:{cr:4,lm:4,cf:2},rocks:{sm:7,sp:3},channel:{cf:6,sm:4}},
+   legend:['sm','sm',0],targets:[['sm',3],['sp',2],['cf',2],['cr',1],['lm',1]],
+   rivals:[['Billy Ray Combs',1.05],['Darlene Sutter',1.12],['Cody Pickens',.95],['Ruth Ann Haskins',1.08],['Travis Lemaster',.9],['Lupe Herrera',1.0],['Vern Tolliver',.88]],
+   weather:[['clear',38],['cloudy',24],['overcast',14],['mist',12],['rain',12]],
+   pal:{sand:[.7,.66,.55],mud:[.4,.37,.3],deep:[.1,.18,.2],weed:[.24,.33,.16],wet:[.58,.55,.46],rockUW:.6,landLo:[.25,.34,.14],landHi:[.42,.4,.2],meadow:[.58,.55,.46],rockLand:[.72,.69,.6],marsh:[.28,.32,.16],timber:[.4,.36,.28],high:[.24,.3,.18],
+     shallow:[.24,.48,.46],deepW:[.03,.15,.2],uw:[.05,.22,.25],hillA:[.11,.16,.13],hillB:[.2,.25,.22],grassMead:[.14,.44,.36],grass:[.18,.34,.24]},
+   hills:[[1050,170,380,0],[1500,280,620,0]],haze:1.05,cliff:9,trees:'temperate',music:'us'},
  nw:{id:'nw',name:'Loon Lake',where:'Northwoods, Canada',accent:'#7fc4ff',
    blurb:'Cold, clear water on the Canadian Shield: spruce and birch forest, pink granite and a fly-in fish camp.',
    shore:[13,1.9,14,.4,8,1.2],
@@ -656,11 +672,12 @@ const REGIONS={
      shallow:[.36,.22,.1],deepW:[.05,.025,.01],uw:[.14,.08,.03],hillA:[.06,.12,.07],hillB:[.12,.18,.12],grassMead:[.22,.55,.36],grass:[.24,.42,.24]},
    hills:[[1050,40,110,0],[1500,70,160,0]],haze:1.3,cliff:3,trees:'amazon',music:'amz'},
 };
-const REG_ORDER=['us','nw','sea','amz'];
+const REG_ORDER=['us','us2','nw','sea','amz'];
 const REGION_ID=(()=>{try{const d=JSON.parse(localStorage.getItem('lunkerlake.save.v1')||'{}');const r=d.settings&&d.settings.region;return REGIONS[r]?r:'us';}catch(e){return 'us';}})();
-const RG=REGIONS[REGION_ID];
+const RG=REGIONS[REGION_ID];const RBASE=RG.base||RG.id;  // lakes in the same region share species, aquarium tank and sounds
 
-const SHORE=th=>96+RG.shore[0]*Math.sin(2*th+RG.shore[1])+RG.shore[2]*Math.sin(3*th+RG.shore[3])+RG.shore[4]*Math.sin(5*th+RG.shore[5]);
+const SHX=RG.shoreX||[];  // extra [harmonic, amplitude, phase] terms: coves and arms that set one lake's outline apart
+const SHORE=th=>{let r=96+RG.shore[0]*Math.sin(2*th+RG.shore[1])+RG.shore[2]*Math.sin(3*th+RG.shore[3])+RG.shore[4]*Math.sin(5*th+RG.shore[5]);for(const[k,am,ph] of SHX)r+=am*Math.sin(k*th+ph);return r;};
 const ZONES=[
   {id:'lily',name:'Lily Pad Cove',ang:Math.PI,frac:.8,r:20,depth:1.3,str:.9},
   {id:'weeds',name:'Weed Flats',ang:-Math.PI/2,frac:.68,r:26,depth:2.1,str:.85},
@@ -668,10 +685,11 @@ const ZONES=[
   {id:'stumps',name:'Stump Field',ang:Math.PI/2+.2,frac:.66,r:24,depth:3.8,str:.6},
   {id:'rocks',name:'Granite Point',ang:-Math.PI/4,frac:.72,r:20,depth:2.8,str:.7},
 ];
+if(RG.zones)ZONES.forEach(z=>Object.assign(z,RG.zones[z.id]||{}));
 ZONES.forEach(z=>{const R=SHORE(z.ang);z.x=Math.cos(z.ang)*R*z.frac;z.z=Math.sin(z.ang)*R*z.frac;});
 const ZBY=Object.fromEntries(ZONES.map(z=>[z.id,z]));
-const CH={x1:-50,z1:-30,x2:46,z2:34};
-ZBY.channel={id:'channel',name:'The Channel',x:-2,z:2,r:22};
+const CH=Object.assign({x1:-50,z1:-30,x2:46,z2:34},RG.ch||{});
+ZBY.channel=Object.assign({id:'channel',name:'The Channel',x:-2,z:2,r:22},RG.chz||{});
 for(const z of [...ZONES,ZBY.channel])z.name=RG.spots[z.id][0];
 const SPOT_IDS=['lily','weeds','dock','stumps','rocks','channel'];
 const SPOT_DESC=Object.fromEntries(Object.entries(RG.spots).map(([k,v])=>[k,v[1]]));
@@ -687,35 +705,35 @@ const SPECIES={
      fins:[{k:'d',a:.43,b:.66,h:.105,e:'spiny',spines:9},{k:'d',a:.2,b:.43,h:.1,e:'soft'},{k:'a',a:.14,b:.3,h:.09,e:'soft'},{k:'pec',u:.74,t:.6,len:.12},{k:'pel',u:.68,len:.1}],
      tail:{k:'emarg',h:.17,len:.19},eye:{u:.875,t:.32,r:.03,col:'#b8861e'},mouth:{t:.5,len:.21,drop:.08}},
    about:'The heavyweight of Lunker Lake. It ambushes from cover and eats almost anything that fits in a jaw that reaches past its eye.',
-   where:'Lily Pad Cove and Stump Field',tip:'Frogs over the pads at dawn; worms and jigs in cover at midday.',fightTxt:'Jumps and shakes its head. Ease off when it clears the water.'},
+   where:'Lunker Lake pads and stumps; Bluff Reservoir creek arm and timber',tip:'Frogs over the pads at dawn; worms and jigs in cover at midday.',fightTxt:'Jumps and shakes its head. Ease off when it clears the water.'},
  sm:{reg:'us',name:'Smallmouth Bass',sci:'Micropterus dolomieu',min:.5,max:7,k:.016,fight:1.3,jumps:.75,dep:[.55,1],
    look:{back:'#4f4224',side:'#9c7d45',side2:'#b4975c',belly:'#ece2c4',fin:'#7f6438',pat:'sm',sc:11,gill:.75,
      B:{H:.27,at:.56,ped:.095,pedL:.07,top:.5,snY:.04,blunt:2.05,sharp:1.6,W:.15,wAt:.68},
      fins:[{k:'d',a:.42,b:.64,h:.085,e:'spiny',spines:10},{k:'d',a:.2,b:.42,h:.1,e:'soft'},{k:'a',a:.14,b:.3,h:.09,e:'soft'},{k:'pec',u:.74,t:.6,len:.12},{k:'pel',u:.67,len:.1}],
      tail:{k:'emarg',h:.16,len:.18},eye:{u:.88,t:.33,r:.03,col:'#c4352a'},mouth:{t:.52,len:.14,drop:.05}},
    about:'Bronze-sided and built like a spring. Pound for pound the hardest fighter in the lake, and it jumps more than any other bass.',
-   where:'Granite Point and The Channel',tip:'Jerkbaits and crankbaits along the rocks; drag a jig on the bottom.',fightTxt:'Long runs and repeated jumps. Steer it and stay patient.'},
+   where:'Bluff Reservoir: Bluff Wall and Gravel Flats',tip:'Jerkbaits and crankbaits along the rocks; drag a jig on the bottom.',fightTxt:'Long runs and repeated jumps. Steer it and stay patient.'},
  sp:{reg:'us',name:'Spotted Bass',sci:'Micropterus punctulatus',min:.5,max:6,k:.016,fight:1.15,jumps:.45,dep:[.4,.9],
    look:{back:'#34502b',side:'#88a05d',side2:'#a9b77a',belly:'#efebcd',fin:'#62784a',pat:'sp',sc:12,gill:.75,
      B:{H:.27,at:.56,ped:.095,pedL:.07,top:.5,snY:.05,blunt:1.95,sharp:1.55,W:.145,wAt:.68},
      fins:[{k:'d',a:.43,b:.65,h:.095,e:'spiny',spines:10},{k:'d',a:.2,b:.43,h:.1,e:'soft'},{k:'a',a:.14,b:.3,h:.09,e:'soft'},{k:'pec',u:.74,t:.6,len:.12},{k:'pel',u:.67,len:.1}],
      tail:{k:'emarg',h:.165,len:.18},eye:{u:.88,t:.33,r:.03,col:'#b8861e'},mouth:{t:.51,len:.17,drop:.06}},
    about:'Looks like a largemouth until you notice the neat rows of dots along its belly. Schools up and chases fast baits.',
-   where:'Old Ferry Dock, Stump Field and Granite Point',tip:'Spinnerbaits and crankbaits through the stumps.',fightTxt:'A stubborn diver. Keep steady pressure.'},
+   where:'Bluff Reservoir: Creek Arm, Marina and Gravel Flats',tip:'Spinnerbaits and crankbaits through the stumps.',fightTxt:'A stubborn diver. Keep steady pressure.'},
  cr:{reg:'us',name:'Black Crappie',sci:'Pomoxis nigromaculatus',min:.2,max:3.2,k:.018,fight:.55,jumps:0,dep:[.3,.7],
    look:{back:'#34433f',side:'#c3cbbf',side2:'#d6dbd0',belly:'#eef0ea',fin:'#55625b',pat:'cr',sc:11,metal:.45,gill:.74,
      B:{H:.44,at:.54,ped:.09,pedL:.06,top:.5,snY:.24,blunt:1.45,sharp:1.25,W:.11,wAt:.62},
      fins:[{k:'d',a:.38,b:.56,h:.13,e:'spiny',spines:7},{k:'d',a:.17,b:.38,h:.15,e:'soft',spots:6},{k:'a',a:.15,b:.42,h:.15,e:'sail',spots:5},{k:'pec',u:.73,t:.58,len:.11},{k:'pel',u:.66,len:.1}],
      tail:{k:'emarg',h:.2,len:.19,spots:10},eye:{u:.87,t:.33,r:.04,col:'#d9d4c0'},mouth:{t:.36,len:.14,drop:.09}},
    about:'A silver, paper-mouthed panfish speckled in black. It gathers in loose schools around dock posts and sunken wood.',
-   where:'Old Ferry Dock and Stump Field',tip:'Jigs and jerkbaits worked slowly.',fightTxt:'Soft mouth. Too much tension tears the hook out.'},
+   where:'Lunker Lake ferry dock; Bluff Reservoir marina and timber',tip:'Jigs and jerkbaits worked slowly.',fightTxt:'Soft mouth. Too much tension tears the hook out.'},
  bg:{reg:'us',name:'Bluegill',sci:'Lepomis macrochirus',min:.1,max:1.8,k:.03,fight:.6,jumps:0,dep:[.1,.5],
    look:{back:'#2b3f4a',side:'#7d8f6c',side2:'#a29a62',belly:'#f0b060',fin:'#3f5354',pat:'bg',sc:10,gill:.74,flap:'rgba(12,16,26,.92)',
      B:{H:.52,at:.52,ped:.09,pedL:.05,top:.5,snY:.07,blunt:1.7,sharp:1.25,W:.1,wAt:.6},
      fins:[{k:'d',a:.42,b:.62,h:.11,e:'spiny',spines:10},{k:'d',a:.18,b:.42,h:.14,e:'soft',blotch:[.2,.022]},{k:'a',a:.14,b:.36,h:.13,e:'soft'},{k:'pec',u:.72,t:.55,len:.19,shape:'point',ang:-.55},{k:'pel',u:.64,len:.11}],
      tail:{k:'emarg',h:.2,len:.17},eye:{u:.865,t:.38,r:.038,col:'#2a3238'},mouth:{t:.47,len:.05,drop:.02}},
    about:'Round as a dinner plate, with a dark ear flap and an orange chest. Every big bass in the lake is hunting them.',
-   where:'Lily Pad Cove and Weed Flats',tip:'A worm on the bottom or a popper over the weeds.',fightTxt:'Circles hard for its size. Easy to land.'},
+   where:'Lunker Lake pads, weeds and the ferry dock',tip:'A worm on the bottom or a popper over the weeds.',fightTxt:'Circles hard for its size. Easy to land.'},
  cf:{reg:'us',name:'Channel Catfish',sci:'Ictalurus punctatus',min:1,max:28,k:.0095,fight:1.3,jumps:0,dep:[.85,1],
    look:{back:'#414c55',side:'#8d989d',side2:'#a9b1b2',belly:'#e8e7df',fin:'#525d64',pat:'cf',sc:0,gill:.8,
      B:{H:.2,at:.62,ped:.085,pedL:.06,top:.5,snY:-.08,blunt:1.6,sharp:1.25,W:.2,wAt:.82,flat:.35},
@@ -723,14 +741,14 @@ const SPECIES={
      tail:{k:'deep',h:.2,len:.2},eye:{u:.9,t:.38,r:.016,col:'#3a3a30'},mouth:{t:.64,len:.07,drop:.01},
      barbels:[{u:.955,t:.42,len:.3,a:-.15,r:.005,droop:.35,spread:.35},{u:.985,t:.25,len:.07,a:.6,r:.003},{u:.97,t:.88,len:.12,a:-.9,r:.003,spread:.15},{u:.975,t:.78,len:.09,a:-.7,r:.003,spread:.3}]},
    about:'A whiskered bottom cruiser that feeds by smell in the deep channel. Big ones pull like an anchor.',
-   where:'The Channel, near the bottom',tip:'Worms and jigs dragged slowly on the bottom.',fightTxt:'Heavy, deep runs. No jumps, just weight.'},
+   where:'Bluff Reservoir: Dam & Bridge channel',tip:'Worms and jigs dragged slowly on the bottom.',fightTxt:'Heavy, deep runs. No jumps, just weight.'},
  pk:{reg:'us',name:'Northern Pike',sci:'Esox lucius',min:2,max:26,k:.0068,fight:1.4,jumps:.2,dep:[.2,.6],
    look:{back:'#2a3d22',side:'#6b8944',side2:'#8aa05a',belly:'#ebe8cf',fin:'#7a6a3a',pat:'pk',sc:6,gill:.72,
      B:{H:.16,at:.45,ped:.085,pedL:.04,top:.5,snY:-.02,blunt:1.05,sharp:1.12,W:.11,wAt:.62,flat:.3},
      fins:[{k:'d',a:.1,b:.24,h:.1,e:'rear',rake:.2,spots:6},{k:'a',a:.08,b:.2,h:.09,e:'rear',rake:.2},{k:'pec',u:.68,t:.72,len:.09},{k:'pel',u:.4,len:.08}],
      tail:{k:'fork',h:.2,len:.19,spots:8},eye:{u:.84,t:.3,r:.025,col:'#d8b43a'},mouth:{t:.5,len:.24,drop:.02}},
    about:'A long, toothy ambush predator. It hangs still at the weed edge, then hits flashy baits like a missile.',
-   where:'Weed Flats',tip:'Spinnerbaits, swimbaits and buzzbaits along the weeds.',fightTxt:'Violent head-shakes and surges. Watch the tension.'},
+   where:'Lunker Lake weed flats, rocks and channel',tip:'Spinnerbaits, swimbaits and buzzbaits along the weeds.',fightTxt:'Violent head-shakes and surges. Watch the tension.'},
  gd:{reg:'us',name:'Golden Largemouth',sci:'Micropterus salmoides, xanthic',min:3,max:15,k:.016,fight:1.25,jumps:.6,legend:true,dep:[.3,.7],
    look:{back:'#9c6716',side:'#efb93a',side2:'#f6d063',belly:'#fff2c4',fin:'#c98f2a',pat:'gd',sc:13,glow:'#5a3a05',gill:.74,
      B:{H:.3,at:.57,ped:.1,pedL:.07,top:.5,snY:.07,blunt:1.85,sharp:1.5,W:.155,wAt:.68},
@@ -1056,7 +1074,7 @@ const Snd=(()=>{
     thump(s=1){tone(68,.28,'sine',.36*s,0,.55);noise(.14,420,120,1,.14*s,'lowpass');},
     chime(){tone(1320,.12,'sine',.07);tone(1760,.16,'sine',.05,.06);},
     rain(v){rainLvl=v;if(rainG)rainG.gain.setTargetAtTime(v*RAIN_VOL,ctx.currentTime,.8);},
-    chirp(){const r=RG.id;
+    chirp(){const r=RBASE;
       if(r==='nw'){if(Math.random()<.35){tone(560,.9,'sine',.03,0,1.5);tone(840,1.2,'sine',.028,.85,.75);}else{const f=rnd(3000,3800);tone(f,.12,'sine',.025,0,.8);tone(f*.8,.18,'sine',.022,.16,.9);}return;}
       if(r==='sea'){if(Math.random()<.5){noise(1.6,6200,6000,9,.02,'bandpass');}else{const f=rnd(1600,2200);for(let k=0;k<3;k++)tone(f*(1+k*.12),.09,'sine',.03,k*.13,1.1);}return;}
       if(r==='amz'){if(Math.random()<.4){tone(rnd(700,900),.25,'sawtooth',.012,0,.6);tone(rnd(600,800),.3,'sawtooth',.01,.3,.55);}else{for(let k=0;k<4;k++)tone(rnd(2600,3200),.05,'sine',.025,k*.08,1.3);}return;}
@@ -1281,7 +1299,7 @@ function segDist(px,pz,ax,az,bx,bz){const vx=bx-ax,vz=bz-az;const t=clamp(((px-a
 function depthAt(x,z){
   const th=Math.atan2(z,x),r=Math.hypot(x,z),R=SHORE(th),q=r/R;
   if(q>=1)return -1;
-  let d=10*Math.pow(1-q,.55);
+  let d=10*(RG.deep||1)*Math.pow(1-q,.55);
   for(const zn of ZONES){const dx=x-zn.x,dz=z-zn.z;const w=Math.exp(-(dx*dx+dz*dz)/(2*zn.r*zn.r))*zn.str;d=d*(1-w)+zn.depth*w;}
   const cd=segDist(x,z,CH.x1,CH.z1,CH.x2,CH.z2);d+=4.2*Math.exp(-cd*cd/220);
   d+=(vnoise(x*.07+11,z*.07-3)-.5)*1.4;
@@ -1289,10 +1307,11 @@ function depthAt(x,z){
   d*=smooth(1,.92,q);
   return Math.max(d,0);
 }
+const CLIFFS=RG.cliffs||[[-Math.PI/4,RG.cliff,.16]];
 function terrainH(x,z){
   const th=Math.atan2(z,x),r=Math.hypot(x,z),R=SHORE(th);
   if(r<R)return -depthAt(x,z);
-  const e=r-R;const cl=Math.exp(-(angDiff(th,-Math.PI/4)**2)/(2*.16*.16))*smooth(0,9,e)*(1-smooth(35,80,e))*RG.cliff;return cl+e*.16+smooth(0,30,e)*fbm(x*.02,z*.02)*9+smooth(40,230,e)*58*(.55+.6*fbm(x*.006+5,z*.006));
+  const e=r-R;let cl=0;for(const[ca,cs,cw]of CLIFFS)cl+=Math.exp(-(angDiff(th,ca)**2)/(2*cw*cw))*cs;cl*=smooth(0,9,e)*(1-smooth(35,80,e));return cl+e*.16+smooth(0,30,e)*fbm(x*.02,z*.02)*9+smooth(40,230,e)*58*(.55+.6*fbm(x*.006+5,z*.006));
 }
 function zoneAt(x,z){
   let best=null,bd=1e9;for(const zn of ZONES){const d=Math.hypot(x-zn.x,z-zn.z)/zn.r;if(d<1.35&&d<bd){bd=d;best=zn;}}
@@ -1370,7 +1389,7 @@ const sky=new THREE.Mesh(new THREE.SphereGeometry(2000,32,16),skyMat);sky.frustu
     else if(h<.9){c=wet;}
     else{const n=fbm(x*.03,z*.03);let g0=PL.landLo.map((v,k)=>lerp(v,PL.landHi[k],n));
       const th=Math.atan2(z,x),ee=Math.hypot(x,z)-SHORE(th),near=1-smooth(40,110,ee);const sw=(a,wd)=>Math.exp(-(angDiff(th,a)**2)/(2*wd*wd))*near;
-      const wM=sw(-Math.PI/2,.3),wR=sw(-Math.PI/4,.26),wL=sw(Math.PI,.3),wS=sw(Math.PI/2+.2,.3);
+      const wM=sw(ZBY.weeds.ang,.3),wR=sw(ZBY.rocks.ang,.26),wL=sw(ZBY.lily.ang,.3),wS=sw(ZBY.stumps.ang,.3);
       g0=g0.map((v,k)=>lerp(v,PL.meadow[k],wM*.85));g0=g0.map((v,k)=>lerp(v,PL.rockLand[k],wR*.85));g0=g0.map((v,k)=>lerp(v,PL.marsh[k],wL*.6));g0=g0.map((v,k)=>lerp(v,PL.timber[k],wS*.6));
       const hi=smooth(10,45,h);c=g0.map((v,k)=>lerp(v,PL.high[k],hi));}
     const j=.94+.12*hash2(i,7);col[i*3]=c[0]*j;col[i*3+1]=c[1]*j;col[i*3+2]=c[2]*j;
@@ -1466,7 +1485,8 @@ function setTOD(h){
 
 // places kept clear of trees for buildings
 const DA=ZBY.dock.ang;
-const CLEAR=[[DA+.16,9,10],[DA+.27,11,10],[DA-.15,9,10],[DA-.26,12,10],[DA,6,9],[-Math.PI/2,22,15],[-Math.PI/2+.07,24,8],[-Math.PI/2+.12,30,9],[-Math.PI/4,5,12]].map(([a,e,r])=>{const R0=SHORE(a);return{x:Math.cos(a)*(R0+e),z:Math.sin(a)*(R0+e),r};});
+const WA=ZBY.weeds.ang,RA=ZBY.rocks.ang;
+const CLEAR=(RG.clear||[[DA+.16,9,10],[DA+.27,11,10],[DA-.15,9,10],[DA-.26,12,10],[DA,6,9],[WA,22,15],[WA+.07,24,8],[WA+.12,30,9],[RA,5,12]]).map(([a,e,r])=>{const R0=SHORE(a);return{x:Math.cos(a)*(R0+e),z:Math.sin(a)*(R0+e),r};});
 const inClear=(x,z)=>CLEAR.some(c=>Math.hypot(x-c.x,z-c.z)<c.r);
 const SECT=(a,c,w)=>Math.abs(angDiff(a,c))<w;
 function colGeo(g,hex){g=g.index?g.toNonIndexed():g;g.computeVertexNormals();const c=new THREE.Color(hex),n=g.attributes.position.count,a=new Float32Array(n*3);for(let i=0;i<n;i++){a[i*3]=c.r;a[i*3+1]=c.g;a[i*3+2]=c.b;}g.setAttribute('color',new THREE.BufferAttribute(a,3));return g;}
@@ -1521,14 +1541,14 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
     parts.forEach(g=>g.computeVertexNormals());return mergeAO(parts,0,1,.6,1.15,.2);})();
   // ---------- trees ----------
   const lists={};const L=k=>lists[k]||(lists[k]=[]);
-  const marshA=Math.PI,timberA=Math.PI/2+.2,rockA=-Math.PI/4,meadA=-Math.PI/2;
+  const marshA=ZBY.lily.ang,timberA=ZBY.stumps.ang,rockA=ZBY.rocks.ang,meadA=ZBY.weeds.ang;
   for(let i=0;i<5600&&(L('a').length+L('b').length+L('c').length)<2400;i++){
     const a=R()*TAU,R0=SHORE(a),e=6+Math.pow(R(),1.6)*150;const x=Math.cos(a)*(R0+e),z=Math.sin(a)*(R0+e);
     if(Math.hypot(x-DZ.x,z-DZ.z)<26||inClear(x,z))continue;
     if(SECT(a,meadA,.36)&&e<62)continue;
     const y=terrainH(x,z);const sc=rr(.8,1.5)*(1+e/220);
     if(K==='temperate'){
-      if(SECT(a,marshA,.42)&&e<28){L('willow').push({x,y:y-.2,z,sx:5.6*sc,sy:6*sc,sz:5.6*sc,ry:R()*TAU,c:HSL(.17+R()*.05,.45,.36+R()*.1)});L('trunkW').push({x,y:y-.2,z,sx:sc*1.1,sy:3.2*sc,sz:sc*1.1});continue;}
+      if(!RG.noWillow&&SECT(a,marshA,.42)&&e<28){L('willow').push({x,y:y-.2,z,sx:5.6*sc,sy:6*sc,sz:5.6*sc,ry:R()*TAU,c:HSL(.17+R()*.05,.45,.36+R()*.1)});L('trunkW').push({x,y:y-.2,z,sx:sc*1.1,sy:3.2*sc,sz:sc*1.1});continue;}
       if(SECT(a,timberA,.38)&&e<36&&R()<.6){L('snag').push({x,y:y-.3,z,sx:sc*1.4,sy:rr(5,9)*sc,sz:sc*1.4,ry:R()*TAU,rz:rr(-.06,.06),c:HSL(.08,.07,.4+R()*.14)});continue;}
       if(R()<(SECT(a,rockA,.45)?.95:.58)){L('a').push({x,y:y-.2,z,sx:5.4*sc,sy:8.6*sc,sz:5.4*sc,ry:R()*TAU,c:HSL(.31+R()*.07,.38,.18+R()*.08)});L('trunk').push({x,y:y-.2,z,sx:sc,sy:2.4*sc,sz:sc});}
       else{L('b').push({x,y:y-.2,z,sx:5*sc,sy:6.4*sc,sz:5*sc,ry:R()*TAU,c:AUT[(R()*AUT.length)|0].clone().multiplyScalar(.85+R()*.2)});L('trunk').push({x,y:y-.2,z,sx:sc*.9,sy:3.4*sc,sz:sc*.9});}
@@ -1568,13 +1588,15 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   else{const n=K==='jungle'?190:130,minH=K==='jungle'?5:2.5,maxH=K==='jungle'?14:8;
     for(let i=0;i<600&&snags.length<n;i++){const x=sz.x+gauss()*sz.r*.75,z=sz.z+gauss()*sz.r*.75;const d=depthAt(x,z);if(d<.8)continue;const h=d+rr(minH,maxH);
       snags.push({x,y:-d,z,sx:rr(1.1,1.7)*(K==='jungle'?1.5:1),sy:h,sz:rr(1.1,1.7)*(K==='jungle'?1.5:1),ry:R()*TAU,rz:rr(-.1,.1),c:K==='jungle'?HSL(.1,.05,.62+R()*.15):K==='boreal'?HSL(.07,.05,.3+R()*.12):HSL(.08,.06,.36+R()*.14)});OBST.push({x,z,r:.6});}}
+  if(RG.brush){const bz=ZBY[RG.brush];for(let i=0;i<900&&snags.length<380;i++){const x=bz.x+gauss()*bz.r*.7,z=bz.z+gauss()*bz.r*.7;const d=depthAt(x,z);if(d<.3||d>2.6)continue;
+      const h=d+rr(.6,2.4);snags.push({x,y:-d,z,sx:rr(.6,1),sy:h,sz:rr(.6,1),ry:R()*TAU,rz:rr(-.25,.25),c:HSL(.08,.08,.38+R()*.18)});}}
   if(snags.length)inst(snagG,lam(0xffffff),snags,{cast:true,recv:true});
   // ---------- marsh plants ----------
   const cattailG=mergeCol([colGeo(new THREE.CylinderGeometry(.012,.018,1,4).translate(0,.5,0),0x6f7d3a),colGeo(new THREE.CylinderGeometry(.035,.035,.16,6).translate(0,.86,0),0x5a3a1e),colGeo(leafTri(.03,.9,.25,0),0x7d8f3e),colGeo(leafTri(.03,.75,-.3,1.9),0x6b7d35),colGeo(leafTri(.03,.8,.2,3.6),0x86973f)]);
   const riceG=mergeCol([0,1,2,3,4,5].map(k=>colGeo(leafTri(.012,1,.12*Math.cos(k*2.1),k*1.05),k%2?0xc8b860:0xa8a050)));
   const papyrusG=mergeCol([colGeo(new THREE.CylinderGeometry(.01,.016,1,4).translate(0,.5,0),0x5a8a3a),colGeo(new THREE.ConeGeometry(.18,.16,8,1,true).rotateX(Math.PI).translate(0,1.02,0),0x7aa84a)]);
   const marshPlant=K==='temperate'?cattailG:K==='boreal'?riceG:papyrusG;
-  const cats=[];for(let i=0;i<9000&&cats.length<(K==='boreal'?900:520);i++){const a=R()<.7?Math.PI+gauss()*.33:-Math.PI/2+gauss()*.3,f=rr(.86,.995),Rr=SHORE(a);const x=Math.cos(a)*Rr*f,z=Math.sin(a)*Rr*f;const d=depthAt(x,z);if(d<.05||d>(K==='boreal'?1.2:.75))continue;
+  const cats=[];for(let i=0;i<9000&&cats.length<(K==='boreal'?900:520);i++){const a=R()<.7?ZBY.lily.ang+gauss()*.33:ZBY.weeds.ang+gauss()*.3,f=rr(.86,.995),Rr=SHORE(a);const x=Math.cos(a)*Rr*f,z=Math.sin(a)*Rr*f;const d=depthAt(x,z);if(d<.05||d>(K==='boreal'?1.2:.75))continue;
     cats.push({x,y:-d,z,sx:1,sy:rr(1.3,2.1)+d,sz:1,ry:R()*TAU,c:new THREE.Color(1,1,1).multiplyScalar(rr(.8,1.1))});}
   inst(marshPlant,swayMat(new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide}),.1,1.7),cats,{cast:true});
   // ---------- shoreline bushes ----------
@@ -1600,7 +1622,8 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   inst(reedG,swayMat(lam(0xffffff),.12,1.9),reeds,{cast:true});
   // ---------- pads and flowers ----------
   const pads=[],flowers=[];const lz=ZBY.lily;
-  if(K==='amazon'){// giant Victoria lilies with upturned rims
+  if(RG.noPads){}
+  else if(K==='amazon'){// giant Victoria lilies with upturned rims
     const rims=[];for(let i=0;i<1400&&pads.length<70;i++){const x=lz.x+gauss()*lz.r*.6,z=lz.z+gauss()*lz.r*.6;const d=depthAt(x,z);if(d<.3||d>2.4)continue;if(pads.some(p=>Math.hypot(p.x-x,p.z-z)<p.sx*.95+.6))continue;const s=rr(1.1,2);
       pads.push({x,y:.04,z,ry:R()*TAU,sx:s,sy:1,sz:s,c:HSL(.27+R()*.04,.5,.22+R()*.06)});rims.push({x,y:.04,z,sx:s,sy:1,sz:s,c:HSL(.98,.5,.32+R()*.08)});if(R()<.18)flowers.push({x:x+s*.4,y:.15,z,sx:.3,sy:.2,sz:.3,c:new THREE.Color(R()<.5?'#fbf6ee':'#f2b8cc')});}
     const vg=new THREE.CircleGeometry(1,28);vg.rotateX(-Math.PI/2);inst(vg,new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide}),pads,{recv:true});
@@ -1650,6 +1673,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   for(let i=0;i<120;i++){const a=R()*TAU,Rr=SHORE(a),e=rr(-1,4);const x=Math.cos(a)*(Rr+e),z=Math.sin(a)*(Rr+e);const s=rr(.6,2);rocks.push({x,y:terrainH(x,z)+s*.2,z,sx:s,sy:s*.7*flat,sz:s,ry:R()*TAU,c:rockCol()});}
   inst(new THREE.DodecahedronGeometry(1,K==='amazon'?2:1),new THREE.MeshPhongMaterial({color:0xffffff,shininess:K==='amazon'?40:6,specular:K==='amazon'?0x333333:0x111111}),rocks,{cast:true,recv:true});
   // ---------- the dock ----------
+  if(!RG.noDock){
   const da=DZ.ang,Rd=SHORE(da);const sx=Math.cos(da)*Rd,szz=Math.sin(da)*Rd;const ux=-Math.cos(da),uz=-Math.sin(da);
   const dock=new THREE.Group();const woodC={temperate:[0x6b5137,0x4e3a27],boreal:[0x7a6040,0x4a3826],jungle:[0x8a7050,0x5a4430],amazon:[0x6a5238,0x4a3a28]}[K];const wood=lam(woodC[0]),wood2=lam(woodC[1]);
   const len=K==='jungle'?30:24;const deck=new THREE.Mesh(new THREE.BoxGeometry(2.6,.18,len),wood);deck.position.set(0,.95,len/2-2);dock.add(deck);
@@ -1659,6 +1683,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   if(K==='temperate'||K==='boreal'){const house=new THREE.Mesh(new THREE.BoxGeometry(5,3.2,5),lam(K==='boreal'?0x6a4a2a:0x7a3b2a));house.position.set(0,terrainH(sx-ux*5,szz-uz*5)+1.6,-7);dock.add(house);
     const roof=new THREE.Mesh(new THREE.ConeGeometry(4.3,2,4),lam(K==='boreal'?0x2f4a32:0x2d2a28));roof.position.set(0,house.position.y+2.6,-7);roof.rotation.y=Math.PI/4;dock.add(roof);}
   dock.position.set(sx,0,szz);dock.rotation.y=Math.atan2(ux,uz);dock.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});scene.add(dock);
+  }
 })();
 
 function shorePt(a,e){const R0=SHORE(a);return{x:Math.cos(a)*(R0+e),z:Math.sin(a)*(R0+e)};}
@@ -1730,6 +1755,41 @@ function buildLandmarksUS(){
       const top=new THREE.Mesh(sd>0?new THREE.ConeGeometry(.34,.5,10):new THREE.CylinderGeometry(.34,.34,.25,10),mt);top.position.y=1.15;g.add(top);
       const lt=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),glowMat);lt.position.y=1.45;g.add(lt);
       g.position.set(x,0,z);shadowAll(g);scene.add(g);SCN.bob.push({o:g,ph:R()*TAU,amp:.08});OBST.push({x,z,r:.9});}}}
+}
+// Bluff Reservoir: pieces from the Blender kit (models/bluff_kit.glb, tools/env_kits/bluff_kit.py) placed around the lake.
+// Every piece's lake side is its +Z, so faceLake() turns it to the water.
+function buildLandmarksBluff(){
+  if(!THREE.GLTFLoader)return;const ld=new THREE.GLTFLoader();
+  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
+  ld.load('models/bluff_kit.glb',gl=>{
+    const K={};for(const o of gl.scene.children)K[o.name]=o;  // one node per kit piece (a group when it has several materials)
+    gl.scene.traverse(o=>{if(o.isMesh){o.material.envMap=ENV;o.material.envMapIntensity=o.material.metalness>.3?.8:.25;
+      if(/lamp/.test(o.material.name)){o.material.emissive=new THREE.Color(0xffc560);SCN.glow.push(o.material);}}});
+    const R=mulberry(123);const rr=(a,b)=>a+R()*(b-a);
+    const put=(name,x,y,z,ry,sc)=>{const src=K[name];if(!src)return null;const m=src.clone();m.rotation.set(0,0,0);m.position.set(x,y,z);m.rotation.y=ry||0;if(sc)m.scale.setScalar(sc);shadowAll(m);scene.add(m);return m;};
+    const atShore=(name,a,e,y,sc,jit)=>{const q=shorePt(a,e);const m=put(name,q.x,y==null?0:y,q.z,0,sc);if(m){faceLake(m,q.x,q.z);m.rotation.y+=jit||0;}return m;};
+    // dam: wall bays along the east shore, two spillway gates in the middle, intake tower in front
+    {const A=RG.damAng,R0=SHORE(A),step=12/R0;for(let i=-3;i<=3;i++){const a=A+i*step;atShore((i===0||i===1)?'dam_gate':'dam_seg',a,1,0);}
+      const q=shorePt(A-.5*step,-15);const t=put('intake_tower',q.x,0,q.z);if(t)faceLake(t,q.x,q.z);OBST.push({x:q.x,z:q.z,r:5});}
+    // highway bridge across the narrows
+    {const A=RG.damAng,c=shorePt(A,-(RG.bridgeOff||40)),tx=-Math.sin(A),tz=Math.cos(A);  // parallel to the dam, across the basin, out to 10 m past each shore
+      const reach=sg=>{let k=0;while(k<400&&depthAt(c.x+tx*sg*k,c.z+tz*sg*k)>0)k+=2;return k+10;};const k0=reach(-1),k1=reach(1);
+      const p0={x:c.x-tx*k0,z:c.z-tz*k0},p1={x:c.x+tx*k1,z:c.z+tz*k1},dx=p1.x-p0.x,dz=p1.z-p0.z,len=Math.hypot(dx,dz),n=Math.ceil(len/30),sl=len/n,ry=-Math.atan2(dz,dx);
+      for(let i=0;i<n;i++){const t=(i+.5)/n;const m=put('bridge_span',p0.x+dx*t,0,p0.z+dz*t,ry);if(m)m.scale.x=sl/30;}
+      for(let i=0;i<=n;i++){const t=i/n,x=p0.x+dx*t,z=p0.z+dz*t;put('bridge_pier',x,Math.min(0,terrainH(x,z)+1),z,ry);if(depthAt(x,z)>0)for(const s of[-3.4,3.4])OBST.push({x:x-Math.sin(ry)*s,z:z-Math.cos(ry)*s,r:1.6});}}
+    // marina: floating docks with covered slips, boats, ramp and bait shop
+    {const A=ZBY.dock.ang,q=shorePt(A,-1),m=put('marina',q.x,0,q.z);if(m){faceLake(m,q.x,q.z);const ry=m.rotation.y,cs=Math.cos(ry),sn=Math.sin(ry);
+        const loc=(lx,lz)=>({x:q.x+lx*cs+lz*sn,z:q.z-lx*sn+lz*cs});
+        for(let k=0;k<5;k++)for(const s of[-1,1]){if(R()<.35)continue;const p=loc(s*5.3,3.2+k*5.6),b=put(R()<.75?'bass_boat':'pontoon',p.x,0,p.z,ry+(R()<.5?0:Math.PI),1);if(b)SCN.bob.push({o:b,ph:R()*TAU,amp:.04});}
+        for(let k=0;k<=34;k+=4){const p=loc(0,k);OBST.push({x:p.x,z:p.z,r:5});}}
+      const r=atShore('ramp',A+.11,1,0);
+      atShore('bait_shop',A-.11,11,terrainH(shorePt(A-.11,11).x,shorePt(A-.11,11).z)-.1);
+      const pp=shorePt(A+.11,-6);const tr=put('bass_boat',pp.x,0,pp.z);if(tr){faceLake(tr,pp.x,pp.z);SCN.bob.push({o:tr,ph:1,amp:.04});}}
+    // limestone bluffs along the Bluff Wall and the south shore
+    for(const[a0,a1,e0] of [[ZBY.rocks.ang-.32,ZBY.rocks.ang+.34,1.2],[-1.62,-1.38,1.5]]){
+      for(let a=a0;a<a1;a+=rr(.03,.075)){const nm=['ledge_a','ledge_b','ledge_c'][(R()*3)|0];const up=R()<.3;const q=shorePt(a,e0+(up?rr(4,7):rr(-.6,.8)));
+        const sc=up?rr(.7,1.1):rr(.9,1.9);const m=put(nm,q.x,up?terrainH(q.x,q.z)-2:rr(-1.4,.3),q.z,0,sc);if(m)m.scale.x=sc*rr(1.4,1.9);if(m){faceLake(m,q.x,q.z);m.rotation.y+=rr(-.25,.25);}}}
+  },undefined,()=>{});
 }
 function buildLandmarksRegion(){
   const R=mulberry(91);const rr=(a,b)=>a+R()*(b-a);const K=RG.id;
@@ -1869,7 +1929,7 @@ function buildLandmarksRegion(){
   }
 }
 
-if(RG.id==='us')buildLandmarksUS();else buildLandmarksRegion();
+if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else buildLandmarksRegion();
 function updScenery(){
   if(SCN.mill)SCN.mill.rotation.z=G.time*(.6+1.2*U.wind.value);
   for(const b of SCN.bob){b.o.position.y=Math.sin(G.time*1.3+b.ph)*b.amp*U.waveAmp.value;b.o.rotation.z=Math.sin(G.time*1.1+b.ph)*.06;b.o.rotation.x=Math.cos(G.time*.9+b.ph)*.05;}
@@ -3138,7 +3198,7 @@ function landLure(){
   const d=depthAt(L.x,L.z);
   if(d<.25){banner('On the bank','warn','Reel it back and try again');startReturn();return;}
   const zn=zoneAt(L.x,L.z);
-  if(!lu.weedless&&zn.id==='lily'&&d<1.8&&Math.random()<.4){banner('Snagged in the '+({us:'pads',nw:'wild rice',sea:'lotus',amz:'giant lilies'})[RG.id],'warn','Use a weedless lure here');splash(L.x,L.z,.4);startReturn();return;}
+  if(!lu.weedless&&zn.id==='lily'&&d<1.8&&Math.random()<.4){banner('Snagged in the '+({us:'pads',us2:'brush',nw:'wild rice',sea:'lotus',amz:'giant lilies'})[RG.id],'warn','Use a weedless lure here');splash(L.x,L.z,.4);startReturn();return;}
   splash(L.x,L.z,lu.shape==='swim'||lu.shape==='deep'?.8:.55);Snd.splash(.6);
   G.phase='retrieve';L.recent=0;L.idle=0;L.since=9;L.sinceLand=0;L.reeled=false;L.reelDist=0;L.trace=[];L.trT=0;L.impX=L.impZ=L.impY=0;L.defl=0;
   for(const fi of fishes){if(fi.state!=='wander'||fi.cool>0)continue;const dd=Math.hypot(fi.x-L.x,fi.z-L.z);
@@ -3660,7 +3720,9 @@ function cycleCam(){const o=['full','big','small','off'],nm={full:'Underwater',b
 function spotAt(x,z){let b=null,bd=1e9;for(const id of SPOT_IDS){const zn=ZBY[id];const d=Math.hypot(x-zn.x,z-zn.z)/(zn.r*1.7);if(d<1&&d<bd){bd=d;b=id;}}return b;}
 const fishHere=id=>fishes.filter(f=>f.spot===id&&f.state!=='gone'&&f.state!=='held'&&f.state!=='hooked').sort((a,b)=>b.len-a.len);
 let spotFrom='start',regMode='free';
-function regionSpecies(r){return Object.keys(SPECIES).filter(k=>SPECIES[k].reg===r);}
+// species that live in a lake: its spot tables plus its legend fish
+function lakesOf(sp){return REG_ORDER.filter(r=>regionSpecies(r).includes(sp)).map(r=>REGIONS[r].name).join(' or ');}
+function regionSpecies(r){const Rg=REGIONS[r],set=new Set();for(const t of Object.values(Rg.fish))for(const k in t)set.add(k);if(Rg.legend&&Rg.legend[2]>0)set.add(Rg.legend[1]);return Object.keys(SPECIES).filter(k=>set.has(k));}
 function openRegions(mode,from){
   regMode=mode;G.screen='region';G.regFrom=from||'title';showOnly('region');$('#hud').hidden=true;
   $('#regKicker').textContent=mode==='tour'?'Tournament day':'Free fishing';
@@ -3783,7 +3845,7 @@ function openTackle(){
 }
 function renderLdet(){
   const l=LURES[tackleSel],ci=save.settings.colors[l.id]||0;
-  const best=Object.entries(l.pref).filter(([s])=>SPECIES[s].reg===RG.id&&!SPECIES[s].legend).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([s])=>SPECIES[s].name);
+  const best=Object.entries(l.pref).filter(([s])=>regionSpecies(RG.id).includes(s)&&!SPECIES[s].legend).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([s])=>SPECIES[s].name);
   const lvl=v=>v>8.5?'Loud':v>6.5?'Medium':'Quiet',mv=lureMove(l);
   $('#ldet').innerHTML=`<canvas width="300" height="168"></canvas><h3>${l.name}</h3><div class="chips"><span class="chip">${l.type}</span><span class="chip">Cast ${l.cast} m</span><span class="chip">${lvl(l.noise)}</span>${l.weedless?'<span class="chip">Weedless</span>':''}${l.big>.5?'<span class="chip">Trophy bait</span>':''}</div>
   <div><div class="lbl" style="margin-bottom:6px">How it moves · ${lureDepth(l).txt} · ${(RETRIEVE[l.ideal]||RETRIEVE.steady)[0]}</div><div class="lmove">${mv.svg}</div></div>
@@ -3837,7 +3899,7 @@ function emptyState(){return`<div class="empty"><b>The tank is empty</b><span>Ev
 const Tank={fish:[],sel:0,raf:0,last:0,plants:[],reg:null,
   // regions that have at least one catch, in map order
   regions(){const have=new Set(save.catches.map(c=>SPECIES[c.sp]&&SPECIES[c.sp].reg));return REG_ORDER.filter(r=>have.has(r));},
-  build(){const regs=this.regions();if(!regs.includes(this.reg))this.reg=regs.includes(RG.id)?RG.id:regs[0];
+  build(){const regs=this.regions();if(!regs.includes(this.reg))this.reg=regs.includes(RBASE)?RBASE:regs[0];
     // one fish per species: your heaviest, so the tank stays readable (the Catch log lists every fish)
     const pick=SP_ORDER.filter(sp=>SPECIES[sp].reg===this.reg).map(best).filter(Boolean);
     const n=pick.length,maxLen=Math.max(...pick.map(c=>c.len));
@@ -3872,7 +3934,7 @@ function renderTank(){
   const P=$('#apane');if(!save.catches.length){P.innerHTML=emptyState();return;}
   Tank.build();Tank.sel=0;
   const regs=Tank.regions(),have=sp=>save.catches.some(c=>c.sp===sp),cnt=r=>SP_ORDER.filter(sp=>SPECIES[sp].reg===r&&have(sp)).length;
-  P.innerHTML=`<div class="tankwrap"><div class="tanktabs">${regs.map(r=>`<button class="tab nav${r===Tank.reg?' on':''}" data-tankreg="${r}">${REGIONS[r].name}<small>${cnt(r)}/8</small></button>`).join('')}<span class="hint">Your heaviest fish of each species. Every catch is in the Catch log.</span></div>
+  P.innerHTML=`<div class="tankwrap"><div class="tanktabs">${regs.map(r=>`<button class="tab nav${r===Tank.reg?' on':''}" data-tankreg="${r}">${REGIONS[r].tab||REGIONS[r].name}<small>${cnt(r)}/8</small></button>`).join('')}<span class="hint">Your heaviest fish of each species. Every catch is in the Catch log.</span></div>
   <canvas id="tank"></canvas><div class="showcase">${Tank.fish.map((f,i)=>`<button class="scb nav${i===0?' on':''}" data-tankfish="${i}">${crownIf(f.c)}${SPECIES[f.c.sp].name}<small>${fmtW(f.c.w)} · ${TIERS[f.c.tier].name}</small></button>`).join('')}</div></div>`;
   $('#tank').addEventListener('click',e=>Tank.hit(e));
   $$('.scb').forEach(b=>b.addEventListener('focus',()=>{Tank.sel=+b.dataset.tankfish;Tank.syncChips();}));
@@ -3881,12 +3943,12 @@ function renderTank(){
 function renderSpecies(){
   const P=$('#apane');
   let lastReg='';
-  P.innerHTML=`<div class="sgrid">${SP_ORDER.map(sp=>{const hd=SPECIES[sp].reg!==lastReg?(lastReg=SPECIES[sp].reg,`<div class="sghead">${REGIONS[lastReg].name}<small>${REGIONS[lastReg].where}</small></div>`):'';return hd+(()=>{const S=SPECIES[sp],cs=save.catches.filter(c=>c.sp===sp),known=cs.length>0;const b=best(sp);const counts=[0,0,0,0,0];cs.forEach(c=>counts[c.tier]++);
+  P.innerHTML=`<div class="sgrid">${SP_ORDER.map(sp=>{const hd=SPECIES[sp].reg!==lastReg?(lastReg=SPECIES[sp].reg,`<div class="sghead">${REGIONS[lastReg].group||REGIONS[lastReg].name}<small>${REGIONS[lastReg].where}</small></div>`):'';return hd+(()=>{const S=SPECIES[sp],cs=save.catches.filter(c=>c.sp===sp),known=cs.length>0;const b=best(sp);const counts=[0,0,0,0,0];cs.forEach(c=>counts[c.tier]++);
     const bl=cs.length?Math.max(...cs.map(c=>c.len)):0;
     return`<article class="scard nav" tabindex="-1" data-sp="${sp}"><canvas width="480" height="200"></canvas>
     <h4><span class="${known?'':'locked'}">${known?S.name:'Unknown fish'}</span><small>${cs.length} caught</small></h4>
     <div class="sci">${known?S.sci:'Not caught yet'}</div>
-    <p>${known?S.about:(S.legend?S.legendHint:(S.reg!==RG.id?REGIONS[S.reg].name+'. ':'')+'Hint: '+S.where+'.')}</p>
+    <p>${known?S.about:(S.legend?S.legendHint:(!regionSpecies(RG.id).includes(sp)?lakesOf(sp)+'. ':'')+'Hint: '+S.where+'.')}</p>
     ${known?`<dl class="kv"><dt>Where</dt><dd>${S.where}</dd><dt>Tip</dt><dd>${S.tip}</dd><dt>Fight</dt><dd>${S.fightTxt}</dd><dt>Record</dt><dd>${crownIf(b)}${fmtW(b.w)} · ${fmtL(bl)} longest</dd><dt>Monster</dt><dd>${fmtW(tierW(sp,4))} and up</dd></dl>
     <div class="tierbar">${TIERS.map((t,i)=>`<div><b style="color:${TIER_COL[i]}">${counts[i]}</b>${t.name}<small>${i<4?'< '+fmtW(tierW(sp,i+1)).replace(/ 0 oz$/,' '):''}${i===4?fmtW(tierW(sp,4)).replace(/ 0 oz$/,'')+'+':''}</small></div>`).join('')}</div>`:''}
     </article>`;})();}).join('')}</div>`;
@@ -4026,7 +4088,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={regionSpecies,lakesOf,REG_ORDER,get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
