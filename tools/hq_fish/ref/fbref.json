@@ -1,0 +1,2542 @@
+{
+ "lm": {
+  "sci": "Micropterus salmoides",
+  "speccode": 3385,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.311,
+   "PAL": 0.626,
+   "PDL": 0.364,
+   "PPL": 0.293,
+   "PPEL": 0.305,
+   "ED": 0.047,
+   "POL": 0.062,
+   "BD": 0.33,
+   "CH": 0.246,
+   "TL": 1.155,
+   "FL": 1.123
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.165,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.646,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.4,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.927,
+    0.021,
+    1
+   ],
+   "EyeEnd": [
+    0.877,
+    0.021,
+    1
+   ],
+   "OpercleEnd": [
+    0.672,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.561,
+    0.144,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.561,
+    -0.182,
+    1
+   ],
+   "PectoralOrigin": [
+    0.684,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.718,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.128,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.126,
+    0.149,
+    1
+   ],
+   "CaudalLower": [
+    -0.126,
+    -0.14,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 10.0,
+   "DorsalSpinesMax": 10.0,
+   "DorsalSoftRaysMin": 11.0,
+   "DorsalSoftRaysMax": 14.0,
+   "Adifin": "absent",
+   "CShape": "forked",
+   "AnalFinSpinesMin": 3.0,
+   "Araymin": 10.0,
+   "Araymax": 12.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "oval",
+   "StrikingFeatures": "none",
+   "Notched": -1
+  }
+ },
+ "gd": {
+  "sci": "Micropterus salmoides",
+  "speccode": 3385,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.311,
+   "PAL": 0.626,
+   "PDL": 0.364,
+   "PPL": 0.293,
+   "PPEL": 0.305,
+   "ED": 0.047,
+   "POL": 0.062,
+   "BD": 0.33,
+   "CH": 0.246,
+   "TL": 1.155,
+   "FL": 1.123
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.165,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.646,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.4,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.927,
+    0.021,
+    1
+   ],
+   "EyeEnd": [
+    0.877,
+    0.021,
+    1
+   ],
+   "OpercleEnd": [
+    0.672,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.561,
+    0.144,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.561,
+    -0.182,
+    1
+   ],
+   "PectoralOrigin": [
+    0.684,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.718,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.128,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.126,
+    0.149,
+    1
+   ],
+   "CaudalLower": [
+    -0.126,
+    -0.14,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 10.0,
+   "DorsalSpinesMax": 10.0,
+   "DorsalSoftRaysMin": 11.0,
+   "DorsalSoftRaysMax": 14.0,
+   "Adifin": "absent",
+   "CShape": "forked",
+   "AnalFinSpinesMin": 3.0,
+   "Araymin": 10.0,
+   "Araymax": 12.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "oval",
+   "StrikingFeatures": "none",
+   "Notched": -1
+  }
+ },
+ "sm": {
+  "sci": "Micropterus dolomieu",
+  "speccode": 3382,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.321,
+   "PAL": 0.671,
+   "PDL": 0.393,
+   "PPL": 0.327,
+   "PPEL": 0.304,
+   "ED": 0.048,
+   "POL": 0.087,
+   "BD": 0.323,
+   "CH": 0.288,
+   "TL": 1.208,
+   "FL": 1.165
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": 9.0,
+   "DorsalSpinesMax": 11.0,
+   "DorsalSoftRaysMin": 13.0,
+   "DorsalSoftRaysMax": 15.0,
+   "Adifin": "absent",
+   "CShape": null,
+   "AnalFinSpinesMin": 10.0,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "sp": {
+  "sci": "Micropterus punctulatus",
+  "speccode": 3384,
+  "shape": "short and / or deep",
+  "ratios": {
+   "HL": 0.268,
+   "PAL": 0.632,
+   "PDL": 0.552,
+   "PPL": 0.315,
+   "PPEL": 0.275,
+   "ED": 0.044,
+   "POL": 0.063,
+   "BD": 0.281,
+   "CH": 0.279,
+   "TL": 1.159,
+   "FL": 1.114
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "cr": {
+  "sci": "Pomoxis nigromaculatus",
+  "speccode": 3388,
+  "shape": "short and / or deep",
+  "ratios": {
+   "HL": 0.353,
+   "PAL": 0.481,
+   "PDL": 0.448,
+   "PPL": 0.315,
+   "PPEL": 0.312,
+   "ED": 0.065,
+   "POL": 0.101,
+   "BD": 0.436,
+   "CH": 0.356,
+   "TL": 1.202,
+   "FL": 1.169
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "bg": {
+  "sci": "Lepomis macrochirus",
+  "speccode": 3375,
+  "shape": "short and / or deep",
+  "ratios": {
+   "HL": 0.355,
+   "PAL": 0.63,
+   "PDL": 0.366,
+   "PPL": 0.366,
+   "PPEL": 0.312,
+   "ED": 0.071,
+   "POL": 0.087,
+   "BD": 0.483,
+   "CH": 0.288,
+   "TL": 1.192,
+   "FL": 1.15
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": "flaps",
+   "Notched": 0
+  }
+ },
+ "cf": {
+  "sci": "Ictalurus punctatus",
+  "speccode": 290,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.238,
+   "PAL": 0.609,
+   "PDL": 0.354,
+   "PPL": 0.465,
+   "PPEL": 0.222,
+   "ED": 0.03,
+   "POL": 0.072,
+   "BD": 0.233,
+   "CH": 0.254,
+   "TL": 1.184,
+   "FL": 1.106
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.195,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.643,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.388,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.914,
+    0.016,
+    1
+   ],
+   "EyeEnd": [
+    0.885,
+    0.016,
+    1
+   ],
+   "OpercleEnd": [
+    0.739,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.567,
+    0.094,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.567,
+    -0.105,
+    1
+   ],
+   "PectoralOrigin": [
+    0.762,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.55,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.121,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.183,
+    0.105,
+    1
+   ],
+   "CaudalLower": [
+    -0.183,
+    -0.133,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": "present",
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "pk": {
+  "sci": "Esox lucius",
+  "speccode": 258,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.302,
+   "PAL": 0.749,
+   "PDL": 0.725,
+   "PPL": 0.53,
+   "PPEL": 0.271,
+   "ED": 0.03,
+   "POL": 0.121,
+   "BD": 0.164,
+   "CH": 0.207,
+   "TL": 1.155,
+   "FL": 1.089
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    2
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    2
+   ],
+   "TLEnd": [
+    -0.155,
+    0.0,
+    2
+   ],
+   "DorsalOrigin": [
+    0.275,
+    0.0,
+    2
+   ],
+   "AnalOrigin": [
+    0.251,
+    0.0,
+    2
+   ],
+   "EyeFront": [
+    0.872,
+    0.032,
+    2
+   ],
+   "EyeEnd": [
+    0.858,
+    0.016,
+    2
+   ],
+   "OpercleEnd": [
+    0.698,
+    0.0,
+    2
+   ],
+   "MaxDepthDorsal": [
+    0.466,
+    0.105,
+    2
+   ],
+   "MaxDepthVentral": [
+    0.466,
+    -0.059,
+    2
+   ],
+   "PectoralOrigin": [
+    0.729,
+    0.0,
+    2
+   ],
+   "PelvicOrigin": [
+    0.47,
+    0.0,
+    2
+   ],
+   "FLEnd": [
+    -0.089,
+    0.0,
+    2
+   ],
+   "CaudalUpper": [
+    -0.127,
+    0.088,
+    2
+   ],
+   "CaudalLower": [
+    -0.127,
+    -0.12,
+    2
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": 17.0,
+   "DorsalSoftRaysMax": 25.0,
+   "Adifin": "absent",
+   "CShape": "forked",
+   "AnalFinSpinesMin": null,
+   "Araymin": 10.0,
+   "Araymax": 22.0,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "wa": {
+  "sci": "Sander vitreus",
+  "speccode": 3516,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.26,
+   "PAL": 0.664,
+   "PDL": 0.277,
+   "PPL": 0.3,
+   "PPEL": 0.25,
+   "ED": 0.051,
+   "POL": 0.061,
+   "BD": 0.178,
+   "CH": 0.178,
+   "TL": 1.154,
+   "FL": 1.099
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.193,
+    -0.113,
+    1
+   ],
+   "DorsalOrigin": [
+    0.707,
+    0.089,
+    1
+   ],
+   "AnalOrigin": [
+    0.316,
+    -0.111,
+    1
+   ],
+   "EyeFront": [
+    0.936,
+    0.014,
+    1
+   ],
+   "EyeEnd": [
+    0.883,
+    0.012,
+    1
+   ],
+   "OpercleEnd": [
+    0.729,
+    0.005,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.705,
+    0.087,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.715,
+    -0.098,
+    1
+   ],
+   "PectoralOrigin": [
+    0.741,
+    -0.026,
+    1
+   ],
+   "PelvicOrigin": [
+    0.693,
+    -0.089,
+    1
+   ],
+   "FLEnd": [
+    -0.14,
+    -0.045,
+    1
+   ],
+   "CaudalUpper": [
+    -0.173,
+    0.058,
+    1
+   ],
+   "CaudalLower": [
+    -0.139,
+    -0.126,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 13.0,
+   "DorsalSpinesMax": 17.0,
+   "DorsalSoftRaysMin": 18.0,
+   "DorsalSoftRaysMax": 22.0,
+   "Adifin": null,
+   "CShape": "forked",
+   "AnalFinSpinesMin": 2.0,
+   "Araymin": 11.0,
+   "Araymax": 14.0,
+   "BarbelsNo": null,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "mu": {
+  "sci": "Esox masquinongy",
+  "speccode": 2711,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.287,
+   "PAL": 0.795,
+   "PDL": 0.741,
+   "PPL": 0.598,
+   "PPEL": 0.244,
+   "ED": 0.053,
+   "POL": 0.116,
+   "BD": 0.208,
+   "CH": 0.227,
+   "TL": 1.146,
+   "FL": 1.088
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.17,
+    0.037,
+    1
+   ],
+   "DorsalOrigin": [
+    0.243,
+    0.043,
+    1
+   ],
+   "AnalOrigin": [
+    0.196,
+    -0.13,
+    1
+   ],
+   "EyeFront": [
+    0.881,
+    0.015,
+    1
+   ],
+   "EyeEnd": [
+    0.827,
+    0.009,
+    1
+   ],
+   "OpercleEnd": [
+    0.71,
+    -0.047,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.565,
+    0.062,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.575,
+    -0.149,
+    1
+   ],
+   "PectoralOrigin": [
+    0.756,
+    -0.092,
+    1
+   ],
+   "PelvicOrigin": [
+    0.397,
+    -0.147,
+    1
+   ],
+   "FLEnd": [
+    -0.106,
+    -0.068,
+    1
+   ],
+   "CaudalUpper": [
+    -0.157,
+    0.05,
+    1
+   ],
+   "CaudalLower": [
+    -0.15,
+    -0.181,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "tm": {
+  "sci": "Esox masquinongy",
+  "speccode": 2711,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.287,
+   "PAL": 0.795,
+   "PDL": 0.741,
+   "PPL": 0.598,
+   "PPEL": 0.244,
+   "ED": 0.053,
+   "POL": 0.116,
+   "BD": 0.208,
+   "CH": 0.227,
+   "TL": 1.146,
+   "FL": 1.088
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.17,
+    0.037,
+    1
+   ],
+   "DorsalOrigin": [
+    0.243,
+    0.043,
+    1
+   ],
+   "AnalOrigin": [
+    0.196,
+    -0.13,
+    1
+   ],
+   "EyeFront": [
+    0.881,
+    0.015,
+    1
+   ],
+   "EyeEnd": [
+    0.827,
+    0.009,
+    1
+   ],
+   "OpercleEnd": [
+    0.71,
+    -0.047,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.565,
+    0.062,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.575,
+    -0.149,
+    1
+   ],
+   "PectoralOrigin": [
+    0.756,
+    -0.092,
+    1
+   ],
+   "PelvicOrigin": [
+    0.397,
+    -0.147,
+    1
+   ],
+   "FLEnd": [
+    -0.106,
+    -0.068,
+    1
+   ],
+   "CaudalUpper": [
+    -0.157,
+    0.05,
+    1
+   ],
+   "CaudalLower": [
+    -0.15,
+    -0.181,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "yp": {
+  "sci": "Perca flavescens",
+  "speccode": 359,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.268,
+   "PAL": 0.722,
+   "PDL": 0.29,
+   "PPL": 0.341,
+   "PPEL": 0.264,
+   "ED": 0.052,
+   "POL": 0.065,
+   "BD": 0.276,
+   "CH": 0.22,
+   "TL": 1.181,
+   "FL": 1.153
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "lt": {
+  "sci": "Salvelinus namaycush",
+  "speccode": 248,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.23,
+   "PAL": 0.794,
+   "PDL": 0.514,
+   "PPL": 0.595,
+   "PPEL": 0.23,
+   "ED": 0.027,
+   "POL": 0.067,
+   "BD": 0.213,
+   "CH": 0.221,
+   "TL": 1.119,
+   "FL": 1.043
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": 4.0,
+   "DorsalSpinesMax": 5.0,
+   "DorsalSoftRaysMin": 8.0,
+   "DorsalSoftRaysMax": 10.0,
+   "Adifin": "present",
+   "CShape": "forked",
+   "AnalFinSpinesMin": 4.0,
+   "Araymin": 8.0,
+   "Araymax": 10.0,
+   "BarbelsNo": null,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "oval",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "bt": {
+  "sci": "Salvelinus fontinalis",
+  "speccode": 246,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.215,
+   "PAL": 0.735,
+   "PDL": 0.464,
+   "PPL": 0.502,
+   "PPEL": 0.205,
+   "ED": 0.045,
+   "POL": 0.056,
+   "BD": 0.291,
+   "CH": 0.229,
+   "TL": 1.102,
+   "FL": 1.089
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": 3.0,
+   "DorsalSpinesMax": 4.0,
+   "DorsalSoftRaysMin": 8.0,
+   "DorsalSoftRaysMax": 14.0,
+   "Adifin": "present",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": 3.0,
+   "Araymin": 8.0,
+   "Araymax": 14.0,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "rt": {
+  "sci": "Oncorhynchus mykiss",
+  "speccode": 239,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.231,
+   "PAL": 0.745,
+   "PDL": 0.459,
+   "PPL": 0.525,
+   "PPEL": 0.222,
+   "ED": 0.041,
+   "POL": 0.072,
+   "BD": 0.251,
+   "CH": 0.244,
+   "TL": 1.119,
+   "FL": 1.095
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    2
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    2
+   ],
+   "TLEnd": [
+    -0.119,
+    0.0,
+    2
+   ],
+   "DorsalOrigin": [
+    0.541,
+    0.0,
+    2
+   ],
+   "AnalOrigin": [
+    0.255,
+    0.0,
+    2
+   ],
+   "EyeFront": [
+    0.929,
+    0.007,
+    2
+   ],
+   "EyeEnd": [
+    0.888,
+    0.007,
+    2
+   ],
+   "OpercleEnd": [
+    0.769,
+    0.0,
+    2
+   ],
+   "MaxDepthDorsal": [
+    0.55,
+    0.117,
+    2
+   ],
+   "MaxDepthVentral": [
+    0.55,
+    -0.134,
+    2
+   ],
+   "PectoralOrigin": [
+    0.778,
+    0.0,
+    2
+   ],
+   "PelvicOrigin": [
+    0.475,
+    0.0,
+    2
+   ],
+   "FLEnd": [
+    -0.095,
+    0.0,
+    2
+   ],
+   "CaudalUpper": [
+    -0.103,
+    0.106,
+    2
+   ],
+   "CaudalLower": [
+    -0.103,
+    -0.138,
+    2
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 0.0,
+   "DorsalSpinesMax": 0.0,
+   "DorsalSoftRaysMin": 14.0,
+   "DorsalSoftRaysMax": 16.0,
+   "Adifin": "present",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": 0.0,
+   "Araymin": 6.0,
+   "Araymax": 12.0,
+   "BarbelsNo": null,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "bu": {
+  "sci": "Lota lota",
+  "speccode": 310,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.211,
+   "PAL": 0.523,
+   "PDL": 0.37,
+   "PPL": 0.172,
+   "PPEL": 0.224,
+   "ED": 0.026,
+   "POL": 0.065,
+   "BD": 0.136,
+   "CH": 0.095,
+   "TL": 1.086,
+   "FL": 1.086
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": 0.0,
+   "DorsalSpinesMax": 0.0,
+   "DorsalSoftRaysMin": 67.0,
+   "DorsalSoftRaysMax": 96.0,
+   "Adifin": "absent",
+   "CShape": "other (see remark)",
+   "AnalFinSpinesMin": 0.0,
+   "Araymin": 58.0,
+   "Araymax": 84.0,
+   "BarbelsNo": 3.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "circular",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "ts": {
+  "sci": "Channa micropeltes",
+  "speccode": 344,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.343,
+   "PAL": 0.525,
+   "PDL": 0.339,
+   "PPL": 0.375,
+   "PPEL": 0.343,
+   "ED": 0.053,
+   "POL": 0.065,
+   "BD": 0.191,
+   "CH": 0.144,
+   "TL": 1.172,
+   "FL": 1.172
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": "absent",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": "more or less straight",
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "hs": {
+  "sci": "Channa striata",
+  "speccode": 343,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.297,
+   "PAL": 0.535,
+   "PDL": 0.338,
+   "PPL": 0.346,
+   "PPEL": 0.305,
+   "ED": 0.033,
+   "POL": 0.043,
+   "BD": 0.178,
+   "CH": 0.121,
+   "TL": 1.172
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    -0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.21,
+    -0.049,
+    1
+   ],
+   "DorsalOrigin": [
+    0.648,
+    0.069,
+    1
+   ],
+   "AnalOrigin": [
+    0.451,
+    -0.111,
+    1
+   ],
+   "EyeFront": [
+    0.955,
+    0.002,
+    1
+   ],
+   "EyeEnd": [
+    0.921,
+    0.001,
+    1
+   ],
+   "OpercleEnd": [
+    0.693,
+    -0.002,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.658,
+    0.071,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.665,
+    -0.113,
+    1
+   ],
+   "PectoralOrigin": [
+    0.686,
+    -0.019,
+    1
+   ],
+   "PelvicOrigin": [
+    0.647,
+    -0.107,
+    1
+   ],
+   "CaudalUpper": [
+    -0.091,
+    0.012,
+    1
+   ],
+   "CaudalLower": [
+    -0.102,
+    -0.113,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 0.0,
+   "DorsalSpinesMax": 0.0,
+   "DorsalSoftRaysMin": 38.0,
+   "DorsalSoftRaysMax": 43.0,
+   "Adifin": "absent",
+   "CShape": null,
+   "AnalFinSpinesMin": 0.0,
+   "Araymin": 23.0,
+   "Araymax": 27.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": null,
+   "Forehead": "more or less straight",
+   "BodyShapeII": "other (see Diagnosi",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "hb": {
+  "sci": "Hampala macrolepidota",
+  "speccode": 4803,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.271,
+   "PAL": 0.743,
+   "PDL": 0.521,
+   "PPL": 0.488,
+   "PPEL": 0.247,
+   "ED": 0.045,
+   "POL": 0.071,
+   "BD": 0.305,
+   "CH": 0.294,
+   "TL": 1.231,
+   "FL": 1.069
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    2
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    2
+   ],
+   "TLEnd": [
+    -0.252,
+    0.0,
+    2
+   ],
+   "DorsalOrigin": [
+    0.496,
+    0.0,
+    2
+   ],
+   "AnalOrigin": [
+    0.272,
+    0.0,
+    2
+   ],
+   "EyeFront": [
+    0.925,
+    0.029,
+    2
+   ],
+   "EyeEnd": [
+    0.853,
+    0.029,
+    2
+   ],
+   "OpercleEnd": [
+    0.688,
+    0.0,
+    2
+   ],
+   "MaxDepthDorsal": [
+    0.546,
+    0.159,
+    2
+   ],
+   "MaxDepthVentral": [
+    0.546,
+    -0.139,
+    2
+   ],
+   "PectoralOrigin": [
+    0.725,
+    0.0,
+    2
+   ],
+   "PelvicOrigin": [
+    0.497,
+    0.0,
+    2
+   ],
+   "FLEnd": [
+    -0.087,
+    0.0,
+    2
+   ],
+   "CaudalUpper": [
+    -0.236,
+    0.163,
+    2
+   ],
+   "CaudalLower": [
+    -0.236,
+    -0.16,
+    2
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": 11.0,
+   "DorsalSoftRaysMax": 11.0,
+   "Adifin": "absent",
+   "CShape": "forked",
+   "AnalFinSpinesMin": null,
+   "Araymin": 8.0,
+   "Araymax": 8.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "terminal",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "ma": {
+  "sci": "Tor tambroides",
+  "speccode": 12231,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.268,
+   "PAL": 0.755,
+   "PDL": 0.515,
+   "PPL": 0.5,
+   "PPEL": 0.275,
+   "ED": 0.066,
+   "POL": 0.086,
+   "BD": 0.297,
+   "CH": 0.288,
+   "TL": 1.252,
+   "FL": 1.102
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.24,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.489,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.274,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.913,
+    0.047,
+    1
+   ],
+   "EyeEnd": [
+    0.855,
+    0.047,
+    1
+   ],
+   "OpercleEnd": [
+    0.728,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.496,
+    0.194,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.496,
+    -0.098,
+    1
+   ],
+   "PectoralOrigin": [
+    0.711,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.519,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.089,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.236,
+    0.179,
+    1
+   ],
+   "CaudalLower": [
+    -0.236,
+    -0.153,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 4.0,
+   "DorsalSpinesMax": 4.0,
+   "DorsalSoftRaysMin": 8.0,
+   "DorsalSoftRaysMax": 8.0,
+   "Adifin": "absent",
+   "CShape": "forked",
+   "AnalFinSpinesMin": 3.0,
+   "Araymin": 5.0,
+   "Araymax": 5.0,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "gg": {
+  "sci": "Osphronemus goramy",
+  "speccode": 498,
+  "shape": "short and / or deep",
+  "ratios": {
+   "HL": 0.28,
+   "PAL": 0.436,
+   "PDL": 0.484,
+   "PPL": 0.304,
+   "PPEL": 0.273,
+   "ED": 0.056,
+   "POL": 0.089,
+   "BD": 0.477,
+   "CH": 0.277,
+   "TL": 1.203,
+   "FL": 1.203
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.176,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.474,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.548,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.93,
+    -0.011,
+    1
+   ],
+   "EyeEnd": [
+    0.883,
+    -0.011,
+    1
+   ],
+   "OpercleEnd": [
+    0.756,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.474,
+    0.236,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.474,
+    -0.207,
+    1
+   ],
+   "PectoralOrigin": [
+    0.756,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.707,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.176,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.055,
+    0.192,
+    1
+   ],
+   "CaudalLower": [
+    -0.055,
+    -0.077,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 12.0,
+   "DorsalSpinesMax": 14.0,
+   "DorsalSoftRaysMin": 10.0,
+   "DorsalSoftRaysMax": 13.0,
+   "Adifin": "absent",
+   "CShape": "other (see remarks)",
+   "AnalFinSpinesMin": 9.0,
+   "Araymin": 18.0,
+   "Araymax": 21.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "superior",
+   "Forehead": "clearly concave",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "br": {
+  "sci": "Lates calcarifer",
+  "speccode": 346,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.322,
+   "PAL": 0.691,
+   "PDL": 0.393,
+   "PPL": 0.321,
+   "PPEL": 0.308,
+   "ED": 0.038,
+   "POL": 0.058,
+   "BD": 0.286,
+   "CH": 0.219,
+   "TL": 1.152,
+   "FL": 1.152
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.141,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.595,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.299,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.942,
+    0.015,
+    1
+   ],
+   "EyeEnd": [
+    0.911,
+    0.015,
+    1
+   ],
+   "OpercleEnd": [
+    0.683,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.525,
+    0.149,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.525,
+    -0.129,
+    1
+   ],
+   "PectoralOrigin": [
+    0.689,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.676,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.141,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.064,
+    0.069,
+    1
+   ],
+   "CaudalLower": [
+    -0.064,
+    -0.139,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 7.0,
+   "DorsalSpinesMax": 9.0,
+   "DorsalSoftRaysMin": 10.0,
+   "DorsalSoftRaysMax": 11.0,
+   "Adifin": "absent",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": 3.0,
+   "Araymin": 7.0,
+   "Araymax": 8.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "superior",
+   "Forehead": "clearly concave",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": "none",
+   "Notched": -1
+  }
+ },
+ "rc": {
+  "sci": "Hemibagrus wyckioides",
+  "speccode": 26973,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.272,
+   "PAL": 0.713,
+   "PDL": 0.412,
+   "PPL": 0.536,
+   "PPEL": 0.238,
+   "ED": 0.019,
+   "POL": 0.079,
+   "BD": 0.182,
+   "CH": 0.228,
+   "TL": 1.178,
+   "FL": 1.038
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.155,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.589,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.271,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.919,
+    0.021,
+    1
+   ],
+   "EyeEnd": [
+    0.899,
+    0.021,
+    1
+   ],
+   "OpercleEnd": [
+    0.748,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.599,
+    0.103,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.599,
+    -0.12,
+    1
+   ],
+   "PectoralOrigin": [
+    0.775,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.44,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.05,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.147,
+    0.132,
+    1
+   ],
+   "CaudalLower": [
+    -0.147,
+    -0.159,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": 1.0,
+   "DorsalSpinesMax": 1.0,
+   "DorsalSoftRaysMin": 7.0,
+   "DorsalSoftRaysMax": 8.0,
+   "Adifin": "present",
+   "CShape": "forked",
+   "AnalFinSpinesMin": null,
+   "Araymin": 12.0,
+   "Araymax": 14.0,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "fb": {
+  "sci": "Chitala lopis",
+  "speccode": 27034,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.227,
+   "PAL": 0.291,
+   "PDL": 0.539,
+   "PPL": 0.277,
+   "PPEL": 0.225,
+   "ED": 0.03,
+   "POL": 0.037,
+   "BD": 0.283,
+   "CH": 0.056,
+   "TL": 1.07,
+   "FL": 1.07
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": "absent",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "pb": {
+  "sci": "Cichla temensis",
+  "speccode": 6461,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.331,
+   "PAL": 0.721,
+   "PDL": 0.321,
+   "PPL": 0.349,
+   "PPEL": 0.337,
+   "ED": 0.054,
+   "POL": 0.116,
+   "BD": 0.251,
+   "CH": 0.277,
+   "TL": 1.163,
+   "FL": 1.163
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "bp": {
+  "sci": "Cichla orinocensis",
+  "speccode": 46779,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.317,
+   "PAL": 0.715,
+   "PDL": 0.418,
+   "PPL": 0.317,
+   "PPEL": 0.314,
+   "ED": 0.046,
+   "POL": 0.11,
+   "BD": 0.329,
+   "CH": 0.34,
+   "TL": 1.202,
+   "FL": 1.202
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.202,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.582,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.285,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.89,
+    0.061,
+    1
+   ],
+   "EyeEnd": [
+    0.844,
+    0.061,
+    1
+   ],
+   "OpercleEnd": [
+    0.683,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.562,
+    0.196,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.562,
+    -0.133,
+    1
+   ],
+   "PectoralOrigin": [
+    0.686,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.683,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.202,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.153,
+    0.173,
+    1
+   ],
+   "CaudalLower": [
+    -0.153,
+    -0.167,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "pr": {
+  "sci": "Pygocentrus nattereri",
+  "speccode": 4501,
+  "shape": "short and / or deep",
+  "ratios": {
+   "HL": 0.325,
+   "PAL": 0.693,
+   "PDL": 0.531,
+   "PPL": 0.493,
+   "PPEL": 0.296,
+   "ED": 0.075,
+   "POL": 0.061,
+   "BD": 0.525,
+   "CH": 0.379,
+   "TL": 1.155,
+   "FL": 1.075
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": 0.0,
+   "DorsalSpinesMax": 0.0,
+   "DorsalSoftRaysMin": 16.0,
+   "DorsalSoftRaysMax": 18.0,
+   "Adifin": "present",
+   "CShape": "more or less truncate",
+   "AnalFinSpinesMin": 0.0,
+   "Araymin": 27.0,
+   "Araymax": 30.0,
+   "BarbelsNo": 0.0,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "superior",
+   "Forehead": "clearly convex",
+   "BodyShapeII": "compressed",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "py": {
+  "sci": "Hydrolycus armatus",
+  "speccode": 6419,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.24,
+   "PAL": 0.712,
+   "PDL": 0.588,
+   "PPL": 0.386,
+   "PPEL": 0.209,
+   "ED": 0.083,
+   "POL": 0.057,
+   "BD": 0.342,
+   "CH": 0.307,
+   "TL": 1.203,
+   "FL": 1.203
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.203,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.412,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.288,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.906,
+    -0.02,
+    1
+   ],
+   "EyeEnd": [
+    0.906,
+    -0.102,
+    1
+   ],
+   "OpercleEnd": [
+    0.76,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.647,
+    0.009,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.647,
+    -0.333,
+    1
+   ],
+   "PectoralOrigin": [
+    0.791,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.614,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.203,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.142,
+    0.083,
+    1
+   ],
+   "CaudalLower": [
+    -0.142,
+    -0.224,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "ar": {
+  "sci": "Osteoglossum bicirrhosum",
+  "speccode": 6234,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.192,
+   "PAL": 0.48,
+   "PDL": 0.643,
+   "PPL": 0.353,
+   "PPEL": 0.169,
+   "ED": 0.036,
+   "POL": 0.025,
+   "BD": 0.203,
+   "CH": 0.057,
+   "TL": 1.057,
+   "FL": 1.057
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": "absent",
+   "CShape": "pointed",
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": "more or less normal",
+   "PosofMouth": "superior",
+   "Forehead": "more or less straight",
+   "BodyShapeII": "oval",
+   "StrikingFeatures": "none",
+   "Notched": 0
+  }
+ },
+ "rtc": {
+  "sci": "Phractocephalus hemioliopterus",
+  "speccode": 6421,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.326,
+   "PAL": 0.784,
+   "PDL": 0.458,
+   "PPL": 0.551,
+   "PPEL": 0.246,
+   "ED": 0.037,
+   "POL": 0.102,
+   "BD": 0.244,
+   "CH": 0.19,
+   "TL": 1.173,
+   "FL": 1.108
+  },
+  "landmarks": {},
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "wf": {
+  "sci": "Hoplias aimara",
+  "speccode": 11900,
+  "shape": "elongated",
+  "ratios": {
+   "HL": 0.277,
+   "PAL": 0.816,
+   "PDL": 0.467,
+   "PPL": 0.57,
+   "PPEL": 0.242,
+   "ED": 0.029,
+   "POL": 0.05,
+   "BD": 0.289,
+   "CH": 0.207,
+   "TL": 1.155
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.162,
+    -0.154,
+    1
+   ],
+   "DorsalOrigin": [
+    0.524,
+    0.07,
+    1
+   ],
+   "AnalOrigin": [
+    0.182,
+    -0.167,
+    1
+   ],
+   "EyeFront": [
+    0.948,
+    0.013,
+    1
+   ],
+   "EyeEnd": [
+    0.919,
+    0.014,
+    1
+   ],
+   "OpercleEnd": [
+    0.721,
+    -0.024,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.532,
+    0.07,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.545,
+    -0.222,
+    1
+   ],
+   "PectoralOrigin": [
+    0.76,
+    -0.126,
+    1
+   ],
+   "PelvicOrigin": [
+    0.431,
+    -0.172,
+    1
+   ],
+   "CaudalUpper": [
+    -0.047,
+    -0.01,
+    1
+   ],
+   "CaudalLower": [
+    -0.11,
+    -0.222,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ },
+ "ap": {
+  "sci": "Arapaima gigas",
+  "speccode": 2076,
+  "shape": "fusiform / normal",
+  "ratios": {
+   "HL": 0.202,
+   "PAL": 0.718,
+   "PDL": 0.683,
+   "PPL": 0.56,
+   "PPEL": 0.186,
+   "ED": 0.02,
+   "POL": 0.043,
+   "BD": 0.145,
+   "CH": 0.087,
+   "TL": 1.064,
+   "FL": 1.064
+  },
+  "landmarks": {
+   "SnoutTip": [
+    1.0,
+    0.0,
+    1
+   ],
+   "CaudalOrigin": [
+    0.0,
+    0.0,
+    1
+   ],
+   "TLEnd": [
+    -0.064,
+    0.0,
+    1
+   ],
+   "DorsalOrigin": [
+    0.317,
+    0.0,
+    1
+   ],
+   "AnalOrigin": [
+    0.282,
+    0.0,
+    1
+   ],
+   "EyeFront": [
+    0.957,
+    -0.012,
+    1
+   ],
+   "EyeEnd": [
+    0.938,
+    -0.012,
+    1
+   ],
+   "OpercleEnd": [
+    0.798,
+    0.0,
+    1
+   ],
+   "MaxDepthDorsal": [
+    0.573,
+    0.039,
+    1
+   ],
+   "MaxDepthVentral": [
+    0.573,
+    -0.106,
+    1
+   ],
+   "PectoralOrigin": [
+    0.814,
+    0.0,
+    1
+   ],
+   "PelvicOrigin": [
+    0.44,
+    0.0,
+    1
+   ],
+   "FLEnd": [
+    -0.064,
+    0.0,
+    1
+   ],
+   "CaudalUpper": [
+    -0.032,
+    0.0,
+    1
+   ],
+   "CaudalLower": [
+    -0.032,
+    -0.087,
+    1
+   ]
+  },
+  "fins": {
+   "DorsalSpinesMin": null,
+   "DorsalSpinesMax": null,
+   "DorsalSoftRaysMin": null,
+   "DorsalSoftRaysMax": null,
+   "Adifin": null,
+   "CShape": null,
+   "AnalFinSpinesMin": null,
+   "Araymin": null,
+   "Araymax": null,
+   "BarbelsNo": null,
+   "TypeofMouth": null,
+   "PosofMouth": null,
+   "Forehead": null,
+   "BodyShapeII": null,
+   "StrikingFeatures": null,
+   "Notched": 0
+  }
+ }
+}

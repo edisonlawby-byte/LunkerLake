@@ -2274,31 +2274,34 @@ function paintScanExtras(ctx,W,H,sp){const lk=SPECIES[sp].look;if(!lk.flap)retur
       if(o.parent){o.parent.add(m);o.parent.remove(o);}f.mesh=m;}
   },undefined,()=>{});
 })();
-// High-quality fish for the Ultra and High settings (models/fish_hq.glb + models/hq/, Blender/hq_fish.py): bodies traced
+// High-quality fish for the Ultra and High settings (models/hq/<sp>.glb + textures, built by tools/hq_fish/): bodies traced
 // from real photos of each species, wearing the photo itself as skin, with a scale/edge normal map, sculpted gill
-// covers and jaws, fins cut from the photo and the real eye. Loaded only when Ultra or High is chosen; Medium and Low
+// covers and jaws, fins cut from the photo and the real eye. Each species loads only when Ultra or High is chosen
+// and that fish is in the water; Medium and Low
 // keep the lighter fish above. Photo credits are listed in Settings > Credits.
 const HQ_SPECIES=['sm','cr','br','sp','cf','pk','wa','yp','lt','bu','ts'];  // largemouth, golden and bluegill keep their 3D scans for now
-let HQKit=null,HQLoading=false;
+const HQKit={};
 function hqOn(){return save.settings.quality==='ultra'||save.settings.quality==='high';}
-function hqFor(sp){return hqOn()&&HQKit&&HQKit[sp]?HQKit[sp]:null;}
+function hqFor(sp){if(!hqOn()||!HQ_SPECIES.includes(sp))return null;if(HQKit[sp])return HQKit[sp];loadHQ(sp);return null;}
 // rebuild the meshes of fish already in the water (after the HQ kit loads or the quality setting changes)
 function refreshFishMeshes(list){
   for(const f of fishes)if(f.mesh&&list.includes(f.sp)){const o=f.mesh,m=makeFishMesh(f.sp);if(!!o.userData.hq===!!m.userData.hq)continue;
     m.position.copy(o.position);m.rotation.order=o.rotation.order;m.quaternion.copy(o.quaternion);m.scale.copy(o.scale);m.visible=o.visible;
     if(o.parent){o.parent.add(m);o.parent.remove(o);}f.mesh=m;}
 }
-function loadHQKit(){
-  if(HQKit||HQLoading||!THREE.GLTFLoader)return;HQLoading=true;
+// each species is its own small file (models/hq/<sp>.glb, ~70 KB), fetched the first time that fish is needed
+const HQLoading={};
+function loadHQ(sp){
+  if(HQKit[sp]||HQLoading[sp]||!THREE.GLTFLoader)return;HQLoading[sp]=true;
   const ld=new THREE.GLTFLoader();
   if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
-  ld.load('models/fish_hq.glb',gl=>{const k={};
-    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|fins|eye)_(\w+)$/.exec(o.name);if(!m||!HQ_SPECIES.includes(m[2]))return;const g=o.geometry;
-      if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();(k[m[2]]=k[m[2]]||{})[m[1]]=g;});
-    for(const sp in k)if(!k[sp].body||!k[sp].fins||!k[sp].eye)delete k[sp];
-    HQKit=k;HQLoading=false;refreshFishMeshes(HQ_SPECIES);
-  },undefined,()=>{HQLoading=false;});
+  ld.load('models/hq/'+sp+'.glb',gl=>{const k={};
+    gl.scene.traverse(o=>{if(!o.isMesh)return;const m=/^(body|fins|eye)_(\w+)$/.exec(o.name);if(!m||m[2]!==sp)return;const g=o.geometry;
+      if(!g.attributes.normal)g.computeVertexNormals();g.computeBoundingSphere();k[m[1]]=g;});
+    if(k.body&&k.fins&&k.eye){HQKit[sp]=k;refreshFishMeshes([sp]);}
+  },undefined,()=>{});
 }
+function loadHQKit(){for(const sp of HQ_SPECIES)loadHQ(sp);}  // preload all (debug/tests)
 // textures load the first time a species is needed (only the fish in the water at the current spot), ~1.2 MB each
 function hqTextures(sp,K){if(K.skin)return;const tl=new THREE.TextureLoader(),tx=n=>{const t=tl.load('models/hq/'+n+'.jpg');t.flipY=false;t.anisotropy=8;return t;};
   Object.assign(K,{skin:tx(sp+'_skin'),nrm:tx(sp+'_nrm'),atlas:tx(sp+'_atlas'),atlasA:tx(sp+'_atlas_a')});}
@@ -2316,7 +2319,6 @@ function makeHQFishMesh(sp,K){
     envMap:ENV,envMapIntensity:1}),uni));g.add(eye);
   g.userData={body,eye,uni,hq:true};return g;
 }
-if(hqOn())loadHQKit();
 // ---------- 2D (aquarium, catch card, spot picker) ----------
 const F2D={};
 function fish2DCache(sp){
@@ -3498,7 +3500,7 @@ function applyQuality(){
   buildPP();
 }
 function setQuality(q,manual){save.settings.quality=q;if(manual)save.settings.qManual=true;persist();Q=QUAL[q];applyQuality();syncSettings();
-  if(hqOn())loadHQKit();refreshFishMeshes(HQ_SPECIES);}
+  refreshFishMeshes(HQ_SPECIES);}
 // Planar reflection: mirror the camera under the water plane, clip everything below it, render to a texture the water shader samples.
 const reflCam=new THREE.PerspectiveCamera();const _rv=new V3(),_rt=new V3(),_rq=new THREE.Vector4(),_rp=new THREE.Plane(),_rc=new THREE.Vector4();const REFL_HIDE=[];
 function renderReflection(){
