@@ -13,12 +13,14 @@ paragraph in index.html).
 
 | | species |
 |---|---|
-| HQ done (20) | sm smallmouth, cr black crappie, br barramundi, sp spotted bass, pk northern pike, cf channel catfish, wa walleye, yp yellow perch, lt lake trout, bu burbot, ts giant snakehead, mu muskie (hand-traced `mask_poly`), hs striped snakehead, hb hampala barb (Commons photos), bg bluegill (photo skin on the 3D scan via `scan_hq.py`), **Amazon:** bp butterfly peacock bass, pr red-bellied piranha, rtc redtail catfish, wf wolf fish (Hoplias aimara) |
+| HQ done (21) | sm smallmouth, cr black crappie, br barramundi, sp spotted bass, pk northern pike, cf channel catfish, wa walleye, yp yellow perch, lt lake trout, bu burbot, ts giant snakehead, mu muskie (hand-traced `mask_poly`), hs striped snakehead, hb hampala barb (Commons photos), bg bluegill (photo skin on the 3D scan via `scan_hq.py`), **Amazon:** bp butterfly peacock bass, pr red-bellied piranha, rtc redtail catfish, wf wolf fish (Hoplias aimara), bt brook trout (iNat 150-obs set #257, photo was belly-up: flipped vertically, fingers cut off by the outline) |
 | Scan, no HQ needed | lm largemouth (scan already photo-textured), gd golden largemouth (scan texture repainted natural gold, all settings) |
-| No usable licensed photo yet | tm tiger muskie, ma mahseer (1 photo), rc Asian redtail catfish (Commons: none usable), fb giant featherback (one bent fish in a net), gg giant gourami (aquarium shots at angles only), pb speckled peacock bass (iNat: only 8 licensed photos, none side-on & whole), py payara (iNat: 1 photo), bt brook trout (iNat top 12 all underwater or in hands) — try Commons for these |
+| No usable licensed photo yet | tm tiger muskie, ma mahseer (1 photo), rc Asian redtail catfish (Commons: none usable), fb giant featherback (one bent fish in a net), gg giant gourami (aquarium shots at angles only), pb speckled peacock bass (iNat: only 8 licensed photos, none side-on & whole), py payara (iNat: 1 photo) — try Commons for these |
 | Built, not shipped (no clear win) | ap arapaima (iNat #5: tail crumpled, body lumpy, not clearly better than the old model), ar silver arowana (iNat #1 CC0, only side-on photo: dirty skin, dark back lost in leaf litter), rt rainbow trout (#97: leaves through the dorsal; #113: washed-out silver-blue, no red band, lumpy) — try Commons / fresh vivid fish on a plain background |
 
-Network: the cloud environment must allow `api.inaturalist.org` and `static.inaturalist.org`.
+Network: the cloud environment must allow `api.inaturalist.org`, `static.inaturalist.org`, `commons.wikimedia.org`, `upload.wikimedia.org`.
+`commons_get.py` fetches standard-width thumbs (1920/1280/960) from upload.wikimedia.org: odd widths redirect to thumb.wikimedia.org and originals get 429.
+`get_orig.py` reads `$CD/<key>_meta.json` (default `cand`), e.g. `CD=cand150 python3 -I get_orig.py orig bt:257` for a bigger candidate set.
 `spec_<key>.json` can also take `outline` + `band`: a hand-traced outline that GrabCut only refines within a band of that width (busy backgrounds: rtc, wf).
 Pale/silvery fish photographed on the ground (trout, arowana, arapaima) tend to come out washed-out and lumpy; prefer vivid, fresh fish on a plain background.
 
