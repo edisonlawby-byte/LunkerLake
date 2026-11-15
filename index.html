@@ -4227,7 +4227,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={regionSpecies,lakesOf,REG_ORDER,get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={regionSpecies,lakesOf,REG_ORDER,REGIONS,get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);
