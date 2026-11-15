@@ -700,15 +700,33 @@ const REGIONS={
    blurb:'A blackwater lagoon off the Rio Negro: giant Victoria lilies, white sand, flooded forest and a stilt village.',
    shore:[19,1.1,9,2.2,7,.6],
    spots:{lily:['Victoria Lily Lagoon','A still lagoon covered in giant Victoria lily pads, 1–2 m deep.'],weeds:['Floating Meadow','Mats of floating grass at the lagoon mouth, 1.5–3 m.'],dock:['Stilt Village','Palafitas houses on stilts and a floating store, 2–4 m.'],stumps:['Igapó Flooded Forest','Living trees standing in the dark water, 3–5 m.'],rocks:['Black Rock Shoals','Smooth black granite boulders and a white beach, 2–5 m.'],channel:['Main River Channel','The deep, slow current of the river itself, 8–14 m.']},
-   fish:{lily:{ar:4,wf:4,bp:2},weeds:{bp:5,pr:3,pb:2},dock:{pr:6,bp:4},stumps:{pb:6,wf:2,ar:2},rocks:{pb:5,py:5},channel:{rtc:5,py:5}},
-   legend:['pb','ap',.03],targets:[['pb',3],['bp',2],['py',2],['ar',1],['rtc',1],['wf',1]],
+   fish:{lily:{ar:5,bp:3,pr:2},weeds:{bp:5,pr:3,pb:2},dock:{pr:6,bp:4},stumps:{pb:6,ar:4},rocks:{pb:6,bp:4},channel:{pb:5,ar:3,pr:2}},
+   legend:['pb','ap',.03],targets:[['pb',3],['bp',2],['ar',2],['pr',1]],group:'Brazil: Rio Negro & Praia Branca',tab:'Brazil',
+   region:{name:'Amazon',where:'Brazil',blurb:'A blackwater lagoon with peacock bass, arowana and the arapaima legend, and a clearwater river of white beaches and rapids with payara, redtail catfish and wolf fish.'},
    rivals:[['João Batista',1.1],['Raimundo Sateré',1.05],['Ana Paula Lima',1.0],['Chico Mendes Neto',.95],['Kátia Barbosa',1.12],['Zé do Barco',.9],['Iara Tukano',1.08]],
    weather:[['clear',20],['cloudy',30],['overcast',18],['mist',10],['rain',22]],
    pal:{sand:[.82,.78,.66],mud:[.24,.17,.1],deep:[.08,.06,.04],weed:[.18,.26,.1],wet:[.7,.64,.52],rockUW:.18,landLo:[.08,.22,.07],landHi:[.18,.32,.1],meadow:[.36,.5,.16],rockLand:[.2,.2,.2],marsh:[.16,.3,.1],timber:[.2,.24,.12],high:[.08,.2,.07],
      shallow:[.36,.22,.1],deepW:[.05,.025,.01],uw:[.14,.08,.03],hillA:[.06,.12,.07],hillB:[.12,.18,.12],grassMead:[.22,.55,.36],grass:[.24,.42,.24]},
    hills:[[1050,40,110,0],[1500,70,160,0]],haze:1.3,cliff:3,trees:'amazon',music:'amz'},
+ amz2:{id:'amz2',base:'amz',name:'Praia Branca',where:'Pará, Brazil',accent:'#3fd0ff',
+   blurb:'A clear blue-green Amazon river with wide white beaches, a sandbar lagoon, black rock rapids, a riverboat landing and an eco-lodge.',
+   shore:[22,2.0,12,.2,8,1.6],shoreX:[[4,9,2.5]],deep:1.5,noPads:true,noDock:true,noWillow:true,noMarsh:true,timber:0,weedScale:.2,snag:'sunken branches',
+   zones:{lily:{ang:-2.7,frac:.8,r:20,depth:1.3,str:.9},weeds:{ang:-1.5,frac:.8,r:20,depth:2.2,str:.8},dock:{ang:1.2,frac:.86,r:16,depth:4,str:.55},
+     stumps:{ang:2.4,frac:.8,r:20,depth:3.5,str:.6},rocks:{ang:-.2,frac:.78,r:20,depth:3,str:.75}},
+   ch:{x1:-40,z1:70,x2:70,z2:-40},chz:{x:20,z:18,r:24},beaches:[[-2.3,-.95],[2.75,3.25]],
+   clear:[[1.2,8,14],[1.1,8,10],[.75,14,14],[.6,16,12],[.9,18,12],[-2.25,14,16],[-2.15,14,16],[-2.05,14,16],[-1.95,14,16],[-1.85,14,16],[-1.75,14,16],[-1.65,14,16],[-1.55,14,16],[-1.45,14,16],[-1.35,14,16],[-1.25,14,16],[-1.15,14,16],[-1.05,14,16],[2.80,14,16],[2.90,14,16],[3.00,14,16],[3.10,14,16],[3.20,14,16]],cliffs:[[-1.6,-5,.42],[-2.2,-4,.25],[3.0,-4.5,.22],[.75,7,.25]],
+   spots:{lily:['Sandbar Lagoon','Warm, shallow water behind a white sandbar, 1–2 m deep.'],weeds:['Beach Point','A white sand point dropping into clear water, 1.5–3 m.'],
+     dock:['Riverboat Landing','The passenger riverboat, a floating store and canoes at the landing, 2–4 m.'],stumps:['Fallen Trees','Dead forest giants lying from the bank into the current, 3–5 m.'],
+     rocks:['Pedral Rapids','Polished black rock slabs with white water pouring between them, 2–4 m.'],channel:['River Bend Deep','The deep outside bend of the river, payara and catfish water, 8–14 m.']},
+   fish:{lily:{bp:5,pr:3,wf:2},weeds:{bp:5,wf:3,pr:2},dock:{pr:5,rtc:5},stumps:{wf:6,bp:4},rocks:{py:7,wf:3},channel:{rtc:6,py:4}},
+   legend:['py','py',0],targets:[['py',3],['rtc',2],['bp',2],['wf',1],['pr',1]],
+   rivals:[['João Batista',1.05],['Raimunda Lopes',1.12],['Edson Pereira',.95],['Francisca Souza',1.08],['Manoel Tapajós',.9],['Ana Kayabi',1.0],['Zé Ribeiro',.88]],
+   weather:[['clear',34],['cloudy',30],['overcast',10],['mist',8],['rain',18]],
+   pal:{sand:[.9,.86,.74],mud:[.5,.46,.36],deep:[.12,.18,.16],weed:[.2,.34,.14],wet:[.72,.68,.56],rockUW:.25,landLo:[.12,.32,.1],landHi:[.28,.42,.14],meadow:[.45,.55,.22],rockLand:[.25,.24,.23],marsh:[.2,.36,.12],timber:[.34,.3,.22],high:[.12,.3,.12],
+     shallow:[.3,.56,.5],deepW:[.04,.22,.24],uw:[.12,.36,.33],hillA:[.06,.12,.07],hillB:[.12,.18,.12],grassMead:[.22,.55,.36],grass:[.24,.42,.24]},
+   hills:[[1000,50,140,0],[1500,80,200,0]],haze:1.15,cliff:6,trees:'amazon',music:'amz'},
 };
-const REG_ORDER=['us','us2','nw','nw2','sea','sea2','amz'];
+const REG_ORDER=['us','us2','nw','nw2','sea','sea2','amz','amz2'];
 const REGION_ID=(()=>{try{const d=JSON.parse(localStorage.getItem('lunkerlake.save.v1')||'{}');const r=d.settings&&d.settings.region;return REGIONS[r]?r:'us';}catch(e){return 'us';}})();
 const RG=REGIONS[REGION_ID];const RBASE=RG.base||RG.id;  // lakes in the same region share species, aquarium tank and sounds
 
@@ -934,7 +952,7 @@ const SPECIES={
      tail:{k:'round',h:.17,len:.17,oc:.024,col:'#a88a3a'},eye:{u:.875,t:.32,r:.032,col:'#d03020'},mouth:{t:.52,len:.18,drop:.06}},
    pref:{popper:.9,buzz:.75,frog:.3,spinner:.6,square:.55,crank:.6,deep:.3,jerk:.85,worm:.3,jig:.45,swim:.75},
    about:'The tucunaré-açu. The most savage lure-striker on earth, with three dark bars and a false eye on its tail.',
-   where:'The Igapó Flooded Forest and Black Rock Shoals',tip:'Big noisy topwaters and jerkbaits. Never stop a popper twice.',fightTxt:'Destroys topwaters, then runs straight for the trees.'},
+   where:'Rio Negro: Igapó, Black Rock Shoals and the river channel',tip:'Big noisy topwaters and jerkbaits. Never stop a popper twice.',fightTxt:'Destroys topwaters, then runs straight for the trees.'},
  bp:{reg:'amz',name:'Butterfly Peacock Bass',sci:'Cichla orinocensis',local:'Tucunaré-borboleta',min:.5,max:13,k:.02,fight:1.35,jumps:.4,dep:[.2,.6],
    look:{back:'#5a5a20',side:'#d0b830',side2:'#e0c848',belly:'#f6eabc',fin:'#b8a040',pat:'bp',sc:11,gill:.74,
      B:{H:.3,at:.55,ped:.11,pedL:.06,top:.54,snY:.05,blunt:1.7,sharp:1.45,W:.15,wAt:.66,hump:.03,humpAt:.7},
@@ -942,7 +960,7 @@ const SPECIES={
      tail:{k:'round',h:.17,len:.17,oc:.022,col:'#b89a40'},eye:{u:.875,t:.32,r:.032,col:'#d03020'},mouth:{t:.52,len:.17,drop:.06}},
    pref:{popper:.85,buzz:.7,frog:.3,spinner:.65,square:.6,crank:.6,deep:.25,jerk:.8,worm:.35,jig:.4,swim:.55},
    about:'A golden peacock bass marked with three eyespots like a butterfly’s wings.',
-   where:'Victoria Lily Lagoon and the Floating Meadow',tip:'Poppers and jerkbaits along the weed edges.',fightTxt:'Hard strikes and short, angry runs.'},
+   where:'Rio Negro lagoon and meadow; Praia Branca sandbar, beach and fallen trees',tip:'Poppers and jerkbaits along the weed edges.',fightTxt:'Hard strikes and short, angry runs.'},
  pr:{reg:'amz',name:'Red-bellied Piranha',sci:'Pygocentrus nattereri',local:'Piranha-caju',min:.2,max:3.8,k:.032,fight:.7,jumps:0,dep:[.2,.8],
    look:{back:'#4a5258',back2:'#6a747a',side:'#9aa4a8',side2:'#c08a70',belly:'#d83c1e',fin:'#5a6064',pat:'pr',sc:6,metal:.4,gill:.76,teeth:'saw',
      B:{H:.56,at:.52,ped:.11,pedL:.05,top:.5,snY:-.08,blunt:2.4,sharp:1.6,W:.17,wAt:.62},
@@ -950,7 +968,7 @@ const SPECIES={
      tail:{k:'fork',h:.2,len:.18,edge:'rgba(14,14,14,.9)'},eye:{u:.86,t:.36,r:.045,col:'#c03020'},mouth:{t:.62,len:.08,drop:-.01}},
    pref:{popper:.3,buzz:.2,frog:.1,spinner:.6,square:.45,crank:.45,deep:.2,jerk:.4,worm:.9,jig:.6,swim:.2},
    about:'Silver above, blood-red below, with a jaw full of interlocking razor teeth. A school can strip a bait in seconds.',
-   where:'The Stilt Village and the Floating Meadow',tip:'Anything with meat. Worms disappear fast.',fightTxt:'Snappy little runs. Mind the teeth.'},
+   where:'Rio Negro stilt village; Praia Branca landing and lagoon',tip:'Anything with meat. Worms disappear fast.',fightTxt:'Snappy little runs. Mind the teeth.'},
  py:{reg:'amz',name:'Payara',sci:'Hydrolycus armatus',local:'Cachorra',min:1,max:39,k:.0117,fight:1.5,jumps:.75,dep:[.3,.9],
    look:{back:'#4a5458',side:'#b8c0c0',side2:'#d0d6d4',belly:'#f2f4f0',fin:'#8a9090',pat:'py',sc:5,metal:.6,gill:.75,teeth:'fang',
      B:{H:.2,at:.6,ped:.07,pedL:.05,top:.48,snY:.05,blunt:1.5,sharp:1.3,W:.11,wAt:.66},
@@ -958,7 +976,7 @@ const SPECIES={
      tail:{k:'fork',h:.22,len:.24,edge:'rgba(20,24,28,.7)'},eye:{u:.88,t:.34,r:.03,col:'#c8b070'},mouth:{t:.5,len:.2,drop:.06}},
    pref:{popper:.15,buzz:.2,frog:0,spinner:.65,square:.5,crank:.7,deep:.75,jerk:.8,worm:.2,jig:.6,swim:.8},
    about:'The vampire fish. Two huge fangs rise from its lower jaw and fit into sockets in its head.',
-   where:'The Main River Channel and Black Rock Shoals',tip:'Fast crankbaits and swimbaits in the current near the rocks.',fightTxt:'Blistering runs and wild jumps.'},
+   where:'Praia Branca: Pedral Rapids and the River Bend Deep',tip:'Fast crankbaits and swimbaits in the current near the rocks.',fightTxt:'Blistering runs and wild jumps.'},
  ar:{reg:'amz',name:'Silver Arowana',sci:'Osteoglossum bicirrhosum',local:'Aruanã',min:1,max:13,k:.0059,fight:1.1,jumps:.9,dep:[0,.25],
    look:{back:'#3a4a44',side:'#c0c8c4',side2:'#d4dad6',belly:'#e8ece8',fin:'#a0a8a0',pat:'ar',sc:40,scEdge:'rgba(200,120,140,.32)',metal:.7,gill:.8,
      B:{H:.22,at:.5,ped:.06,pedL:0,top:.3,snY:.38,blunt:1.6,sharp:1.3,W:.08,wAt:.66},
@@ -967,7 +985,7 @@ const SPECIES={
      barbels:[{u:.995,t:.22,len:.08,a:.75,r:.004,droop:-.05,spread:.1}]},
    pref:{popper:.85,buzz:.6,frog:.6,spinner:.4,square:.2,crank:.15,deep:0,jerk:.45,worm:.2,jig:.05,swim:.3},
    about:'The "water monkey". It cruises just under the surface and can leap two metres to snatch insects off branches.',
-   where:'Victoria Lily Lagoon and the Igapó Flooded Forest',tip:'Topwaters and frogs right on the surface.',fightTxt:'Spectacular jumps. Its bony mouth throws hooks easily.'},
+   where:'Rio Negro: Victoria Lily Lagoon, Igapó and channel',tip:'Topwaters and frogs right on the surface.',fightTxt:'Spectacular jumps. Its bony mouth throws hooks easily.'},
  rtc:{reg:'amz',name:'Redtail Catfish',sci:'Phractocephalus hemioliopterus',local:'Pirarara',min:3,max:120,k:.015,fight:1.4,jumps:0,dep:[.9,1],
    look:{back:'#262a2e',side:'#2e3236',side2:'#e8e6dc',belly:'#f0eee6',fin:'#3a3e42',pat:'rtc',sc:0,gill:.8,
      B:{H:.2,at:.66,ped:.08,pedL:.05,top:.5,snY:-.06,blunt:1.5,sharp:1.2,W:.22,wAt:.82,flat:.5},
@@ -976,7 +994,7 @@ const SPECIES={
      barbels:[{u:.96,t:.45,len:.38,a:-.15,r:.006,droop:.3,spread:.4},{u:.97,t:.86,len:.12,a:-.9,r:.004,spread:.2},{u:.975,t:.76,len:.09,a:-.7,r:.004,spread:.3}],barbelCol:'#e8e4d8'},
    pref:{popper:0,buzz:0,frog:0,spinner:.1,square:.1,crank:.2,deep:.5,jerk:.1,worm:.95,jig:.8,swim:.3},
    about:'The pirarara. A black-and-white giant with a flame-red tail that grows bigger than a person.',
-   where:'The Main River Channel, on the bottom',tip:'Worms and jigs left on the deep bottom.',fightTxt:'Pure weight. Long, grinding runs into the current.'},
+   where:'Praia Branca: River Bend Deep and the landing, on the bottom',tip:'Worms and jigs left on the deep bottom.',fightTxt:'Pure weight. Long, grinding runs into the current.'},
  wf:{reg:'amz',name:'Wolf Fish',sci:'Hoplias aimara',local:'Trairão',min:.5,max:30,k:.0185,fight:1.3,jumps:.1,dep:[.1,.5],
    look:{back:'#2e2618',side:'#5a4a30',side2:'#7a6a48',belly:'#c8bca0',fin:'#4a3e28',pat:'wf',sc:10,gill:.78,teeth:'saw',
      B:{H:.2,at:.55,ped:.1,pedL:.03,top:.5,snY:.03,blunt:2,sharp:1.5,W:.16,wAt:.68,flat:.15},
@@ -984,7 +1002,7 @@ const SPECIES={
      tail:{k:'round',h:.15,len:.16,spots:8},eye:{u:.89,t:.3,r:.026,col:'#c0a040'},mouth:{t:.52,len:.17,drop:.05}},
    pref:{popper:.7,buzz:.6,frog:.9,spinner:.45,square:.3,crank:.3,deep:.05,jerk:.45,worm:.5,jig:.3,swim:.5},
    about:'The trairão. A thick-skulled, mottled ambush predator with a mouth full of fangs, lurking in still backwaters.',
-   where:'Victoria Lily Lagoon and the Igapó Flooded Forest',tip:'Frogs and poppers dragged slowly through the pads.',fightTxt:'A savage strike, then thrashing at the surface.'},
+   where:'Praia Branca: fallen trees, rapids and the beach point',tip:'Frogs and poppers dragged slowly through the pads.',fightTxt:'A savage strike, then thrashing at the surface.'},
  ap:{reg:'amz',name:'Arapaima',sci:'Arapaima gigas',local:'Pirarucu',min:30,max:400,k:.0125,fight:1.8,jumps:.25,legend:true,dep:[.1,.5],
    look:{back:'#3a4438',side:'#6a7464',side2:'#8a9080',belly:'#c8c4b0',fin:'#4a3a30',pat:'ap',sc:44,scEdge:'rgba(40,40,30,.45)',gill:.8,
      B:{H:.17,at:.4,ped:.1,pedL:0,top:.5,snY:.02,blunt:2.4,sharp:1.4,W:.15,wAt:.72,flat:.35},
@@ -1617,7 +1635,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   const snagG=mergeAO([geoPart(new THREE.CylinderGeometry(.07,.13,1,7),0,.5,0),brG(.55,1,0,.3),brG(.68,-1.1,1.2,.26),brG(.8,.9,2.4,.2),brG(.45,-.9,3.6,.22)],0,1,.55,1.05,.15);
   // ---------- the timber spot ----------
   const snags=L('snag');const sz=ZBY.stumps;
-  if(K==='amazon'){// igapó: living trees standing in the dark water
+  if(K==='amazon'&&RG.timber!==0){// igapó: living trees standing in the dark water
     const it=[],itc=[];for(let i=0;i<500&&it.length<70;i++){const x=sz.x+gauss()*sz.r*.75,z=sz.z+gauss()*sz.r*.75;const d=depthAt(x,z);if(d<.8)continue;const h=d+rr(5,10);
       it.push({x,y:-d,z,sx:rr(1.2,1.8),sy:h,sz:rr(1.2,1.8),c:HSL(.08,.2,.22+R()*.08)});itc.push({x,y:-d+h-rr(5.5,7.5),z,sx:rr(6,9),sy:rr(7,9),sz:rr(6,9),ry:R()*TAU,c:HSL(.22+R()*.1,.55,.17+R()*.12)});OBST.push({x,z,r:.8});}
     inst(trunkG,trunkMat,it,{cast:true,recv:true});inst(canopyG,sway(.03,1),itc,{cast:true});}
@@ -1679,7 +1697,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
     inst(padG,new THREE.MeshLambertMaterial({color:0xffffff,side:THREE.DoubleSide}),pads,{recv:true});}
   if(flowers.length)inst(new THREE.SphereGeometry(1,8,6),lam(0xffffff),flowers);
   // floating grass mats (Amazon "floating meadow")
-  if(K==='amazon'){const wz=ZBY.weeds,mats=[],base=[];for(let i=0;i<14000&&mats.length<4200;i++){const x=wz.x+gauss()*wz.r*.6,z=wz.z+gauss()*wz.r*.6;const d=depthAt(x,z);if(d<.3)continue;if(vnoise(x*.09,z*.09)<.42)continue;
+  if(K==='amazon'&&!RG.noMarsh){const wz=ZBY.weeds,mats=[],base=[];for(let i=0;i<14000&&mats.length<4200;i++){const x=wz.x+gauss()*wz.r*.6,z=wz.z+gauss()*wz.r*.6;const d=depthAt(x,z);if(d<.3)continue;if(vnoise(x*.09,z*.09)<.42)continue;
       mats.push({x,y:-.02,z,sx:rr(2,3.2),sy:rr(.35,.7),sz:rr(2,3.2),ry:R()*TAU,c:HSL(.2+R()*.07,.55,.32+R()*.14)});if(mats.length%5===0)base.push({x,y:.04,z,sx:rr(1.6,2.6),sy:1,sz:rr(1.6,2.6),ry:R()*TAU,c:HSL(.22+R()*.05,.5,.22+R()*.08)});}
     inst(tuftG,swayMat(new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide}),.1,1.6),mats,{recv:true});
     const disc=new THREE.CircleGeometry(1,10);disc.rotateX(-Math.PI/2);inst(disc,new THREE.MeshLambertMaterial({color:0xffffff}),base,{recv:true});}
@@ -1880,6 +1898,25 @@ function buildLandmarksDeras(){
     for(let k=0;k<70;k++){const a=k<34?ZBY.lily.ang+rr(-.35,.35):rr(-Math.PI,Math.PI),e=rr(1,7),q=shorePt(a,e);if(inClear(q.x,q.z))continue;put('bamboo',q.x,terrainH(q.x,q.z)-.2,q.z,R()*TAU,rr(.8,1.2));}
   });
 }
+function buildLandmarksPraia(){
+  loadKit('models/praia_kit.glb',59,({K,R,rr,put,atShore,bend,spanLine,across})=>{
+    // wide white beaches (the land behind is lowered, so the sand lies on top)
+    for(const[a0,a1] of RG.beaches||[])bend('beach_strip',a0,a1,0);
+    // sandbar island closing off the lagoon
+    {const A=ZBY.lily.ang,q=shorePt(A,-24);const m=put('sand_spit',q.x,0,q.z,0,1.7);if(m)faceLake(m,q.x,q.z),m.rotation.y+=Math.PI/2;}
+    // riverboat landing: passenger boat, floating store, canoes
+    {const A=ZBY.dock.ang,q=shorePt(A,-9),b=put('riverboat',q.x,0,q.z,0);if(b){faceLake(b,q.x,q.z);b.rotation.y+=Math.PI/2;SCN.bob.push({o:b,ph:0,amp:.03});}
+      for(let k=-1;k<=1;k++)OBST.push({x:q.x+Math.cos(A+Math.PI/2)*k*7,z:q.z+Math.sin(A+Math.PI/2)*k*7,r:4.5});
+      const f=shorePt(A+.12,-5),fl=put('flutuante',f.x,0,f.z,0);if(fl){faceLake(fl,f.x,f.z);SCN.bob.push({o:fl,ph:1,amp:.04});OBST.push({x:f.x,z:f.z,r:6});}
+      for(const[da,e] of[[-.1,-3],[-.13,-5],[.2,-4]]){const c=shorePt(A+da,e),r=put('rabeta',c.x,0,c.z,R()*TAU);if(r)SCN.bob.push({o:r,ph:R()*TAU,amp:.05});}}
+    // eco-lodge huts up on the bank
+    for(const[a,e] of[[.75,14],[.62,17],[.88,18],[.7,24]]){const q=shorePt(a,e);atShore('lodge_hut',a,e,terrainH(q.x,q.z)-.3,1,rr(-.3,.3));}
+    // black rock rapids
+    for(let k=0;k<9;k++){const a=ZBY.rocks.ang+rr(-.28,.28),q=shorePt(a,rr(-16,-2));put('pedral',q.x,0,q.z,R()*TAU,rr(.8,1.3));OBST.push({x:q.x,z:q.z,r:6});}
+    // fallen forest giants
+    for(let k=0;k<6;k++)atShore('fallen_tree',ZBY.stumps.ang+(k-2.5)*.07+rr(-.02,.02),4,0,rr(.9,1.3),rr(-.35,.35));
+  });
+}
 function buildLandmarksRegion(){
   const R=mulberry(91);const rr=(a,b)=>a+R()*(b-a);const K=RG.id;
   const L=(c,o)=>new THREE.MeshLambertMaterial(Object.assign({color:c},o||{}));
@@ -2018,7 +2055,7 @@ function buildLandmarksRegion(){
   }
 }
 
-if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else if(RG.id==='nw2')buildLandmarksGlacier();else if(RG.id==='sea2')buildLandmarksDeras();else buildLandmarksRegion();
+if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else if(RG.id==='nw2')buildLandmarksGlacier();else if(RG.id==='sea2')buildLandmarksDeras();else if(RG.id==='amz2')buildLandmarksPraia();else buildLandmarksRegion();
 function updScenery(){
   if(SCN.mill)SCN.mill.rotation.z=G.time*(.6+1.2*U.wind.value);
   for(const b of SCN.bob){b.o.position.y=Math.sin(G.time*1.3+b.ph)*b.amp*U.waveAmp.value;b.o.rotation.z=Math.sin(G.time*1.1+b.ph)*.06;b.o.rotation.x=Math.cos(G.time*.9+b.ph)*.05;}
