@@ -457,7 +457,7 @@ body.touch .callout{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 
 <section class="screen" id="scr-region" hidden>
   <div class="spotbox">
-    <div class="thead"><div><div class="lbl" id="regKicker">Free fishing</div><h2 class="h2">Pick a region</h2></div><button class="btn small nav backbtn" data-act="regback">&#8592; Back</button><div class="hint" style="flex-basis:100%">Every region has its own lake, six spots and fish you can’t catch anywhere else. Switching region takes a few seconds to load.</div></div>
+    <div class="thead"><div><div class="lbl" id="regKicker">Free fishing</div><h2 class="h2" id="regHead">Pick a region</h2></div><button class="btn small nav backbtn" data-act="regback">&#8592; Back</button><div class="hint" id="regHint" style="flex-basis:100%"></div></div>
     <div class="spgrid rggrid" id="rggrid"></div>
   </div>
 </section>
@@ -616,7 +616,7 @@ const REGIONS={
    shore:[17,.5,10,1.3,6,2.1],
    spots:{lily:['Lily Pad Cove','A marshy cove of willows, cattails and lily pads, 1–2 m deep. Weedless lures only.'],weeds:['Weed Flats','Grass beds off a farm meadow with a windmill, 1.5–3 m deep.'],dock:['Old Ferry Dock','The ferry dock, boathouse and lakeside cabins, 2–4 m.'],stumps:['Stump Field','A flooded forest of dead trees and sunken logs, 3–5 m.'],rocks:['Granite Point','Granite cliffs under the lighthouse, with a sharp drop-off, 2–5 m.'],channel:['The Channel','Marked by red and green buoys. The deepest water in the lake, 8–14 m.']},
    fish:{lily:{lm:7,bg:3},weeds:{pk:5.5,bg:4.5},dock:{cr:6,bg:4},stumps:{lm:5,cr:3,pk:2},rocks:{pk:5,lm:5},channel:{pk:5,lm:3,cr:2}},
-   legend:['lm','gd',.025],targets:[['lm',3],['pk',2],['cr',2],['bg',1]],group:'USA: Lunker Lake & Bluff Reservoir',tab:'USA',
+   legend:['lm','gd',.025],targets:[['lm',3],['pk',2],['cr',2],['bg',1]],group:'USA: Lunker Lake & Bluff Reservoir',tab:'USA',region:{name:'USA',where:'Midwest & Ozarks',blurb:'Two bass lakes: a weedy natural lake with pike and bluegill, and a clear Ozark reservoir with smallmouth, spotted bass and catfish.'},
    rivals:[['Hank Dobbins',1.05],['Rosa Delgado',1.15],['Earl Pruitt',.95],['Mei-Lin Chou',1.1],['Dusty Varner',.85],['June Okafor',1.0],['Tomás Rey',.9]],
    weather:[['clear',33],['cloudy',25],['overcast',17],['mist',12],['rain',13]],
    pal:{sand:[.66,.6,.42],mud:[.36,.34,.24],deep:[.16,.2,.16],weed:[.22,.32,.14],wet:[.52,.47,.33],rockUW:.42,landLo:[.27,.38,.15],landHi:[.47,.42,.17],meadow:[.6,.5,.25],rockLand:[.47,.46,.43],marsh:[.2,.3,.15],timber:[.37,.31,.22],high:[.28,.3,.22],
@@ -1786,9 +1786,9 @@ function buildLandmarksBluff(){
       atShore('bait_shop',A-.11,11,terrainH(shorePt(A-.11,11).x,shorePt(A-.11,11).z)-.1);
       const pp=shorePt(A+.11,-6);const tr=put('bass_boat',pp.x,0,pp.z);if(tr){faceLake(tr,pp.x,pp.z);SCN.bob.push({o:tr,ph:1,amp:.04});}}
     // limestone bluffs along the Bluff Wall and the south shore
-    for(const[a0,a1,e0] of [[ZBY.rocks.ang-.32,ZBY.rocks.ang+.34,1.2],[-1.62,-1.38,1.5]]){
-      for(let a=a0;a<a1;a+=rr(.03,.075)){const nm=['ledge_a','ledge_b','ledge_c'][(R()*3)|0];const up=R()<.3;const q=shorePt(a,e0+(up?rr(4,7):rr(-.6,.8)));
-        const sc=up?rr(.7,1.1):rr(.9,1.9);const m=put(nm,q.x,up?terrainH(q.x,q.z)-2:rr(-1.4,.3),q.z,0,sc);if(m)m.scale.x=sc*rr(1.4,1.9);if(m){faceLake(m,q.x,q.z);m.rotation.y+=rr(-.25,.25);}}}
+    // limestone bluffs: one continuous wall per stretch, every piece at the same height so the rock beds line up
+    for(const[a0,a1] of [[ZBY.rocks.ang-.32,ZBY.rocks.ang+.34],[-1.62,-1.38]]){
+      for(let a=a0;a<a1;){const nm=(a-a0<.06||a1-a<.06)?'ledge_c':['ledge_a','ledge_b','ledge_c'][(R()*3)|0];/* low ends: the bluff fades into the hillside */atShore(nm,a,4+rr(-.6,.6),0,1,rr(-.07,.07));a+=rr(7.5,9.5)/SHORE(a);}}
   },undefined,()=>{});
 }
 function buildLandmarksRegion(){
@@ -3723,17 +3723,30 @@ let spotFrom='start',regMode='free';
 // species that live in a lake: its spot tables plus its legend fish
 function lakesOf(sp){return REG_ORDER.filter(r=>regionSpecies(r).includes(sp)).map(r=>REGIONS[r].name).join(' or ');}
 function regionSpecies(r){const Rg=REGIONS[r],set=new Set();for(const t of Object.values(Rg.fish))for(const k in t)set.add(k);if(Rg.legend&&Rg.legend[2]>0)set.add(Rg.legend[1]);return Object.keys(SPECIES).filter(k=>set.has(k));}
-function openRegions(mode,from){
-  regMode=mode;G.screen='region';G.regFrom=from||'title';showOnly('region');$('#hud').hidden=true;
+// regions hold one or more lakes (a lake with `base` belongs to that region); each lake has only some of the region's fish
+const regionOf=r=>REGIONS[r].base||r;
+const lakesIn=g=>REG_ORDER.filter(r=>regionOf(r)===g);
+function groupSpecies(g){const s=new Set(lakesIn(g).flatMap(regionSpecies));return Object.keys(SPECIES).filter(k=>s.has(k));}
+function openRegions(mode,from,lakesOfG){
+  regMode=mode;G.screen='region';if(!lakesOfG)G.regFrom=from||'title';G.regLakes=lakesOfG||null;showOnly('region');$('#hud').hidden=true;
   $('#regKicker').textContent=mode==='tour'?'Tournament day':'Free fishing';
-  $('#rggrid').innerHTML=REG_ORDER.map(r=>{const Rg=REGIONS[r],list=regionSpecies(r),got=list.filter(sp=>save.catches.some(c=>c.sp===sp)).length;
-    return`<button class="spcard rgcard nav" data-region="${r}" style="--rc:${Rg.accent}"${r===RG.id?' data-default':''}><h3>${Rg.name}<small>${got} of ${list.length} species</small></h3><div class="where">${Rg.where}</div>${r===RG.id?'<span class="here">You are here</span>':''}<canvas width="560" height="254"></canvas><p>${Rg.blurb}</p></button>`;}).join('');
-  $$('#rggrid .rgcard').forEach(el=>{const r=el.dataset.region,x=el.querySelector('canvas').getContext('2d');const list=regionSpecies(r);
+  const RGN=lakesOfG&&(REGIONS[lakesOfG].region||{});
+  $('#regHead').textContent=lakesOfG?`Pick a lake \u2013 ${RGN.name||REGIONS[lakesOfG].name}`:'Pick a region';
+  $('#regHint').textContent=lakesOfG?'Each lake holds only some of the region\u2019s fish, so fish both lakes to catch them all. Switching lake takes a few seconds to load.':'Every region has its own fish you can\u2019t catch anywhere else, spread over its lakes. Switching takes a few seconds to load.';
+  const ids=lakesOfG?lakesIn(lakesOfG):REG_ORDER.filter(r=>!REGIONS[r].base);
+  const card=(key,r,title,small,where,blurb,list,here)=>`<button class="spcard rgcard nav" data-region="${key}" data-list="${list.join(',')}" style="--rc:${REGIONS[r].accent}"${here?' data-default':''}><h3>${title}<small>${small}</small></h3><div class="where">${where}</div>${here?'<span class="here">You are here</span>':''}<canvas width="560" height="254"></canvas><p>${blurb}</p></button>`;
+  const got=list=>list.filter(sp=>save.catches.some(c=>c.sp===sp)).length;
+  $('#rggrid').innerHTML=ids.map(r=>{
+    if(lakesOfG){const list=regionSpecies(r);return card(r,r,REGIONS[r].name,`${got(list)} of ${list.length} species`,REGIONS[r].where,REGIONS[r].blurb,list,r===RG.id);}
+    const lk=lakesIn(r),list=groupSpecies(r),Rn=REGIONS[r].region||{};
+    return card(lk.length>1?'g:'+r:r,r,Rn.name||REGIONS[r].name,`${got(list)} of ${list.length} species${lk.length>1?` \u00b7 ${lk.length} lakes`:''}`,Rn.where||REGIONS[r].where,Rn.blurb||REGIONS[r].blurb,list,regionOf(RG.id)===r);}).join('');
+  $$('#rggrid .rgcard').forEach(el=>{const x=el.querySelector('canvas').getContext('2d');const list=el.dataset.list.split(',');
     list.forEach((sp,i)=>{const col=i%4,row=(i/4)|0,cx=70+col*140,cy=66+row*122;const known=save.catches.some(c=>c.sp===sp);const e=fishPlan(sp).ext;const L=fitFishL(sp,124,92);
       drawFish2D(x,sp,cx-(e.x0+e.x1)/2*L,cy+(e.y0+e.y1)/2*L,L,known?{phase:.4}:{sil:true,silCol:SPECIES[sp].legend?'rgba(255,214,90,.35)':'rgba(214,232,222,.7)'});});});
   requestAnimationFrame(()=>Nav.def());
 }
 function pickRegion(r){
+  if(r.startsWith('g:')){openRegions(regMode,null,r.slice(2));return;}
   if(r===RG.id){startMode(regMode);return;}
   if(G.inGame&&G.mode==='tour'&&!G.tourDone){toast('Finish the tournament first');return;}
   save.settings.region=r;persist();try{sessionStorage.setItem('ll.travel',JSON.stringify({mode:regMode}));}catch(e){}
@@ -4012,7 +4025,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.tankreg){Tank.reg=t.dataset.tankreg;renderTank();Nav.def();return;}
   switch(t.dataset.act){
     case 'tour':openRegions('tour');break;case 'free':openRegions('free');break;
-    case 'regback':G.regFrom==='pause'?openScreen('pause'):openScreen('title');break;
+    case 'regback':if(G.regLakes){openRegions(regMode,G.regFrom);break;}G.regFrom==='pause'?openScreen('pause'):openScreen('title');break;
     case 'region':if(G.mode==='tour'&&!G.tourDone)toast('Finish the tournament first');else if(G.phase!=='boat')toast('Reel in first');else openRegions(G.mode,'pause');break;
     case 'aqua':openAqua(G.screen);break;case 'aquaback':aquaBack();break;
     case 'help':returnTo=G.screen;renderHelp();openScreen('help');break;case 'helpback':openScreen(returnTo==='help'?'title':returnTo);break;
@@ -4049,7 +4062,7 @@ function menuInput(dt){
   if(G.screen==='pause'&&back){closeToGame();return;}
   if(G.screen==='settings'&&back){closeSettings();return;}
   if(G.screen==='spot'&&back){spotFrom==='start'?openScreen('title'):openScreen('pause');return;}
-  if(G.screen==='region'&&back){G.regFrom==='pause'?openScreen('pause'):openScreen('title');return;}
+  if(G.screen==='region'&&back){if(G.regLakes){openRegions(regMode,G.regFrom);return;}G.regFrom==='pause'?openScreen('pause'):openScreen('title');return;}
   if(G.screen==='help'&&back){openScreen(returnTo==='help'?'title':returnTo);return;}
   if(G.screen==='catch'&&back){releaseHeld();closeToGame();toBoat();return;}
 }
