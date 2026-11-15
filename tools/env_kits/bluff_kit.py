@@ -417,7 +417,7 @@ def pontoon():
 random.seed(7)
 BEDS = []  # one bed sequence shared by every piece, so the beds line up from piece to piece along the shore
 z = -4.0
-while z < 18:
+while z < 28:
     th = random.uniform(.7, 2.3)
     BEDS.append((z, z + th, False))
     z += th
@@ -428,71 +428,90 @@ while z < 18:
 
 def bluff_col(p, key):
     bi = next((i for i, (z0, z1, _) in enumerate(BEDS) if z0 <= p.z < z1), 0)
-    c = .74 + .08 * math.sin(bi * 2.3) + .05 * n3(p, 1.2, 4)
-    r, g, b = c * 1.0, c * .97, c * .9
-    streak = max(0, n3(Vector((p.x * 1.6, 0, 3)), 1, 31) - .05) * 2.2  # vertical: no z, runs down the whole face
-    streak *= .6 + .4 * max(0, n3(Vector((p.x, 0, p.z * .15)), 1, 33) + .5)
+    c = .66 + .1 * math.sin(bi * 2.3) + .07 * n3(p, .35, 4) + .04 * n3(p, 2.5, 6)
+    r, g, b = c * 1.0, c * .95, c * .86
+    streak = max(0, n3(Vector((p.x * .7, p.y * .3, p.z * .06)), 1, 31) - .2) * 1.6   # long dark runs down from ledges
+    streak *= max(0, n3(Vector((p.x * .25, 0, p.z * .12)), 1, 33) + .2)
+    lichen = max(0, n3(p, .9, 41) - .3) * 1.2
+    r, g, b = r * (1 - .3 * lichen), g * (1 - .22 * lichen), b * (1 - .35 * lichen)
     iron = max(0, n3(Vector((p.x * .9, p.y, p.z * .5)), .8, 21) - .15) * 1.8
     r, g, b = r * (1 + .22 * iron), g * (1 + .04 * iron), b * (1 - .25 * iron)
-    k = 1 - .62 * min(1, streak)
+    k = 1 - .45 * min(1, streak)
     if p.z < .9:  # wet, algae-dark band at the waterline
         k *= .68 + .15 * max(0, n3(p, 2, 9))
     return (r * k, g * k, b * k * 1.02)
 
 
-def ledge(name, seed, W=16, H=12, D=8):
+def smooth01(t):
+    t = min(1, max(0, t))
+    return t * t * (3 - 2 * t)
+
+
+def bluff_wall(name='bluff_wall', L=80.0, H=22.0, seed=5):
+    """ONE continuous sculpted rock face (no separate blocks). A regular grid along the wall (x) and up (z), pushed
+    out toward the lake (-Y) by: a gentle overall bulge, thick beds that stick out by different amounts along the
+    wall, thin recessed partings between beds, V-shaped vertical joint cracks, a slight lean back with height and fine
+    roughness. Above the local cliff height the grid folds back over the top into the hill. The ends drop to nothing,
+    so the game can bend one wall along a stretch of shoreline with no seams."""
     random.seed(seed)
     P = Part(name)
     m = mat('limestone', LIME, .92)
     b = P.bm(m)
-    joints = []
-    for z0, z1, parting in BEDS:
-        if z0 >= H:
-            break
-        h = max(0, z0) / H
-        half = W / 2 * (1 - .28 * h ** 1.5)
-        face = -D / 2 + .1 * max(0, z0) + .35 * math.sin(seed + z0 * .2)  # gentle batter: the bluff leans back a little
-        if parting:
-            P.box(m, -half, half, face + random.uniform(.5, .9), D / 2, z0, z1)
+    NX, DZ = int(L / .65), .22
+    zs = [-4 + i * DZ for i in range(int((H + 3 + 4) / DZ) + 1)]
+    beds = [(z0, z1, pt) for z0, z1, pt in BEDS if z0 < H + 3]
+    # joints per bed: x positions; about half continue from the bed below
+    jts, prev = [], []
+    for z0, z1, pt in beds:
+        if pt:
+            jts.append(prev)
             continue
-        # vertical joints: about half carry on from the bed below (real joint sets run through several beds)
-        xs = [x for x in joints if random.random() < .55 and -half < x < half]
-        x = -half
-        while x < half:
-            x += random.uniform(1.4, 4.2)
-            if x < half - .8:
-                xs.append(x)
-        xs = sorted(set(round(v, 2) for v in xs))
-        joints = xs
-        cuts = [-half * random.uniform(.85, 1)] + [v for v in xs if v > -half + .6] + [half * random.uniform(.85, 1)]
-        for x0, x1 in zip(cuts[:-1], cuts[1:]):
-            if x1 - x0 < .5:
-                continue
-            if random.random() < .08:  # block fallen out: a dark notch
-                P.box(m, x0, x1, face + 1.4, D / 2, z0, z1)
-                continue
-            y0 = face + random.uniform(-.4, .35)
-            vs = P.box(m, x0 + .04, x1 - .04, y0, D / 2, z0, z1, sub=1)
-            for v in vs:  # crumbled front edges and a slightly uneven face
-                if v.co.y < y0 + .01:
-                    v.co.y += random.uniform(-.08, .12)
-                    if v.co.z > z1 - .01:
-                        v.co.y += random.uniform(0, .25)
-                        v.co.z -= random.uniform(0, .18)
-    # chunk rock (talus) at the waterline
-    for i in range(int(W / 1.6)):
-        x = random.uniform(-W / 2, W / 2)
-        s_ = random.uniform(.5, 1.3)
-        y = -D / 2 - random.uniform(.3, 2.2)
-        vs = P.box(m, x - s_, x + s_ * random.uniform(.6, 1.2), y - s_ * .8, y + s_ * .8, -1.2, -1.2 + s_ * random.uniform(.9, 1.6), sub=1)
-        ax, ay = random.uniform(-.3, .3), random.uniform(-.3, .3)
-        for v in vs:
-            v.co += Vector((random.uniform(-.12, .12), random.uniform(-.12, .12), random.uniform(-.1, .1) + ax * (v.co.x - x) + ay * (v.co.y - y)))
-    return P.build(bluff_col, smooth=False)
+        xs = [x for x in prev if random.random() < .55]
+        x = random.uniform(0, 2)
+        while x < L:
+            xs.append(x)
+            x += random.uniform(1.6, 4.5)
+        prev = sorted(xs)
+        jts.append(prev)
+    grid = []
+    for i in range(NX + 1):
+        x = L * i / NX
+        end = smooth01(x / 14) * smooth01((L - x) / 14)
+        hx = (H * (.7 + .3 * noise.noise(Vector((x * .03, 1.5, seed))))) * end - 1.5 * (1 - end)
+        col = []
+        for z in zs:
+            bi = next((k for k, (z0, z1, _) in enumerate(beds) if z0 <= z < z1), len(beds) - 1)
+            z0, z1, pt = beds[bi]
+            d = 2.2 * noise.noise(Vector((x * .03, z * .04, seed + 1)))           # big buttresses and bays
+            d += 1.0 * noise.noise(Vector((x * .06, bi * 3.1, seed + 2)))         # each bed sticks out its own amount
+            u = (z - z0) / max(z1 - z0, 1e-3)
+            if pt:
+                d -= .9                                                          # parting: recessed dark line
+            else:
+                d -= .35 * (1 - math.sin(math.pi * u)) ** 3                      # bed edges round off into the partings
+                for xj in jts[bi]:
+                    w = abs(x - xj)
+                    if w < .7:
+                        d -= .8 * (1 - w / .7) ** 1.5                            # vertical joint crack
+            d -= .07 * max(0, z)                                                 # leans back as it rises
+            d += .12 * noise.noise(Vector((x * .9, z * .9, seed + 3))) - 4.5 * (1 - end)  # roughness; ends sink into the hill
+            y = -d
+            zz = z
+            if z > hx:                                                          # fold back over the top into the hill
+                k = z - hx
+                y = -d + k * 3.2
+                zz = hx + .35 * math.sin(min(k, 1.2) * 1.3) - max(0, k - 1.2) * .6
+            col.append(b.verts.new((x - L / 2, y, zz)))
+        grid.append(col)
+    for i in range(NX):
+        for j in range(len(zs) - 1):
+            b.faces.new([grid[i][j], grid[i + 1][j], grid[i + 1][j + 1], grid[i][j + 1]])
+    o = P.build(bluff_col, smooth=True)
+    return o
 
 
 pieces = [dam_seg(), dam_gate(), intake_tower(), bridge_span(), bridge_pier(), marina(), ramp(), bait_shop(), bass_boat(), pontoon(),
-          ledge('ledge_a', 1, 16, 12), ledge('ledge_b', 2, 18, 16), ledge('ledge_c', 3, 14, 8)]
+          bluff_wall()]
 for i, o in enumerate(pieces):
     o.location.x = i * 40  # spread out in the .blend; the game uses each piece at its own origin
 if BLEND:

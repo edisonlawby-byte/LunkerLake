@@ -627,7 +627,7 @@ const REGIONS={
    shore:[32,-.49,9,2.4,5,1.1],shoreX:[[4,8,.3],[7,5,1.2]],deep:1.35,noPads:true,brush:'lily',noDock:true,noWillow:true,weedScale:.25,
    zones:{lily:{ang:3.0,frac:.8,r:20,depth:1.6,str:.85},weeds:{ang:-2.2,frac:.7,r:24,depth:2.6,str:.8},dock:{ang:1.25,frac:.86,r:16,depth:4.5,str:.55},
      stumps:{ang:2.15,frac:.68,r:22,depth:5.5,str:.6},rocks:{ang:-1.0,frac:.8,r:18,depth:6.5,str:.75}},
-   ch:{x1:-62,z1:14,x2:78,z2:-2},clear:[[-.24,6,12],[-.12,6,12],[0,6,12],[.12,6,12],[.24,6,12],[-.5,10,13],[.5,10,13],[1.14,11,12],[1.25,4,10],[1.36,4,9]],chz:{x:4,z:4},cliffs:[[-1.0,16,.2],[0,12,.32],[-1.5,7,.12]],damAng:0,
+   ch:{x1:-62,z1:14,x2:78,z2:-2},clear:[[-.24,6,12],[-.12,6,12],[0,6,12],[.12,6,12],[.24,6,12],[-.5,10,13],[.5,10,13],[1.14,11,12],[1.25,4,10],[1.36,4,9]],chz:{x:4,z:4},cliffs:[[-1.0,21,.28],[0,12,.32],[-1.45,18,.16]],bluffs:[[-1.66,-.64]],damAng:0,
    spots:{lily:['Creek Arm','A brushy creek arm with drowned willows and buck brush, 1–2 m deep.'],weeds:['Gravel Flats','A broad gravel and chunk-rock flat with sparse grass, 2–3 m.'],
      dock:['The Marina','Covered boat slips, a fuel dock and the launch ramp. Shade and baitfish under every slip.'],stumps:['Standing Timber','A drowned forest of grey trunks standing in 5 m of water.'],
      rocks:['Bluff Wall','Sheer limestone bluffs dropping straight into deep, clear water.'],channel:['Dam & Bridge','The old river channel running under the highway bridge to the dam: the deepest water in the lake.']},
@@ -1786,9 +1786,12 @@ function buildLandmarksBluff(){
       atShore('bait_shop',A-.11,11,terrainH(shorePt(A-.11,11).x,shorePt(A-.11,11).z)-.1);
       const pp=shorePt(A+.11,-6);const tr=put('bass_boat',pp.x,0,pp.z);if(tr){faceLake(tr,pp.x,pp.z);SCN.bob.push({o:tr,ph:1,amp:.04});}}
     // limestone bluffs along the Bluff Wall and the south shore
-    // limestone bluffs: one continuous wall per stretch, every piece at the same height so the rock beds line up
-    for(const[a0,a1] of [[ZBY.rocks.ang-.32,ZBY.rocks.ang+.34],[-1.62,-1.38]]){
-      for(let a=a0;a<a1;){const nm=(a-a0<.06||a1-a<.06)?'ledge_c':['ledge_a','ledge_b','ledge_c'][(R()*3)|0];/* low ends: the bluff fades into the hillside */atShore(nm,a,4+rr(-.6,.6),0,1,rr(-.07,.07));a+=rr(7.5,9.5)/SHORE(a);}}
+    // limestone bluffs: the kit's one sculpted wall, bent along each stretch of shore so it has no seams
+    if(K.bluff_wall){const src=K.bluff_wall.isMesh?K.bluff_wall:K.bluff_wall.children[0];
+      for(const[a0,a1] of RG.bluffs||[[ZBY.rocks.ang-.34,ZBY.rocks.ang+.36]]){
+        const g=src.geometry.clone(),P=g.attributes.position;g.computeBoundingBox();const bb=g.boundingBox,len=bb.max.x-bb.min.x;
+        for(let k=0;k<P.count;k++){const t=(P.getX(k)-bb.min.x)/len,a=a0+t*(a1-a0),q=shorePt(a,-1.5-P.getZ(k));P.setXYZ(k,q.x,P.getY(k),q.z);}
+        g.computeVertexNormals();g.computeBoundingSphere();const m=new THREE.Mesh(g,src.material);m.castShadow=m.receiveShadow=true;scene.add(m);}}
   },undefined,()=>{});
 }
 function buildLandmarksRegion(){

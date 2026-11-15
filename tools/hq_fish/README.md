@@ -93,4 +93,4 @@ Each region is getting two lakes with 5 species each, so players travel to catch
 - Kit: `tools/env_kits/bluff_kit.py` (Blender, vertex-coloured, no textures) → `python3 bluff_kit.py out.glb [out.blend]`, then
   `npx gltf-transform draco out.glb models/bluff_kit.glb --quantize-position 14 --quantize-normal 10 --quantize-color 8`.
 - Per-lake layout keys in REGIONS: `shoreX` (extra outline harmonics), `zones` (spot angle/depth overrides), `ch`/`chz` (channel),
-  `clear` (tree-free areas), `cliffs`, `deep`, `noPads`, `noDock`, `noWillow`, `brush`, `damAng`, `bridgeOff`, `base`, `group`, `tab`.
+  `clear` (tree-free areas), `cliffs` (raised hillside), `bluffs` (angle ranges for the sculpted `bluff_wall`, bent along the shore), `deep`, `noPads`, `noDock`, `noWillow`, `brush`, `damAng`, `bridgeOff`, `base`, `group`, `tab`.
