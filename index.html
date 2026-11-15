@@ -613,7 +613,7 @@ function shade(hex,amt){const c=new THREE.Color(hex);c.lerp(amt<0?new THREE.Colo
 const REGIONS={
  us:{id:'us',name:'Lunker Lake',where:'Midwest, USA',accent:'#ff6a2b',
    blurb:'A classic bass lake: lily pads, a ferry village, a flooded forest and a lighthouse point.',
-   shore:[17,.5,10,1.3,6,2.1],
+   shore:[17,.5,10,1.3,6,2.1],noWillow:true,
    spots:{lily:['Lily Pad Cove','A marshy cove of willows, cattails and lily pads, 1–2 m deep. Weedless lures only.'],weeds:['Weed Flats','Grass beds off a farm meadow with a windmill, 1.5–3 m deep.'],dock:['Old Ferry Dock','The ferry dock, boathouse and lakeside cabins, 2–4 m.'],stumps:['Stump Field','A flooded forest of dead trees and sunken logs, 3–5 m.'],rocks:['Granite Point','Granite cliffs under the lighthouse, with a sharp drop-off, 2–5 m.'],channel:['The Channel','Marked by red and green buoys. The deepest water in the lake, 8–14 m.']},
    fish:{lily:{lm:7,bg:3},weeds:{pk:5.5,bg:4.5},dock:{cr:6,bg:4},stumps:{lm:5,cr:3,pk:2},rocks:{pk:5,lm:5},channel:{pk:5,lm:3,cr:2}},
    legend:['lm','gd',.025],targets:[['lm',3],['pk',2],['cr',2],['bg',1]],group:'USA: Lunker Lake & Bluff Reservoir',tab:'USA',region:{name:'USA',where:'Midwest & Ozarks',blurb:'Two bass lakes: a weedy natural lake with pike and bluegill, and a clear Ozark reservoir with smallmouth, spotted bass and catfish.'},
@@ -1799,7 +1799,7 @@ function buildLandmarksUS(){
     const cap=new THREE.Mesh(new THREE.ConeGeometry(1,1.1,12),L(0x2a2a2a));cap.position.y=12.05;lh.add(cap);
     const house=new THREE.Mesh(new THREE.BoxGeometry(4,2.6,3),L(0xeae6dc));house.position.set(3.4,1.3,-1.6);lh.add(house);const hr=prismRoof(4.5,1.4,3.4,L(0xa83a2a));hr.position.set(3.4,2.6,-1.6);lh.add(hr);
     lh.position.set(q.x,y-.2,q.z);faceLake(lh,q.x,q.z);shadowAll(lh);scene.add(lh);
-    const cliffs=[];for(let i=0;i<120&&cliffs.length<70;i++){const a=a0+gauss()*.18,e=rr(-2,14);const c2=shorePt(a,e);if(Math.hypot(c2.x-q.x,c2.z-q.z)<7)continue;const s2=rr(2,5.5);
+    const cliffs=[];for(let i=0;i<120&&cliffs.length<16;i++){const a=a0+gauss()*.18,e=rr(-4,1);const c2=shorePt(a,e);if(Math.hypot(c2.x-q.x,c2.z-q.z)<7)continue;const s2=rr(1.2,3);
       cliffs.push({x:c2.x,y:terrainH(c2.x,c2.z)+s2*.12,z:c2.z,sx:s2*1.2,sy:s2,sz:s2,rx:R(),ry:R()*TAU,c:new THREE.Color().setHSL(.08,.05,.38+R()*.18)});}
     inst(new THREE.DodecahedronGeometry(1,1),L(0xffffff),cliffs,{cast:true,recv:true});}
   // channel marker buoys
@@ -1810,17 +1810,28 @@ function buildLandmarksUS(){
       const top=new THREE.Mesh(sd>0?new THREE.ConeGeometry(.34,.5,10):new THREE.CylinderGeometry(.34,.34,.25,10),mt);top.position.y=1.15;g.add(top);
       const lt=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),glowMat);lt.position.y=1.45;g.add(lt);
       g.position.set(x,0,z);shadowAll(g);scene.add(g);SCN.bob.push({o:g,ph:R()*TAU,amp:.08});OBST.push({x,z,r:.9});}}}
+  // weeping willows over the cove and private docks with boat lifts by the cabins (Blender kits)
+  loadKit('models/midwest_kit.glb',97,({put,atShore,R,rr})=>{
+    // grey granite point: the Shield whaleback sculpt, tinted from pink to grey
+    loadKit('models/shield_kit.glb',83,({bend})=>{const m=bend('whaleback',-Math.PI/4-.4,-Math.PI/4+.4,-.5);if(m){m.scale.y=1.8;m.material=m.material.clone();m.material.color.setRGB(.8,.78,.76);}});
+    for(let k=0,n=0;k<120&&n<11;k++){const a=ZBY.lily.ang+rr(-.5,.5),e=rr(.5,14),q=shorePt(a,e);if(inClear(q.x,q.z))continue;atShore('willow',a,e,terrainH(q.x,q.z)-.3,rr(.85,1.25),rr(-.5,.5));n++;}
+    for(const da of[.24,.36,-.24,-.36]){const A=ZBY.dock.ang+da,q=shorePt(A,1),d=atShore('private_dock',A,1,0);if(!d)continue;OBST.push({x:shorePt(A,-7).x,z:shorePt(A,-7).z,r:4});
+      const ry=d.rotation.y,cs=Math.cos(ry),sn=Math.sin(ry),loc=(lx,lz)=>({x:q.x+lx*cs+lz*sn,z:q.z-lx*sn+lz*cs});const bp=loc(3,7);
+      loadKit('models/bluff_kit.glb',5,k2=>{k2.put(R()<.6?'bass_boat':'pontoon',bp.x,.35,bp.z,ry);});}
+  });
 }
 // Bluff Reservoir: pieces from the Blender kit (models/bluff_kit.glb, tools/env_kits/bluff_kit.py) placed around the lake.
 // Every piece's lake side is its +Z, so faceLake() turns it to the water.
 // Blender environment kits: load one, then hand the builder its pieces and placing helpers
+let KIT_LD=null;const KIT_CACHE={};  // one loader for every kit; each kit file is fetched and decoded once
 function loadKit(url,seed,fn){
-  if(!THREE.GLTFLoader)return;const ld=new THREE.GLTFLoader();
-  if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
-  ld.load(url,gl=>{
+  if(!THREE.GLTFLoader)return;
+  if(!KIT_LD){KIT_LD=new THREE.GLTFLoader();if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');KIT_LD.setDRACOLoader(dr);}}
+  if(!KIT_CACHE[url])KIT_CACHE[url]=new Promise((res,rej)=>KIT_LD.load(url,gl=>{
     const K={};for(const o of gl.scene.children)K[o.name]=o;  // one node per kit piece (a group when it has several materials)
     gl.scene.traverse(o=>{if(o.isMesh){o.material.envMap=ENV;o.material.envMapIntensity=o.material.metalness>.3?.8:.25;
-      if(/lamp/.test(o.material.name)){o.material.emissive=new THREE.Color(0xffc560);SCN.glow.push(o.material);}}});
+      if(/lamp/.test(o.material.name)){o.material.emissive=new THREE.Color(0xffc560);SCN.glow.push(o.material);}}});res(K);},undefined,rej));
+  KIT_CACHE[url].then(K=>{
     const R=mulberry(seed);const rr=(a,b)=>a+R()*(b-a);
     const put=(name,x,y,z,ry,sc)=>{const src=K[name];if(!src)return null;const m=src.clone();m.rotation.set(0,0,0);m.position.set(x,y,z);m.rotation.y=ry||0;if(sc)m.scale.setScalar(sc);shadowAll(m);scene.add(m);return m;};
     const atShore=(name,a,e,y,sc,jit)=>{const q=shorePt(a,e);const m=put(name,q.x,y==null?0:y,q.z,0,sc);if(m){faceLake(m,q.x,q.z);m.rotation.y+=jit||0;}return m;};
@@ -1836,7 +1847,7 @@ function loadKit(url,seed,fn){
     // where a straight line through c along direction (tx,tz) meets the shore on both sides, plus `out` m onto land
     const across=(c,tx,tz,out)=>{const reach=sg=>{let k=0;while(k<600&&depthAt(c.x+tx*sg*k,c.z+tz*sg*k)>0)k+=2;return k+out;};const k0=reach(-1),k1=reach(1);return[{x:c.x-tx*k0,z:c.z-tz*k0},{x:c.x+tx*k1,z:c.z+tz*k1}];};
     fn({K,R,rr,put,atShore,bend,spanLine,across});
-  },undefined,()=>{});
+  }).catch(e=>console.warn('kit failed',url,e&&e.message||e));
 }
 function buildLandmarksBluff(){
   loadKit('models/bluff_kit.glb',123,({K,R,rr,put,atShore,bend,spanLine,across})=>{
