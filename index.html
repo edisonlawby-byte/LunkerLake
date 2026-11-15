@@ -672,7 +672,7 @@ const REGIONS={
    shore:[15,2.6,12,.9,7,3.3],
    spots:{lily:['Lotus Marsh','A warm marsh of lotus leaves and pink flowers, 1–2 m deep. Weedless lures only.'],weeds:['Hydrilla Beds','Thick underwater weed beds below the paddy fields, 1.5–3 m.'],dock:['Floating Village','Stilt houses and longtail boats on the water, 2–4 m.'],stumps:['Drowned Forest','Bleached jungle trees standing in the flooded valley, 3–5 m.'],rocks:['Limestone Karst','Sheer karst towers rising out of the water, 2–5 m.'],channel:['Dam Basin','The deep old river bed in front of the dam, 8–14 m.']},
    fish:{lily:{ts:5,hs:5},weeds:{hs:5,gg:3,ts:2},dock:{gg:6,hs:4},stumps:{br:5,ts:5},rocks:{br:5,gg:3,ts:2},channel:{br:7,ts:3}},
-   legend:['br','fb',.035],targets:[['ts',3],['br',2],['gg',2],['hs',1]],group:'Malaysia: Rimba Reservoir & Sungai Deras',tab:'Malaysia',
+   timber:0,legend:['br','fb',.035],targets:[['ts',3],['br',2],['gg',2],['hs',1]],group:'Malaysia: Rimba Reservoir & Sungai Deras',tab:'Malaysia',
    region:{name:'Malaysia',where:'Southeast Asia',blurb:'A karst-tower jungle reservoir with snakeheads, gourami and barramundi, and a fast jungle river under a waterfall with mahseer, hampala and redtail catfish.'},
    rivals:[['Azman Yusof',1.08],['Siti Rahmah',1.12],['Ah Kow Tan',.95],['Rajesh Pillai',1.0],['Budi Santoso',1.1],['Nguyen Van Long',.9],['Somchai Ruang',.88]],
    weather:[['clear',22],['cloudy',30],['overcast',16],['mist',12],['rain',20]],
@@ -2004,14 +2004,18 @@ function buildLandmarksRegion(){
       inst(new THREE.BoxGeometry(1,1,1),L(0xffffff),ter,{recv:true});
       const q=shorePt(a0+.18,24);const y=terrainH(q.x,q.z);const g=new THREE.Group();stilts(g,5,4,1.6,plankD);box(5.6,.14,4.6,plank,0,0,0,g);box(5,2.4,4,L(0x8a6a44),0,1.25,0,g);const rf=prismRoof(6.4,2.2,5,L(0x7a3a26));rf.position.y=2.45;g.add(rf);box(.6,.5,.06,winMat,1.2,1.4,2.02,g);
       g.position.set(q.x,y+1.6,q.z);faceLake(g,q.x,q.z);shadowAll(g);scene.add(g);}
-    // limestone karst towers around the point
-    {const a0=-Math.PI/4;const tower=(x,z,h,r,base)=>{const g=new THREE.CylinderGeometry(r*.55,r,h,12,10);const p=g.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i),an=Math.atan2(p.getZ(i),p.getX(i));const k=1+.22*Math.sin(an*3+y*.2)+.18*vnoise(an*2+x,y*.15)+(y>h*.35?.15:0);p.setX(i,p.getX(i)*k);p.setZ(i,p.getZ(i)*k);}g.translate(0,h/2,0);g.computeVertexNormals();
-        const m=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:new THREE.Color().setHSL(.1,.06,.62+R()*.1)}));m.position.set(x,base,z);m.castShadow=m.receiveShadow=true;scene.add(m);
-        const cap=[];for(let k=0;k<7;k++){const an=R()*TAU;cap.push({x:x+Math.cos(an)*r*.4,y:base+h-rr(0,h*.15),z:z+Math.sin(an)*r*.4,sx:r*rr(.4,.7),sy:r*rr(.3,.5),sz:r*rr(.4,.7),c:new THREE.Color().setHSL(.27,.5,.2+R()*.08)});}
-        for(let k=0;k<5;k++){const an=R()*TAU,yy=base+rr(h*.3,h*.85);cap.push({x:x+Math.cos(an)*r*.9,y:yy,z:z+Math.sin(an)*r*.9,sx:r*.3,sy:r*.22,sz:r*.3,c:new THREE.Color().setHSL(.28,.5,.18+R()*.08)});}
-        inst(new THREE.IcosahedronGeometry(1,1),L(0xffffff),cap,{cast:true});OBST.push({x,z,r:r*1.1});};
-      const rz=ZBY.rocks;tower(rz.x+6,rz.z-4,22,5,-depthAt(rz.x+6,rz.z-4));tower(rz.x-7,rz.z-10,14,3.4,-depthAt(rz.x-7,rz.z-10));
-      for(let i=0;i<6;i++){const q=shorePt(a0+(i-2.5)*.12,rr(4,26));tower(q.x,q.z,rr(28,55),rr(6,11),terrainH(q.x,q.z)-1);}}
+    // limestone karst towers, drowned trees and raft houses come from the Blender kit
+    loadKit('models/rimba_kit.glb',61,({put,atShore,R,rr})=>{
+      const rz=ZBY.rocks,tw=(nm,x,z,y,sc,r)=>{const m=put(nm,x,y,z,R()*TAU,sc);OBST.push({x,z,r:r*sc});return m;};
+      tw('karst_b',rz.x+6,rz.z-4,0,1,10);tw('karst_a',rz.x-14,rz.z-12,0,.6,16);
+      for(let i=0;i<6;i++){const q=shorePt(-Math.PI/4+(i-2.5)*.13,rr(6,24));tw(R()<.5?'karst_a':'karst_c',q.x,q.z,terrainH(q.x,q.z)-3,rr(.7,1.1),16);}
+      // more towers around the rim, so the whole lake sits among them (not by the village or the dam)
+      for(const a of[2.0,2.5,3.0,-2.8,-2.2,1.5]){const q=shorePt(a+rr(-.1,.1),rr(30,70));tw(['karst_a','karst_b','karst_c'][(R()*3)|0],q.x,q.z,terrainH(q.x,q.z)-4,rr(.9,1.5),16);}
+      // the drowned forest: bleached dead trees with bare branches
+      const sz=ZBY.stumps;for(let i=0,n=0;i<600&&n<48;i++){const x=sz.x+gauss()*sz.r*.75,z=sz.z+gauss()*sz.r*.75;const d=depthAt(x,z);if(d<.8)continue;put('dead_tree',x,Math.min(rr(-6,.5),5.5-d),z,R()*TAU,rr(.6,1.1));OBST.push({x,z,r:.7});n++;}
+      // floating raft houses moored off the village
+      for(const[da,e] of[[.13,-22],[-.11,-26],[.02,-34]]){const q=shorePt(DA+da,e),h=put('raft_house',q.x,0,q.z,R()*TAU);if(h){SCN.bob.push({o:h,ph:R()*TAU,amp:.03});OBST.push({x:q.x,z:q.z,r:6});}}
+    });
     // the dam across the old river bed
     {const a0=.85;const pts2=[];const g=new THREE.Group();const con=L(0xb8b6ae),dk=L(0x6a6a66);
       for(let k=-6;k<=6;k++){const q=shorePt(a0+k*.04,1);const y=Math.max(terrainH(q.x,q.z),-1);pts2.push(q);const seg=new THREE.Mesh(new THREE.BoxGeometry(5.2,14,4),con);seg.position.set(q.x,y+5,q.z);seg.rotation.y=-(a0+k*.04);scene.add(seg);seg.castShadow=seg.receiveShadow=true;}
