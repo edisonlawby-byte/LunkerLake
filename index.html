@@ -656,7 +656,7 @@ const REGIONS={
    zones:{lily:{ang:3.14,frac:.82,r:22,depth:1.4,str:.9},weeds:{ang:2.7,frac:.8,r:18,depth:2.4,str:.8},dock:{ang:.75,frac:.86,r:16,depth:3.5,str:.55},
      stumps:{ang:1.57,frac:.45,r:22,depth:4.5,str:.5},rocks:{ang:-.75,frac:.8,r:20,depth:7,str:.7}},
    ch:{x1:-110,z1:0,x2:120,z2:-6},chz:{x:70,z:-5,r:28},trestleAng:1.5708,rockSect:.42,scree:[[-1.2,-.3]],
-   clear:[[.75,8,16],[.81,6,10],[.69,6,10],[1.57,6,9],[-1.57,6,9],[-1.25,9,14],[-1.16,9,14],[-1.07,9,14],[-0.98,9,14],[-0.89,9,14],[-0.80,9,14],[-0.71,9,14],[-0.62,9,14],[-0.53,9,14],[-0.44,9,14],[-0.35,9,14],[-0.26,9,14]],timber:0,cliffs:[[-.75,30,.3],[3.05,12,.25],[2.2,9,.3]],
+   clear:[[.75,8,16],[.81,6,10],[.69,6,10],[1.57,6,9],[-1.57,6,9],[-1.25,9,14],[-1.16,9,14],[-1.07,9,14],[-0.98,9,14],[-0.89,9,14],[-0.80,9,14],[-0.71,9,14],[-0.62,9,14],[-0.53,9,14],[-0.44,9,14],[-0.35,9,14],[-0.26,9,14]],timber:0,cliffs:[[-.75,30,.3],[3.14,-4.5,.22],[2.2,9,.3]],
    spots:{lily:['Inlet Delta','Where the milky glacier creek fans out over gravel bars, 1–2 m deep.'],weeds:['Log Jam','A tangle of bleached drift logs piled up by spring floods, 1.5–3 m.'],
      dock:['Lodge Boathouse','The old log lodge, its red boathouse and the canoes, 2–4 m.'],stumps:['Trestle Narrows','A timber railway trestle across the narrows; fish hold on the pilings, 3–5 m.'],
      rocks:['Scree Slope','A fan of broken rock sliding off the mountain into deep water, 3–8 m.'],channel:['Glacial Deep','The cold trough the glacier carved: lake trout country, 10–16 m.']},
@@ -1886,6 +1886,10 @@ function buildLandmarksGlacier(){
       for(const k of[0,1]){const c=shorePt(A-.07-k*.02,3),y=terrainH(c.x,c.z);put('canoe',c.x,y+.1,c.z,A+1.57+k*.2);}}
     // scree slopes under the peaks
     // scree: the grey mountainside itself (raised terrain) strewn with boulder fields from the water up
+    // gravel bars and a grey gravel delta where the glacier creek comes in (praia kit pieces, tinted to wet grey gravel)
+    loadKit('models/praia_kit.glb',29,k2=>{const grey=m=>{if(!m)return;m.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.color.setRGB(.5,.5,.48);}});};
+      grey(k2.bend('beach_strip',ZBY.lily.ang-.22,ZBY.lily.ang+.22,0));
+      for(const[da,e] of[[-.08,-16],[.1,-22]]){const q=shorePt(ZBY.lily.ang+da,e),m=k2.put('sand_spit',q.x,.15,q.z,R()*TAU,.8);grey(m);}});
     for(const[a0,a1] of RG.scree||[])for(let a=a0;a<a1;a+=rr(.025,.045)){atShore('boulders',a,rr(-2,1.5),-.5,rr(.9,1.4),rr(-1,1));
       for(let k=0;k<2;k++){const e=rr(3,26),q=shorePt(a+rr(-.02,.02),e);const b=put('boulders',q.x,terrainH(q.x,q.z)-.4,q.z,R()*TAU,rr(.7,1.2));}}
   });
@@ -2604,12 +2608,21 @@ function spriteFrame(C,i){
   R2S.add(C.m);R2.render(R2S,C.cam);R2S.remove(C.m);
   const c=document.createElement('canvas');c.width=C.w;c.height=C.h;c.getContext('2d').drawImage(R2.domElement,0,0);return C.frames[i]=c;
 }
+// big views (catch card, guide close-ups) get their own sharper render instead of an upscaled small one
+const SPR_HI=1100;
+function spriteFrameHi(C,i){
+  C.hi=C.hi||[];if(C.hi[i])return C.hi[i];const k=SPR_HI/C.S,w=Math.round(C.w*k),h=Math.round(C.h*k);
+  R2.setSize(w,h,false);const u=C.m.userData.uni;u.ph.value=i/SPR_N*TAU;u.amp.value=.06;
+  R2S.add(C.m);R2.render(R2S,C.cam);R2S.remove(C.m);
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(R2.domElement,0,0);return C.hi[i]=c;
+}
 // screens drawn once get redrawn when a fish picture becomes available
 function spritesReady(){if(document.querySelector('#apane .scard'))drawSpeciesCards();}
 function drawFish2D(ctx,sp,cx,cy,L,o){
   o=o||{};const P=fishPlan(sp);
-  if(!o.sil){const C=sprite3D(sp);if(C&&C.ready){const ph=((o.phase||0)%TAU+TAU)%TAU,cv=spriteFrame(C,Math.floor(ph/TAU*SPR_N)%SPR_N),k=L/C.S;
-    ctx.save();ctx.translate(cx,cy);if(o.flip)ctx.scale(-1,1);if(o.tilt)ctx.rotate(o.tilt);ctx.drawImage(cv,-C.ox*k,-C.oy*k,cv.width*k,cv.height*k);ctx.restore();return;}}
+  if(!o.sil){const C=sprite3D(sp);if(C&&C.ready){const ph=((o.phase||0)%TAU+TAU)%TAU,fi=Math.floor(ph/TAU*SPR_N)%SPR_N,big=L*(window.devicePixelRatio||1)>C.S*1.15;
+    const cv=big?spriteFrameHi(C,fi):spriteFrame(C,fi),S=big?SPR_HI:C.S,k=L/S,ko=S/C.S;
+    ctx.save();ctx.translate(cx,cy);if(o.flip)ctx.scale(-1,1);if(o.tilt)ctx.rotate(o.tilt);ctx.imageSmoothingQuality='high';ctx.drawImage(cv,-C.ox*ko*k,-C.oy*ko*k,cv.width*k,cv.height*k);ctx.restore();return;}}
   ctx.save();ctx.translate(cx,cy);if(o.flip)ctx.scale(-1,1);if(o.tilt)ctx.rotate(o.tilt);
   if(o.sil){ctx.fillStyle=o.silCol||'#14231f';const tx=x=>x*L,ty=y=>-y*L;
     ctx.beginPath();for(let i=0;i<=40;i++){const u=i/40;ctx.lineTo(tx(u-.5),ty(P.yT(u)));}for(let i=40;i>=0;i--){const u=i/40;ctx.lineTo(tx(u-.5),ty(P.yB(u)));}ctx.closePath();ctx.fill();
