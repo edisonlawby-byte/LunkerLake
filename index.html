@@ -640,7 +640,7 @@ const REGIONS={
    hills:[[1050,170,380,0],[1500,280,620,0]],haze:1.05,cliff:9,trees:'temperate',music:'us'},
  nw:{id:'nw',name:'Loon Lake',where:'Northwoods, Canada',accent:'#7fc4ff',
    blurb:'Cold, clear water on the Canadian Shield: spruce and birch forest, pink granite and a fly-in fish camp.',
-   shore:[13,1.9,14,.4,8,1.2],
+   shore:[13,1.9,14,.4,8,1.2],shield:[[-1.1,-.5],[1.15,1.45],[-2.4,-2.0]],
    spots:{lily:['Wild Rice Bay','A shallow bay of wild rice and yellow pond lilies, 1–2 m deep.'],weeds:['The Cabbage Beds','Broad-leaf pondweed beds beside a lakeside campsite, 1.5–3 m.'],dock:['Fish Camp Dock','Log cabins, a float plane and canoes at the fly-in camp, 2–4 m.'],stumps:['Beaver Lodge Timber','Drowned spruce, a beaver lodge and fallen logs, 3–5 m.'],rocks:['Shield Point','Smooth pink granite slabs under the old fire tower, 2–5 m.'],channel:['Lake Trout Hole','The cold, deep heart of the lake, 8–14 m.']},
    fish:{lily:{mu:5,yp:5},weeds:{mu:4,yp:4,wa:2},dock:{yp:6,wa:4},stumps:{wa:4,mu:3,yp:3},rocks:{wa:6,lt:4},channel:{lt:7,wa:3}},
    legend:['mu','tm',.04],targets:[['wa',3],['mu',2],['lt',2],['yp',1]],group:'Canada: Loon Lake & Glacier Lake',tab:'Canada',
@@ -1971,9 +1971,10 @@ function buildLandmarksRegion(){
       for(let h=3;h<15;h+=3){for(let k=0;k<4;k++){const br=new THREE.Mesh(new THREE.BoxGeometry(2.4-h*.06,.08,.08),st);const an=k*Math.PI/2;br.position.set(Math.sin(an)*(1.25-h*.03),h,Math.cos(an)*(1.25-h*.03));br.rotation.y=an+Math.PI/2;g.add(br);}}
       box(2.6,1.9,2.6,L(0x6a5a40),0,16.6,0,g);box(2.7,.7,2.7,winMat,0,16.9,0,g);const rf=new THREE.Mesh(new THREE.ConeGeometry(2.3,1.3,4),red);rf.position.y=18.2;rf.rotation.y=Math.PI/4;g.add(rf);
       g.position.set(q.x,y,q.z);shadowAll(g);scene.add(g);
-      const slabs=[];for(let i=0;i<90&&slabs.length<60;i++){const a=a0+gauss()*.2,e=rr(-3,14);const c2=shorePt(a,e);if(Math.hypot(c2.x-q.x,c2.z-q.z)<5)continue;const s2=rr(2.5,6);
-        slabs.push({x:c2.x,y:terrainH(c2.x,c2.z)+s2*.05,z:c2.z,sx:s2*1.4,sy:s2*.35,sz:s2,rx:rr(-.1,.1),ry:R()*TAU,c:new THREE.Color().setHSL(.02+R()*.04,.14,.48+R()*.14)});}
-      inst(new THREE.DodecahedronGeometry(1,1),L(0xffffff),slabs,{cast:true,recv:true});}
+      // glacier-polished granite whalebacks, erratic boulders and a second beaver lodge (Blender kit)
+      loadKit('models/shield_kit.glb',83,({bend,put,atShore,R,rr})=>{for(const[b0,b1] of RG.shield||[])bend('whaleback',b0,b1,-.5);
+        for(const[b0,b1] of RG.shield||[])for(let k=0;k<5;k++){const a=rr(b0+.05,b1-.05),e=R()<.5?rr(-6,-2):rr(20,28),q=shorePt(a,e);put('erratic',q.x,e<0?-.6:terrainH(q.x,q.z)-.3,q.z,R()*TAU,rr(.7,1.3));if(e<0)OBST.push({x:q.x,z:q.z,r:3});}
+        const lq=shorePt(ZBY.lily.ang+.25,-5);put('beaver_lodge',lq.x,0,lq.z,R()*TAU,1);OBST.push({x:lq.x,z:lq.z,r:4});});}
     // beaver lodge in the timber
     {const sz=ZBY.stumps;let bx=sz.x,bz=sz.z;for(let k=0;k<30&&depthAt(bx,bz)>2.2;k++){const d=Math.hypot(bx,bz)||1;bx+=bx/d*1.5;bz+=bz/d*1.5;}
       const d=depthAt(bx,bz);const lodge=new THREE.Mesh(new THREE.SphereGeometry(2.6,10,6,0,TAU,0,Math.PI/2),L(0x5a4630));lodge.scale.set(1.3,.9,1);lodge.position.set(bx,-d,bz);lodge.castShadow=lodge.receiveShadow=true;scene.add(lodge);
