@@ -698,7 +698,8 @@ const REGIONS={
    hills:[[950,180,400,0],[1400,280,520,0]],haze:1.1,cliff:9,trees:'jungle',music:'sea'},
  amz:{id:'amz',name:'Rio Negro',where:'Amazonas, Brazil',accent:'#ff4d5e',
    blurb:'A blackwater lagoon off the Rio Negro: giant Victoria lilies, white sand, flooded forest and a stilt village.',
-   shore:[19,1.1,9,2.2,7,.6],
+   shore:[19,1.1,9,2.2,7,.6],beaches:[[-1.1,-.5],[2.3,2.8]],cliffs:[[-.8,-4.5,.3],[2.55,-4,.25]],
+   clearX:[[-1.10,12,14],[-1.00,12,14],[-0.90,12,14],[-0.80,12,14],[-0.70,12,14],[-0.60,12,14],[-0.50,12,14],[2.30,12,14],[2.40,12,14],[2.50,12,14],[2.60,12,14],[2.70,12,14],[2.80,12,14]],
    spots:{lily:['Victoria Lily Lagoon','A still lagoon covered in giant Victoria lily pads, 1–2 m deep.'],weeds:['Floating Meadow','Mats of floating grass at the lagoon mouth, 1.5–3 m.'],dock:['Stilt Village','Palafitas houses on stilts and a floating store, 2–4 m.'],stumps:['Igapó Flooded Forest','Living trees standing in the dark water, 3–5 m.'],rocks:['Black Rock Shoals','Smooth black granite boulders and a white beach, 2–5 m.'],channel:['Main River Channel','The deep, slow current of the river itself, 8–14 m.']},
    fish:{lily:{ar:5,bp:3,pr:2},weeds:{bp:5,pr:3,pb:2},dock:{pr:6,bp:4},stumps:{pb:6,ar:4},rocks:{pb:6,bp:4},channel:{pb:5,ar:3,pr:2}},
    legend:['pb','ap',.03],targets:[['pb',3],['bp',2],['ar',2],['pr',1]],group:'Brazil: Rio Negro & Praia Branca',tab:'Brazil',
@@ -1540,7 +1541,7 @@ function setTOD(h){
 // places kept clear of trees for buildings
 const DA=ZBY.dock.ang;
 const WA=ZBY.weeds.ang,RA=ZBY.rocks.ang;
-const CLEAR=(RG.clear||[[DA+.16,9,10],[DA+.27,11,10],[DA-.15,9,10],[DA-.26,12,10],[DA,6,9],[WA,22,15],[WA+.07,24,8],[WA+.12,30,9],[RA,5,12]]).map(([a,e,r])=>{const R0=SHORE(a);return{x:Math.cos(a)*(R0+e),z:Math.sin(a)*(R0+e),r};});
+const CLEAR=(RG.clear||[[DA+.16,9,10],[DA+.27,11,10],[DA-.15,9,10],[DA-.26,12,10],[DA,6,9],[WA,22,15],[WA+.07,24,8],[WA+.12,30,9],[RA,5,12]]).concat(RG.clearX||[]).map(([a,e,r])=>{const R0=SHORE(a);return{x:Math.cos(a)*(R0+e),z:Math.sin(a)*(R0+e),r};});
 const inClear=(x,z)=>CLEAR.some(c=>Math.hypot(x-c.x,z-c.z)<c.r);
 const SECT=(a,c,w)=>Math.abs(angDiff(a,c))<w;
 function colGeo(g,hex){g=g.index?g.toNonIndexed():g;g.computeVertexNormals();const c=new THREE.Color(hex),n=g.attributes.position.count,a=new Float32Array(n*3);for(let i=0;i<n;i++){a[i*3]=c.r;a[i*3+1]=c.g;a[i*3+2]=c.b;}g.setAttribute('color',new THREE.BufferAttribute(a,3));return g;}
@@ -2041,6 +2042,9 @@ function buildLandmarksRegion(){
     {const q=shorePt(DA-.24,16);const y=terrainH(q.x,q.z);const g=new THREE.Group();const wt=L(0xf0ece2);box(5,4,8,wt,0,2,0,g);const rf=prismRoof(5.8,2.4,8.6,L(0x3a6a8a));rf.position.y=4;g.add(rf);
       box(2,7,2,wt,0,3.5,4.6,g);const sp=new THREE.Mesh(new THREE.ConeGeometry(1.4,2.6,4),L(0x3a6a8a));sp.position.set(0,8.3,4.6);sp.rotation.y=Math.PI/4;g.add(sp);box(.12,1.2,.12,L(0x222222),0,10.1,4.6,g);box(.7,.12,.12,L(0x222222),0,10.2,4.6,g);
       g.position.set(q.x,y-.1,q.z);faceLake(g,q.x,q.z);shadowAll(g);scene.add(g);}
+    // white sand beaches against the black water, and a passenger riverboat calling at the village (Blender kit)
+    loadKit('models/praia_kit.glb',73,({bend,put})=>{for(const[a0,a1] of RG.beaches||[])bend('beach_strip',a0,a1,0);
+      const q=shorePt(DA-.3,-11),b=put('riverboat',q.x,0,q.z,0);if(b){faceLake(b,q.x,q.z);b.rotation.y+=Math.PI/2;SCN.bob.push({o:b,ph:0,amp:.03});OBST.push({x:q.x,z:q.z,r:9});}});
     // dugout canoes
     boatAt(DA+.09,-5,hull(5.4,.75,.4,0x5a3a22,.15),.05);boatAt(DA-.08,-6,hull(5,.75,.4,0x6a4428,.15),.05);boatAt(DA+.2,-8,hull(5.4,.75,.4,0x4a3020,.15),.05);
     // the giant samaúma (kapok) tree above the floating meadow
@@ -2051,7 +2055,7 @@ function buildLandmarksRegion(){
       const cr=[];for(let k=0;k<14;k++){const an=R()*TAU,r=rr(0,10);cr.push({x:q.x+Math.cos(an)*r,y:y+rr(37,42),z:q.z+Math.sin(an)*r,sx:rr(5,8),sy:rr(2.5,4),sz:rr(5,8),c:new THREE.Color().setHSL(.25+R()*.06,.45,.18+R()*.08)});}
       inst(new THREE.IcosahedronGeometry(1,1),L(0xffffff),cr,{cast:true});g.position.set(q.x,y-.5,q.z);shadowAll(g);scene.add(g);}
     // white sand beach and black boulders on the shoals
-    {const a0=-Math.PI/4;const big=[];for(let i=0;i<60;i++){const a=a0+gauss()*.2,e=rr(-6,10);const c2=shorePt(a,e);const s2=rr(2,6);big.push({x:c2.x,y:terrainH(c2.x,c2.z)+s2*.2,z:c2.z,sx:s2*1.2,sy:s2*.75,sz:s2,ry:R()*TAU,c:new THREE.Color().setHSL(.6,.03,.08+R()*.07)});}
+    {const a0=-Math.PI/4;const big=[];for(let i=0;i<34;i++){const a=a0+gauss()*.2,e=rr(-9,3);const c2=shorePt(a,e);const s2=rr(1.5,4.2);big.push({x:c2.x,y:terrainH(c2.x,c2.z)+s2*.2,z:c2.z,sx:s2*1.2,sy:s2*.75,sz:s2,ry:R()*TAU,c:new THREE.Color().setHSL(.6,.03,.08+R()*.07)});}
       inst(new THREE.DodecahedronGeometry(1,2),new THREE.MeshPhongMaterial({color:0xffffff,shininess:50,specular:0x444444}),big,{cast:true,recv:true});}
     // drifting logs in the channel
     {const lg=[];for(let t=.15;t<.9;t+=.18){const x=lerp(CH.x1,CH.x2,t)+gauss()*5,z=lerp(CH.z1,CH.z2,t)+gauss()*5;if(depthAt(x,z)<2)continue;lg.push({x,z});}
