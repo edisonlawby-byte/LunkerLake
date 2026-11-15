@@ -1870,6 +1870,8 @@ function buildLandmarksBluff(){
       const pp=shorePt(A+.11,-6);const tr=put('bass_boat',pp.x,0,pp.z);if(tr){faceLake(tr,pp.x,pp.z);SCN.bob.push({o:tr,ph:1,amp:.04});}}
     // limestone bluffs: the kit's one sculpted wall, bent along each stretch of shore so it has no seams
     for(const[a0,a1] of RG.bluffs||[[ZBY.rocks.ang-.34,ZBY.rocks.ang+.36]])bend('bluff_wall',a0,a1,-1.5);
+    // eastern red cedars clinging along the bluff tops
+    for(const[a0,a1] of RG.bluffs||[[ZBY.rocks.ang-.34,ZBY.rocks.ang+.36]])for(let k=0;k<80;k++){const a=rr(a0+.04,a1-.04),e=rr(2,12),q=shorePt(a,e);put('cedar',q.x,terrainH(q.x,q.z)-.2,q.z,R()*TAU,rr(1,1.7));}
 });
 }
 function buildLandmarksGlacier(){
@@ -4260,7 +4262,7 @@ function tick(dt,raw){Touch.update();
 }
 const _equip=equipLure;equipLure=function(i){_equip(i);save.settings.lastLure=i;persist();};
 G.target=null;populate();updPad();
-if(/lldebug/.test(location.search))window.__LL={regionSpecies,lakesOf,REG_ORDER,REGIONS,get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
+if(/lldebug/.test(location.search))window.__LL={regionSpecies,lakesOf,REG_ORDER,REGIONS,drawFish2D,sprite3D,get LureTex(){return LureTex},get ScanKit(){return ScanKit},get LureKit(){return LureKit},get ChubbyKit(){return ChubbyKit},get FishKit(){return FishKit},get HQKit(){return HQKit},sprite3D,spriteFrame,drawFish2D,loadHQKit,get lureMesh(){return lureMesh},animateLure,openTackle,COLORS,G,fishes,Music,Snd,makeLureMesh,drawFish2D,makeFishMesh,fishPlan,fishTemplate,fitFishL,scene,renderer,openScreen,startFight,updFight,fishPower,tierIdx,tierW,SPECIES,setWeather,setTOD,doBite,LURES,equipLure,ZBY,travelTo,setQuality,camera,tick,render};
 openScreen('title');$('#ribbon').textContent='Now fishing: '+RG.name;
 {let tr=null;try{tr=JSON.parse(sessionStorage.getItem('ll.travel')||'null');sessionStorage.removeItem('ll.travel');}catch(e){}if(tr&&tr.mode)setTimeout(()=>startMode(tr.mode),60);}
 requestAnimationFrame(frame);

@@ -510,8 +510,34 @@ def bluff_wall(name='bluff_wall', L=80.0, H=22.0, seed=5):
     return o
 
 
+def boulder(P, m, x, y, z, r, sq=.7, seed=0, detail=2):
+    """rounded, slightly flattened lump (icosphere pushed around by noise); same as kitlib.boulder"""
+    b = P.bm(m)
+    ret = bmesh.ops.create_icosphere(b, subdivisions=detail, radius=r)
+    for v in ret['verts']:
+        c = v.co.copy()
+        k = 1 + .22 * noise.noise(c * (1.3 / r) + Vector((seed, seed * .7, 0))) + .08 * noise.noise(c * (4 / r) + Vector((0, seed, 3)))
+        v.co = Vector((x + c.x * k * 1.15, y + c.y * k, z + c.z * k * sq))
+    return ret['verts']
+
+
+def cedar():
+    """eastern red cedar, the tree that clings to Ozark bluff tops: a narrow, dense, dark blue-green cone of lumpy
+    foliage on a short reddish trunk"""
+    P = Part('cedar')
+    bark, fol = mat('cedar_bark', (.42, .26, .18), .9), mat('cedar_foliage', (.16, .27, .2), .9)
+    P.cyl(bark, 0, 0, -.3, 1.6, .18, 7, r2=.12)
+    for k in range(9):
+        z = 1.2 + k * .75
+        r = 1.5 * (1 - k / 9) ** .8 + .25
+        for q in range(3):
+            t = random.uniform(0, math.tau)
+            boulder(P, fol, math.cos(t) * r * .35, math.sin(t) * r * .35, z, r * random.uniform(.7, .95), sq=.8, seed=k * 3 + q, detail=1)
+    return P.build(lambda p, key: (.85 + .15 * n3(p, 1.5, 3),) * 3)
+
+
 pieces = [dam_seg(), dam_gate(), intake_tower(), bridge_span(), bridge_pier(), marina(), ramp(), bait_shop(), bass_boat(), pontoon(),
-          bluff_wall()]
+          bluff_wall(), cedar()]
 for i, o in enumerate(pieces):
     o.location.x = i * 40  # spread out in the .blend; the game uses each piece at its own origin
 if BLEND:
