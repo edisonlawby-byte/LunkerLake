@@ -642,13 +642,31 @@ const REGIONS={
    blurb:'Cold, clear water on the Canadian Shield: spruce and birch forest, pink granite and a fly-in fish camp.',
    shore:[13,1.9,14,.4,8,1.2],
    spots:{lily:['Wild Rice Bay','A shallow bay of wild rice and yellow pond lilies, 1–2 m deep.'],weeds:['The Cabbage Beds','Broad-leaf pondweed beds beside a lakeside campsite, 1.5–3 m.'],dock:['Fish Camp Dock','Log cabins, a float plane and canoes at the fly-in camp, 2–4 m.'],stumps:['Beaver Lodge Timber','Drowned spruce, a beaver lodge and fallen logs, 3–5 m.'],rocks:['Shield Point','Smooth pink granite slabs under the old fire tower, 2–5 m.'],channel:['Lake Trout Hole','The cold, deep heart of the lake, 8–14 m.']},
-   fish:{lily:{mu:4,yp:3,bt:3},weeds:{mu:4,yp:4,rt:2},dock:{yp:6,wa:4},stumps:{bt:5,wa:3,yp:2},rocks:{wa:5.5,rt:4.5},channel:{lt:6,bu:4}},
-   legend:['mu','tm',.04],targets:[['wa',3],['mu',2],['lt',2],['bt',1],['rt',1],['yp',1]],
+   fish:{lily:{mu:5,yp:5},weeds:{mu:4,yp:4,wa:2},dock:{yp:6,wa:4},stumps:{wa:4,mu:3,yp:3},rocks:{wa:6,lt:4},channel:{lt:7,wa:3}},
+   legend:['mu','tm',.04],targets:[['wa',3],['mu',2],['lt',2],['yp',1]],group:'Canada: Loon Lake & Glacier Lake',tab:'Canada',
+   region:{name:'Canada',where:'Northwoods & Rockies',blurb:'Two cold-water lakes: a granite Shield lake with walleye, muskie and perch, and a turquoise glacier lake in the mountains with trout and burbot.'},
    rivals:[['Gord McAllister',1.05],['Josée Tremblay',1.12],['Wade Kowalski',.95],['Nanabush Cree',1.1],['Earl Lindqvist',.9],['Shannon Bird',1.0],['Duncan Fraser',.88]],
    weather:[['clear',30],['cloudy',28],['overcast',18],['mist',14],['rain',10]],
    pal:{sand:[.58,.55,.48],mud:[.28,.27,.22],deep:[.1,.13,.13],weed:[.18,.28,.14],wet:[.42,.4,.36],rockUW:.5,landLo:[.14,.24,.13],landHi:[.26,.32,.16],meadow:[.42,.44,.22],rockLand:[.6,.52,.5],marsh:[.42,.42,.2],timber:[.3,.28,.22],high:[.2,.24,.18],
      shallow:[.22,.4,.42],deepW:[.03,.1,.15],uw:[.05,.17,.22],hillA:[.09,.13,.12],hillB:[.16,.2,.2],grassMead:[.14,.42,.38],grass:[.2,.32,.24]},
    hills:[[1050,90,240,0],[1500,180,380,0]],haze:.9,cliff:5,trees:'boreal',music:'nw'},
+ nw2:{id:'nw2',base:'nw',name:'Glacier Lake',where:'Rocky Mountains, Canada',accent:'#5fe0d6',
+   blurb:'A long, milky-turquoise lake in a glacier-carved valley under snowy peaks: scree slopes, a log jam, a railway trestle and an old log lodge.',
+   shore:[44,1.57,10,.4,5,2],deep:1.7,noPads:true,noDock:true,noWillow:true,noMarsh:true,weedScale:.3,snag:'driftwood',
+   zones:{lily:{ang:3.14,frac:.82,r:22,depth:1.4,str:.9},weeds:{ang:2.7,frac:.8,r:18,depth:2.4,str:.8},dock:{ang:.75,frac:.86,r:16,depth:3.5,str:.55},
+     stumps:{ang:1.57,frac:.45,r:22,depth:4.5,str:.5},rocks:{ang:-.75,frac:.8,r:20,depth:7,str:.7}},
+   ch:{x1:-110,z1:0,x2:120,z2:-6},chz:{x:70,z:-5,r:28},trestleAng:1.5708,rockSect:.42,scree:[[-1.2,-.3]],
+   clear:[[.75,8,16],[.81,6,10],[.69,6,10],[1.57,6,9],[-1.57,6,9],[-1.25,9,14],[-1.16,9,14],[-1.07,9,14],[-0.98,9,14],[-0.89,9,14],[-0.80,9,14],[-0.71,9,14],[-0.62,9,14],[-0.53,9,14],[-0.44,9,14],[-0.35,9,14],[-0.26,9,14]],timber:0,cliffs:[[-.75,30,.3],[3.05,12,.25],[2.2,9,.3]],
+   spots:{lily:['Inlet Delta','Where the milky glacier creek fans out over gravel bars, 1–2 m deep.'],weeds:['Log Jam','A tangle of bleached drift logs piled up by spring floods, 1.5–3 m.'],
+     dock:['Lodge Boathouse','The old log lodge, its red boathouse and the canoes, 2–4 m.'],stumps:['Trestle Narrows','A timber railway trestle across the narrows; fish hold on the pilings, 3–5 m.'],
+     rocks:['Scree Slope','A fan of broken rock sliding off the mountain into deep water, 3–8 m.'],channel:['Glacial Deep','The cold trough the glacier carved: lake trout country, 10–16 m.']},
+   fish:{lily:{rt:5,bt:5},weeds:{bt:5,rt:3,bu:2},dock:{rt:5,wa:5},stumps:{wa:5,bt:3,lt:2},rocks:{lt:5,rt:3,wa:2},channel:{lt:6,bu:4}},
+   legend:['lt','lt',0],targets:[['rt',3],['lt',2],['bt',2],['wa',1],['bu',1]],
+   rivals:[['Hank Olafson',1.05],['Marie-Ève Gagnon',1.12],['Dale Pruden',.95],['Kirsten Haugen',1.08],['Rory MacLeod',.9],['Priya Sandhu',1.0],['Lyle Whitford',.88]],
+   weather:[['clear',34],['cloudy',26],['overcast',16],['mist',14],['rain',10]],
+   pal:{sand:[.6,.6,.58],mud:[.36,.37,.36],deep:[.16,.24,.26],weed:[.2,.3,.16],wet:[.46,.47,.46],rockUW:.6,landLo:[.15,.24,.14],landHi:[.3,.32,.22],meadow:[.42,.45,.3],rockLand:[.55,.56,.56],marsh:[.3,.34,.2],timber:[.3,.3,.26],high:[.36,.38,.36],
+     shallow:[.32,.64,.6],deepW:[.04,.3,.36],uw:[.12,.42,.44],hillA:[.18,.22,.26],hillB:[.38,.42,.48],grassMead:[.2,.45,.4],grass:[.2,.34,.26]},
+   hills:[[900,140,300,0],[1400,260,620,0]],snow:380,haze:.8,cliff:8,trees:'boreal',music:'nw'},
  sea:{id:'sea',name:'Rimba Reservoir',where:'Malaysia, Southeast Asia',accent:'#ffd24a',
    blurb:'A jungle reservoir under limestone karst towers, with a lotus marsh, a floating village and a drowned forest.',
    shore:[15,2.6,12,.9,7,3.3],
@@ -672,7 +690,7 @@ const REGIONS={
      shallow:[.36,.22,.1],deepW:[.05,.025,.01],uw:[.14,.08,.03],hillA:[.06,.12,.07],hillB:[.12,.18,.12],grassMead:[.22,.55,.36],grass:[.24,.42,.24]},
    hills:[[1050,40,110,0],[1500,70,160,0]],haze:1.3,cliff:3,trees:'amazon',music:'amz'},
 };
-const REG_ORDER=['us','us2','nw','sea','amz'];
+const REG_ORDER=['us','us2','nw','nw2','sea','amz'];
 const REGION_ID=(()=>{try{const d=JSON.parse(localStorage.getItem('lunkerlake.save.v1')||'{}');const r=d.settings&&d.settings.region;return REGIONS[r]?r:'us';}catch(e){return 'us';}})();
 const RG=REGIONS[REGION_ID];const RBASE=RG.base||RG.id;  // lakes in the same region share species, aquarium tank and sounds
 
@@ -764,7 +782,7 @@ const SPECIES={
      tail:{k:'fork',h:.19,len:.2,tipLow:WHITE,spots:8},eye:{u:.875,t:.3,r:.042,col:'#e6dfb2'},mouth:{t:.52,len:.15,drop:.04}},
    pref:{popper:.05,buzz:.1,frog:0,spinner:.55,square:.5,crank:.8,deep:.85,jerk:.75,worm:.7,jig:.9,swim:.45},
    about:'Named for its huge, glassy eyes, which gather light at dusk. It hunts the rock reefs and drop-offs when the light fades.',
-   where:'Shield Point and the Lake Trout Hole',tip:'Jigs on the bottom and crankbaits along the drop-off, best at dawn and dusk.',fightTxt:'Heavy head-thumps, but it rarely runs far.'},
+   where:'Loon Lake Shield Point and channel; Glacier Lake lodge and trestle',tip:'Jigs on the bottom and crankbaits along the drop-off, best at dawn and dusk.',fightTxt:'Heavy head-thumps, but it rarely runs far.'},
  mu:{reg:'nw',name:'Muskellunge',sci:'Esox masquinongy',min:4,max:58,k:.0087,fight:1.6,jumps:.35,dep:[.2,.6],
    look:{back:'#3e4a2c',side:'#9aa27a',side2:'#b9b994',belly:'#ece8d6',fin:'#9a6c3a',pat:'mu',sc:5,gill:.72,
      B:{H:.155,at:.45,ped:.08,pedL:.04,top:.5,snY:-.02,blunt:1.05,sharp:1.12,W:.11,wAt:.62,flat:.3},
@@ -772,7 +790,7 @@ const SPECIES={
      tail:{k:'fork',h:.21,len:.2,spots:10},eye:{u:.84,t:.3,r:.024,col:'#d8b43a'},mouth:{t:.5,len:.25,drop:.02}},
    pref:{popper:.4,buzz:.75,frog:.3,spinner:.85,square:.4,crank:.45,deep:.35,jerk:.8,worm:.05,jig:.15,swim:.95},
    about:'The fish of ten thousand casts. A giant, barred cousin of the pike that follows a lure for a long time before it decides.',
-   where:'The Cabbage Beds and Wild Rice Bay',tip:'Big swimbaits, spinnerbaits and buzzbaits. If one follows, keep the lure moving.',fightTxt:'Explosive runs, head-shakes and jumps right at the boat.'},
+   where:'Loon Lake: Wild Rice Bay, Cabbage Beds and timber',tip:'Big swimbaits, spinnerbaits and buzzbaits. If one follows, keep the lure moving.',fightTxt:'Explosive runs, head-shakes and jumps right at the boat.'},
  yp:{reg:'nw',name:'Yellow Perch',sci:'Perca flavescens',min:.1,max:2.8,k:.0148,fight:.5,jumps:0,dep:[.3,.9],
    look:{back:'#4c5a22',side:'#c8b840',side2:'#dcc858',belly:'#f0ead0',fin:'#b8a048',pat:'yp',sc:9,gill:.75,
      B:{H:.27,at:.56,ped:.085,pedL:.05,top:.55,snY:.05,blunt:1.7,sharp:1.45,W:.13,wAt:.64,hump:.04,humpAt:.62},
@@ -780,7 +798,7 @@ const SPECIES={
      tail:{k:'emarg',h:.17,len:.17},eye:{u:.875,t:.34,r:.036,col:'#d8c070'},mouth:{t:.5,len:.1,drop:.03}},
    pref:{popper:.15,buzz:0,frog:0,spinner:.5,square:.3,crank:.3,deep:.15,jerk:.45,worm:.9,jig:.8,swim:0},
    about:'A banded, golden panfish that roams in big schools. Walleye, pike and muskie all feed on it.',
-   where:'Fish Camp Dock and the Cabbage Beds',tip:'Small worms and jigs near the bottom.',fightTxt:'Quick little tugs. Easy to land.'},
+   where:'Loon Lake: Fish Camp Dock and Wild Rice Bay',tip:'Small worms and jigs near the bottom.',fightTxt:'Quick little tugs. Easy to land.'},
  lt:{reg:'nw',name:'Lake Trout',sci:'Salvelinus namaycush',min:1,max:50,k:.0117,fight:1.3,jumps:0,dep:[.75,1],
    look:{back:'#2e3a36',side:'#5a6862',side2:'#7c8a80',belly:'#e6e4d6',fin:'#4e5a52',pat:'lt',sc:4,gill:.77,
      B:{H:.2,at:.55,ped:.07,pedL:.05,top:.5,snY:0,blunt:1.6,sharp:1.4,W:.13,wAt:.66},
@@ -788,7 +806,7 @@ const SPECIES={
      tail:{k:'deep',h:.2,len:.22,spots:12},eye:{u:.88,t:.34,r:.03,col:'#c8c0a0'},mouth:{t:.53,len:.15,drop:.03}},
    pref:{popper:0,buzz:0,frog:0,spinner:.3,square:.1,crank:.4,deep:.9,jerk:.5,worm:.3,jig:.85,swim:.7},
    about:'A cold-water char that lives in the deepest, coldest part of the lake and can live for decades.',
-   where:'The Lake Trout Hole, deep down',tip:'Deep divers and jigs worked near the bottom of the hole.',fightTxt:'Slow, powerful, deep runs. It never gives up.'},
+   where:'Loon Lake Trout Hole; Glacier Lake deep and scree',tip:'Deep divers and jigs worked near the bottom of the hole.',fightTxt:'Slow, powerful, deep runs. It never gives up.'},
  bt:{reg:'nw',name:'Brook Trout',sci:'Salvelinus fontinalis',min:.2,max:9,k:.0132,fight:.95,jumps:.3,dep:[.3,.8],
    look:{back:'#2c3a24',side:'#5e6a3a',side2:'#7c7a44',belly:'#e8823a',fin:'#5a5a30',pat:'bt',sc:3,gill:.77,
      B:{H:.23,at:.55,ped:.085,pedL:.05,top:.5,snY:0,blunt:1.7,sharp:1.45,W:.13,wAt:.66},
@@ -796,7 +814,7 @@ const SPECIES={
      tail:{k:'square',h:.18,len:.17,spots:8},eye:{u:.88,t:.34,r:.03,col:'#c8b070'},mouth:{t:.53,len:.15,drop:.03}},
    pref:{popper:.3,buzz:.1,frog:0,spinner:.85,square:.4,crank:.4,deep:.1,jerk:.6,worm:.7,jig:.4,swim:.2},
    about:'The jewel of northern waters: worm-like marks on its back, red spots in blue halos and fins edged in white.',
-   where:'Beaver Lodge Timber and Wild Rice Bay',tip:'Spinners and small jerkbaits near the wood.',fightTxt:'Quick runs and the occasional leap.'},
+   where:'Glacier Lake: Inlet Delta, Log Jam and trestle',tip:'Spinners and small jerkbaits near the wood.',fightTxt:'Quick runs and the occasional leap.'},
  rt:{reg:'nw',name:'Rainbow Trout',sci:'Oncorhynchus mykiss',min:.5,max:25,k:.0116,fight:1.2,jumps:.85,dep:[.2,.7],
    look:{back:'#3c4a3a',side:'#9aa8a0',side2:'#c6ccc6',belly:'#f2f0ea',fin:'#8a8f84',pat:'rt',sc:4,metal:.35,gill:.77,
      B:{H:.22,at:.55,ped:.08,pedL:.05,top:.5,snY:0,blunt:1.7,sharp:1.45,W:.13,wAt:.66},
@@ -804,7 +822,7 @@ const SPECIES={
      tail:{k:'emarg',h:.18,len:.18,spots:20},eye:{u:.88,t:.34,r:.03,col:'#d0c090'},mouth:{t:.53,len:.14,drop:.03}},
    pref:{popper:.25,buzz:.1,frog:0,spinner:.8,square:.5,crank:.55,deep:.3,jerk:.75,worm:.6,jig:.35,swim:.35},
    about:'Silver with a pink stripe and black freckles. Famous for leaping again and again once hooked.',
-   where:'Shield Point and the Cabbage Beds',tip:'Spinners and jerkbaits in the morning.',fightTxt:'Acrobatic. Expect jump after jump.'},
+   where:'Glacier Lake: Inlet Delta, lodge and scree',tip:'Spinners and jerkbaits in the morning.',fightTxt:'Acrobatic. Expect jump after jump.'},
  bu:{reg:'nw',name:'Burbot',sci:'Lota lota',min:.5,max:18,k:.0073,fight:.8,jumps:0,dep:[.9,1],
    look:{back:'#4a3c22',side:'#7a6a40',side2:'#9a8a5a',belly:'#d8ccaa',fin:'#6a5a38',pat:'bu',sc:0,gill:.8,lat:false,
      B:{H:.145,at:.6,ped:.06,pedL:0,top:.5,snY:-.02,blunt:2.2,sharp:1.5,W:.13,wAt:.75,flat:.25},
@@ -813,7 +831,7 @@ const SPECIES={
      barbels:[{u:.96,t:.95,len:.06,a:-1.35,r:.004,pair:false,droop:.1},{u:.99,t:.42,len:.025,a:.9,r:.002}]},
    pref:{popper:0,buzz:0,frog:0,spinner:.1,square:.05,crank:.1,deep:.4,jerk:.05,worm:.85,jig:.9,swim:.1},
    about:'The only freshwater cod. Eel-like and mottled, it hugs the bottom of the deepest water and feeds at night.',
-   where:'The Lake Trout Hole, on the bottom',tip:'Worms and jigs dragged slowly over the bottom, early or late.',fightTxt:'Twists and rolls like a wet rope.'},
+   where:'Glacier Lake: Glacial Deep and Log Jam, on the bottom',tip:'Worms and jigs dragged slowly over the bottom, early or late.',fightTxt:'Twists and rolls like a wet rope.'},
  tm:{reg:'nw',name:'Tiger Muskie',sci:'Esox masquinongy × lucius',min:5,max:45,k:.0087,fight:1.7,jumps:.35,legend:true,dep:[.2,.6],
    look:{back:'#36442a',side:'#aab088',side2:'#c6c6a0',belly:'#efeadc',fin:'#a06a34',pat:'tm',sc:5,gill:.72,
      B:{H:.16,at:.45,ped:.082,pedL:.04,top:.5,snY:-.02,blunt:1.05,sharp:1.12,W:.115,wAt:.62,flat:.3},
@@ -821,7 +839,7 @@ const SPECIES={
      tail:{k:'fork',h:.21,len:.2,spots:10},eye:{u:.84,t:.3,r:.024,col:'#d8b43a'},mouth:{t:.5,len:.25,drop:.02}},
    pref:{popper:.4,buzz:.75,frog:.3,spinner:.85,square:.4,crank:.45,deep:.35,jerk:.8,worm:.05,jig:.15,swim:.95},
    about:'A rare natural cross between a muskie and a pike, painted with wavy tiger stripes.',
-   where:'The Cabbage Beds and Wild Rice Bay, very rarely',tip:'Throw the biggest swimbait in the box and keep at it.',fightTxt:'Fights like a giant muskie.',legendHint:'Guides tell of a striped muskie that only shows itself once a season.'},
+   where:'Loon Lake weeds and rice, very rarely',tip:'Throw the biggest swimbait in the box and keep at it.',fightTxt:'Fights like a giant muskie.',legendHint:'Guides tell of a striped muskie that only shows itself once a season.'},
  // ---------------- Rimba Reservoir (Southeast Asia) ----------------
  ts:{reg:'sea',name:'Giant Snakehead',sci:'Channa micropeltes',local:'Toman',min:1,max:40,k:.010,fight:1.5,jumps:.25,dep:[.1,.5],
    look:{back:'#1e2a30',side:'#4a5a60',side2:'#a8b0aa',belly:'#eef0ea',fin:'#2a3238',pat:'ts',sc:16,gill:.8,
@@ -1389,7 +1407,7 @@ const sky=new THREE.Mesh(new THREE.SphereGeometry(2000,32,16),skyMat);sky.frustu
     else if(h<.9){c=wet;}
     else{const n=fbm(x*.03,z*.03);let g0=PL.landLo.map((v,k)=>lerp(v,PL.landHi[k],n));
       const th=Math.atan2(z,x),ee=Math.hypot(x,z)-SHORE(th),near=1-smooth(40,110,ee);const sw=(a,wd)=>Math.exp(-(angDiff(th,a)**2)/(2*wd*wd))*near;
-      const wM=sw(ZBY.weeds.ang,.3),wR=sw(ZBY.rocks.ang,.26),wL=sw(ZBY.lily.ang,.3),wS=sw(ZBY.stumps.ang,.3);
+      const wM=sw(ZBY.weeds.ang,.3),wR=sw(ZBY.rocks.ang,RG.rockSect||.26),wL=sw(ZBY.lily.ang,.3),wS=sw(ZBY.stumps.ang,.3);
       g0=g0.map((v,k)=>lerp(v,PL.meadow[k],wM*.85));g0=g0.map((v,k)=>lerp(v,PL.rockLand[k],wR*.85));g0=g0.map((v,k)=>lerp(v,PL.marsh[k],wL*.6));g0=g0.map((v,k)=>lerp(v,PL.timber[k],wS*.6));
       const hi=smooth(10,45,h);c=g0.map((v,k)=>lerp(v,PL.high[k],hi));}
     const j=.94+.12*hash2(i,7);col[i*3]=c[0]*j;col[i*3+1]=c[1]*j;col[i*3+2]=c[2]*j;
@@ -1585,7 +1603,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
     const it=[],itc=[];for(let i=0;i<500&&it.length<70;i++){const x=sz.x+gauss()*sz.r*.75,z=sz.z+gauss()*sz.r*.75;const d=depthAt(x,z);if(d<.8)continue;const h=d+rr(5,10);
       it.push({x,y:-d,z,sx:rr(1.2,1.8),sy:h,sz:rr(1.2,1.8),c:HSL(.08,.2,.22+R()*.08)});itc.push({x,y:-d+h-rr(5.5,7.5),z,sx:rr(6,9),sy:rr(7,9),sz:rr(6,9),ry:R()*TAU,c:HSL(.22+R()*.1,.55,.17+R()*.12)});OBST.push({x,z,r:.8});}
     inst(trunkG,trunkMat,it,{cast:true,recv:true});inst(canopyG,sway(.03,1),itc,{cast:true});}
-  else{const n=K==='jungle'?190:130,minH=K==='jungle'?5:2.5,maxH=K==='jungle'?14:8;
+  else{const n=(RG.timber??1)*(K==='jungle'?190:130),minH=K==='jungle'?5:2.5,maxH=K==='jungle'?14:8;
     for(let i=0;i<600&&snags.length<n;i++){const x=sz.x+gauss()*sz.r*.75,z=sz.z+gauss()*sz.r*.75;const d=depthAt(x,z);if(d<.8)continue;const h=d+rr(minH,maxH);
       snags.push({x,y:-d,z,sx:rr(1.1,1.7)*(K==='jungle'?1.5:1),sy:h,sz:rr(1.1,1.7)*(K==='jungle'?1.5:1),ry:R()*TAU,rz:rr(-.1,.1),c:K==='jungle'?HSL(.1,.05,.62+R()*.15):K==='boreal'?HSL(.07,.05,.3+R()*.12):HSL(.08,.06,.36+R()*.14)});OBST.push({x,z,r:.6});}}
   if(RG.brush){const bz=ZBY[RG.brush];for(let i=0;i<900&&snags.length<380;i++){const x=bz.x+gauss()*bz.r*.7,z=bz.z+gauss()*bz.r*.7;const d=depthAt(x,z);if(d<.3||d>2.6)continue;
@@ -1596,7 +1614,7 @@ function mergeAO(parts,y0,y1,lo,hi,jit){let n=0;for(const g of parts)n+=g.attrib
   const riceG=mergeCol([0,1,2,3,4,5].map(k=>colGeo(leafTri(.012,1,.12*Math.cos(k*2.1),k*1.05),k%2?0xc8b860:0xa8a050)));
   const papyrusG=mergeCol([colGeo(new THREE.CylinderGeometry(.01,.016,1,4).translate(0,.5,0),0x5a8a3a),colGeo(new THREE.ConeGeometry(.18,.16,8,1,true).rotateX(Math.PI).translate(0,1.02,0),0x7aa84a)]);
   const marshPlant=K==='temperate'?cattailG:K==='boreal'?riceG:papyrusG;
-  const cats=[];for(let i=0;i<9000&&cats.length<(K==='boreal'?900:520);i++){const a=R()<.7?ZBY.lily.ang+gauss()*.33:ZBY.weeds.ang+gauss()*.3,f=rr(.86,.995),Rr=SHORE(a);const x=Math.cos(a)*Rr*f,z=Math.sin(a)*Rr*f;const d=depthAt(x,z);if(d<.05||d>(K==='boreal'?1.2:.75))continue;
+  const cats=[];if(!RG.noMarsh)for(let i=0;i<9000&&cats.length<(K==='boreal'?900:520);i++){const a=R()<.7?ZBY.lily.ang+gauss()*.33:ZBY.weeds.ang+gauss()*.3,f=rr(.86,.995),Rr=SHORE(a);const x=Math.cos(a)*Rr*f,z=Math.sin(a)*Rr*f;const d=depthAt(x,z);if(d<.05||d>(K==='boreal'?1.2:.75))continue;
     cats.push({x,y:-d,z,sx:1,sy:rr(1.3,2.1)+d,sz:1,ry:R()*TAU,c:new THREE.Color(1,1,1).multiplyScalar(rr(.8,1.1))});}
   inst(marshPlant,swayMat(new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide}),.1,1.7),cats,{cast:true});
   // ---------- shoreline bushes ----------
@@ -1758,16 +1776,33 @@ function buildLandmarksUS(){
 }
 // Bluff Reservoir: pieces from the Blender kit (models/bluff_kit.glb, tools/env_kits/bluff_kit.py) placed around the lake.
 // Every piece's lake side is its +Z, so faceLake() turns it to the water.
-function buildLandmarksBluff(){
+// Blender environment kits: load one, then hand the builder its pieces and placing helpers
+function loadKit(url,seed,fn){
   if(!THREE.GLTFLoader)return;const ld=new THREE.GLTFLoader();
   if(THREE.DRACOLoader){const dr=new THREE.DRACOLoader();dr.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/');ld.setDRACOLoader(dr);}
-  ld.load('models/bluff_kit.glb',gl=>{
+  ld.load(url,gl=>{
     const K={};for(const o of gl.scene.children)K[o.name]=o;  // one node per kit piece (a group when it has several materials)
     gl.scene.traverse(o=>{if(o.isMesh){o.material.envMap=ENV;o.material.envMapIntensity=o.material.metalness>.3?.8:.25;
       if(/lamp/.test(o.material.name)){o.material.emissive=new THREE.Color(0xffc560);SCN.glow.push(o.material);}}});
-    const R=mulberry(123);const rr=(a,b)=>a+R()*(b-a);
+    const R=mulberry(seed);const rr=(a,b)=>a+R()*(b-a);
     const put=(name,x,y,z,ry,sc)=>{const src=K[name];if(!src)return null;const m=src.clone();m.rotation.set(0,0,0);m.position.set(x,y,z);m.rotation.y=ry||0;if(sc)m.scale.setScalar(sc);shadowAll(m);scene.add(m);return m;};
     const atShore=(name,a,e,y,sc,jit)=>{const q=shorePt(a,e);const m=put(name,q.x,y==null?0:y,q.z,0,sc);if(m){faceLake(m,q.x,q.z);m.rotation.y+=jit||0;}return m;};
+    // bend a long sculpted sheet (cliff, scree) along the shore from angle a0 to a1, its face e0 m inland: no seams
+    const bend=(name,a0,a1,e0)=>{if(!K[name])return;const src=K[name].isMesh?K[name]:K[name].children[0];
+      const g=src.geometry.clone(),P=g.attributes.position;g.computeBoundingBox();const bb=g.boundingBox,len=bb.max.x-bb.min.x;
+      for(let k=0;k<P.count;k++){const t=(P.getX(k)-bb.min.x)/len,a=a0+t*(a1-a0),q=shorePt(a,e0-P.getZ(k));P.setXYZ(k,q.x,P.getY(k),q.z);}
+      g.computeVertexNormals();g.computeBoundingSphere();const m=new THREE.Mesh(g,src.material);m.castShadow=m.receiveShadow=true;scene.add(m);return m;};
+    // a line of identical spans (bridge, trestle) from p0 to p1, with piers/bents and boat obstacles
+    const spanLine=(span,pier,p0,p1,unit,pierY)=>{const dx=p1.x-p0.x,dz=p1.z-p0.z,len=Math.hypot(dx,dz),n=Math.ceil(len/unit),sl=len/n,ry=-Math.atan2(dz,dx);
+      for(let i=0;i<n;i++){const t=(i+.5)/n,x=p0.x+dx*t,z=p0.z+dz*t;const m=put(span,x,0,z,ry);if(m)m.scale.x=sl/unit;if(!pier&&depthAt(x,z)>0)OBST.push({x,z,r:2.8});}
+      if(pier)for(let i=0;i<=n;i++){const t=i/n,x=p0.x+dx*t,z=p0.z+dz*t;put(pier,x,pierY?pierY(x,z):0,z,ry);if(depthAt(x,z)>0)for(const s of[-2.4,2.4])OBST.push({x:x-Math.sin(ry)*s,z:z-Math.cos(ry)*s,r:1.6});}};
+    // where a straight line through c along direction (tx,tz) meets the shore on both sides, plus `out` m onto land
+    const across=(c,tx,tz,out)=>{const reach=sg=>{let k=0;while(k<600&&depthAt(c.x+tx*sg*k,c.z+tz*sg*k)>0)k+=2;return k+out;};const k0=reach(-1),k1=reach(1);return[{x:c.x-tx*k0,z:c.z-tz*k0},{x:c.x+tx*k1,z:c.z+tz*k1}];};
+    fn({K,R,rr,put,atShore,bend,spanLine,across});
+  },undefined,()=>{});
+}
+function buildLandmarksBluff(){
+  loadKit('models/bluff_kit.glb',123,({K,R,rr,put,atShore,bend,spanLine,across})=>{
     // dam: wall bays along the east shore, two spillway gates in the middle, intake tower in front
     {const A=RG.damAng,R0=SHORE(A),step=12/R0;for(let i=-3;i<=3;i++){const a=A+i*step;atShore((i===0||i===1)?'dam_gate':'dam_seg',a,1,0);}
       const q=shorePt(A-.5*step,-15);const t=put('intake_tower',q.x,0,q.z);if(t)faceLake(t,q.x,q.z);OBST.push({x:q.x,z:q.z,r:5});}
@@ -1785,14 +1820,27 @@ function buildLandmarksBluff(){
       const r=atShore('ramp',A+.11,1,0);
       atShore('bait_shop',A-.11,11,terrainH(shorePt(A-.11,11).x,shorePt(A-.11,11).z)-.1);
       const pp=shorePt(A+.11,-6);const tr=put('bass_boat',pp.x,0,pp.z);if(tr){faceLake(tr,pp.x,pp.z);SCN.bob.push({o:tr,ph:1,amp:.04});}}
-    // limestone bluffs along the Bluff Wall and the south shore
     // limestone bluffs: the kit's one sculpted wall, bent along each stretch of shore so it has no seams
-    if(K.bluff_wall){const src=K.bluff_wall.isMesh?K.bluff_wall:K.bluff_wall.children[0];
-      for(const[a0,a1] of RG.bluffs||[[ZBY.rocks.ang-.34,ZBY.rocks.ang+.36]]){
-        const g=src.geometry.clone(),P=g.attributes.position;g.computeBoundingBox();const bb=g.boundingBox,len=bb.max.x-bb.min.x;
-        for(let k=0;k<P.count;k++){const t=(P.getX(k)-bb.min.x)/len,a=a0+t*(a1-a0),q=shorePt(a,-1.5-P.getZ(k));P.setXYZ(k,q.x,P.getY(k),q.z);}
-        g.computeVertexNormals();g.computeBoundingSphere();const m=new THREE.Mesh(g,src.material);m.castShadow=m.receiveShadow=true;scene.add(m);}}
-  },undefined,()=>{});
+    for(const[a0,a1] of RG.bluffs||[[ZBY.rocks.ang-.34,ZBY.rocks.ang+.36]])bend('bluff_wall',a0,a1,-1.5);
+});
+}
+function buildLandmarksGlacier(){
+  loadKit('models/glacier_kit.glb',77,({K,R,rr,put,atShore,bend,spanLine,across})=>{
+    // timber railway trestle straight across the narrows
+    {const A=RG.trestleAng,[p0,p1]=across({x:0,z:0},Math.cos(A),Math.sin(A),8);spanLine('trestle',null,p0,p1,12);}
+    // drift-log jams around the inlet
+    for(let k=0;k<5;k++)atShore('logjam',ZBY.weeds.ang+(k-2)*.06,-4+rr(-2,1.5),0,rr(1.6,2.1),rr(-.5,.5));
+    atShore('logjam',ZBY.lily.ang+.12,-1,0,1,.4);
+    // lodge, boathouse and canoes
+    {const A=ZBY.dock.ang,q=shorePt(A,16);atShore('lodge',A,16,terrainH(q.x,q.z)-.25);
+      atShore('boathouse',A+.07,-1,0);const ob=shorePt(A+.07,-5);OBST.push({x:ob.x,z:ob.z,r:6});
+      const c1=shorePt(A-.04,-4),cn=put('canoe',c1.x,0,c1.z,A+1.2);if(cn)SCN.bob.push({o:cn,ph:.5,amp:.05});
+      for(const k of[0,1]){const c=shorePt(A-.07-k*.02,3),y=terrainH(c.x,c.z);put('canoe',c.x,y+.1,c.z,A+1.57+k*.2);}}
+    // scree slopes under the peaks
+    // scree: the grey mountainside itself (raised terrain) strewn with boulder fields from the water up
+    for(const[a0,a1] of RG.scree||[])for(let a=a0;a<a1;a+=rr(.025,.045)){atShore('boulders',a,rr(-2,1.5),-.5,rr(.9,1.4),rr(-1,1));
+      for(let k=0;k<2;k++){const e=rr(3,26),q=shorePt(a+rr(-.02,.02),e);const b=put('boulders',q.x,terrainH(q.x,q.z)-.4,q.z,R()*TAU,rr(.7,1.2));}}
+  });
 }
 function buildLandmarksRegion(){
   const R=mulberry(91);const rr=(a,b)=>a+R()*(b-a);const K=RG.id;
@@ -1932,7 +1980,7 @@ function buildLandmarksRegion(){
   }
 }
 
-if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else buildLandmarksRegion();
+if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else if(RG.id==='nw2')buildLandmarksGlacier();else buildLandmarksRegion();
 function updScenery(){
   if(SCN.mill)SCN.mill.rotation.z=G.time*(.6+1.2*U.wind.value);
   for(const b of SCN.bob){b.o.position.y=Math.sin(G.time*1.3+b.ph)*b.amp*U.waveAmp.value;b.o.rotation.z=Math.sin(G.time*1.1+b.ph)*.06;b.o.rotation.x=Math.cos(G.time*.9+b.ph)*.05;}
@@ -1950,7 +1998,7 @@ function updScenery(){
     const m=new THREE.ShaderMaterial({uniforms:{uHor:{value:U.hor},uTop:{value:U.top},uSunCol:{value:U.sunCol},uSunDir:{value:U.sunDir},uLight:U.light,uHaze:{value:haze},uCov:U.cov},side:THREE.DoubleSide,fog:false,
       vertexShader:`attribute float aH;varying float vH;varying vec3 vP;void main(){vH=aH;vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader:`uniform vec3 uHor,uTop,uSunCol,uSunDir;uniform float uLight,uHaze,uCov;varying float vH;varying vec3 vP;
-      void main(){vec3 base=mix(vec3(${RG.pal.hillA.join(',')}),vec3(${RG.pal.hillB.join(',')}),vH)*(.45+.7*uLight);float sd=max(dot(normalize(vP.xz),normalize(uSunDir.xz)),0.);
+      void main(){vec3 base=mix(vec3(${RG.pal.hillA.join(',')}),vec3(${RG.pal.hillB.join(',')}),vH)*(.45+.7*uLight);${RG.snow?`base=mix(base,vec3(.86,.89,.93)*(.5+.6*uLight),smoothstep(${RG.snow.toFixed(1)},${(RG.snow+40).toFixed(1)},vP.y));`:''}float sd=max(dot(normalize(vP.xz),normalize(uSunDir.xz)),0.);
       vec3 haze=mix(uHor,uTop,.12)*(1.+.25*sd*(1.-uCov));vec3 c=mix(base,haze,clamp(uHaze+.25*uCov,0.,.95));c+=uSunCol*pow(sd,6.)*.08*(1.-uCov);gl_FragColor=vec4(c,1.);}`});
     const mesh=new THREE.Mesh(g,m);mesh.frustumCulled=false;mesh.renderOrder=-5;scene.add(mesh);};
   mk(RG.hills[0][0],RG.hills[0][1],RG.hills[0][2],3.1,.5,RG.hills[0][3]);mk(RG.hills[1][0],RG.hills[1][1],RG.hills[1][2],7.7,.68,RG.hills[1][3]);
@@ -3201,7 +3249,7 @@ function landLure(){
   const d=depthAt(L.x,L.z);
   if(d<.25){banner('On the bank','warn','Reel it back and try again');startReturn();return;}
   const zn=zoneAt(L.x,L.z);
-  if(!lu.weedless&&zn.id==='lily'&&d<1.8&&Math.random()<.4){banner('Snagged in the '+({us:'pads',us2:'brush',nw:'wild rice',sea:'lotus',amz:'giant lilies'})[RG.id],'warn','Use a weedless lure here');splash(L.x,L.z,.4);startReturn();return;}
+  if(!lu.weedless&&zn.id==='lily'&&d<1.8&&Math.random()<.4){banner('Snagged in the '+(RG.snag||({us:'pads',us2:'brush',nw:'wild rice',sea:'lotus',amz:'giant lilies'})[RG.id]),'warn','Use a weedless lure here');splash(L.x,L.z,.4);startReturn();return;}
   splash(L.x,L.z,lu.shape==='swim'||lu.shape==='deep'?.8:.55);Snd.splash(.6);
   G.phase='retrieve';L.recent=0;L.idle=0;L.since=9;L.sinceLand=0;L.reeled=false;L.reelDist=0;L.trace=[];L.trT=0;L.impX=L.impZ=L.impY=0;L.defl=0;
   for(const fi of fishes){if(fi.state!=='wander'||fi.cool>0)continue;const dd=Math.hypot(fi.x-L.x,fi.z-L.z);
