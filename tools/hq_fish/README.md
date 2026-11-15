@@ -94,6 +94,6 @@ Each region is getting two lakes with 5 species each, so players travel to catch
   `npx gltf-transform draco out.glb models/bluff_kit.glb --quantize-position 14 --quantize-normal 10 --quantize-color 8`.
 - Per-lake layout keys in REGIONS: `shoreX` (extra outline harmonics), `zones` (spot angle/depth overrides), `ch`/`chz` (channel),
   `clear` (tree-free areas), `cliffs` (raised hillside), `bluffs` (angle ranges for the sculpted `bluff_wall`, bent along the shore), `deep`, `noPads`, `noDock`, `noWillow`, `brush`, `damAng`, `bridgeOff`, `base`, `group`, `tab`.
-Progress: US (Bluff Reservoir, `bluff_kit.py`) done; Canada (Glacier Lake `nw2`, `glacier_kit.py`) done; SE Asia and Amazon next.
+Progress: US (Bluff Reservoir, `bluff_kit.py`) done; Canada (Glacier Lake `nw2`, `glacier_kit.py`) done; Malaysia (Sungai Deras `sea2`, `deras_kit.py`) done; Amazon next.
 New kits use `tools/env_kits/kitlib.py`; in the game `loadKit(url, seed, fn)` gives `put`, `atShore`, `bend`, `spanLine`, `across`.
 Lake flags added: `noMarsh`, `timber` (0 = no drowned trees), `snag` (snag banner word), `snow` (snow line on far hills), `rockSect`.

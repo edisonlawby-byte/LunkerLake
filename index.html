@@ -671,13 +671,31 @@ const REGIONS={
    blurb:'A jungle reservoir under limestone karst towers, with a lotus marsh, a floating village and a drowned forest.',
    shore:[15,2.6,12,.9,7,3.3],
    spots:{lily:['Lotus Marsh','A warm marsh of lotus leaves and pink flowers, 1–2 m deep. Weedless lures only.'],weeds:['Hydrilla Beds','Thick underwater weed beds below the paddy fields, 1.5–3 m.'],dock:['Floating Village','Stilt houses and longtail boats on the water, 2–4 m.'],stumps:['Drowned Forest','Bleached jungle trees standing in the flooded valley, 3–5 m.'],rocks:['Limestone Karst','Sheer karst towers rising out of the water, 2–5 m.'],channel:['Dam Basin','The deep old river bed in front of the dam, 8–14 m.']},
-   fish:{lily:{ts:5,hs:5},weeds:{hs:5,gg:3,hb:2},dock:{gg:5,hb:3,hs:2},stumps:{br:5,ts:4,hb:1},rocks:{hb:5.5,ma:4.5},channel:{rc:5,ma:3,br:2}},
-   legend:['br','fb',.035],targets:[['ts',3],['hb',2],['ma',2],['br',2],['rc',1],['hs',1]],
+   fish:{lily:{ts:5,hs:5},weeds:{hs:5,gg:3,ts:2},dock:{gg:6,hs:4},stumps:{br:5,ts:5},rocks:{br:5,gg:3,ts:2},channel:{br:7,ts:3}},
+   legend:['br','fb',.035],targets:[['ts',3],['br',2],['gg',2],['hs',1]],group:'Malaysia: Rimba Reservoir & Sungai Deras',tab:'Malaysia',
+   region:{name:'Malaysia',where:'Southeast Asia',blurb:'A karst-tower jungle reservoir with snakeheads, gourami and barramundi, and a fast jungle river under a waterfall with mahseer, hampala and redtail catfish.'},
    rivals:[['Azman Yusof',1.08],['Siti Rahmah',1.12],['Ah Kow Tan',.95],['Rajesh Pillai',1.0],['Budi Santoso',1.1],['Nguyen Van Long',.9],['Somchai Ruang',.88]],
    weather:[['clear',22],['cloudy',30],['overcast',16],['mist',12],['rain',20]],
    pal:{sand:[.6,.48,.32],mud:[.34,.27,.18],deep:[.14,.16,.1],weed:[.2,.34,.12],wet:[.5,.32,.2],rockUW:.55,landLo:[.12,.32,.1],landHi:[.3,.44,.14],meadow:[.46,.56,.18],rockLand:[.62,.62,.56],marsh:[.2,.36,.12],timber:[.36,.32,.24],high:[.14,.3,.12],
      shallow:[.32,.44,.26],deepW:[.07,.16,.1],uw:[.1,.22,.12],hillA:[.1,.16,.12],hillB:[.2,.26,.2],grassMead:[.2,.55,.42],grass:[.24,.45,.28]},
    hills:[[1050,160,420,1],[1500,240,600,1]],haze:1.35,cliff:12,trees:'jungle',music:'sea'},
+ sea2:{id:'sea2',base:'sea',name:'Sungai Deras',where:'Pahang, Malaysia',accent:'#9be05a',
+   blurb:'A clear, fast jungle river pooled below a waterfall: granite boulders, bamboo banks, fallen giants, a rope bridge and a kampung jetty.',
+   shore:[36,.3,14,1.2,6,.5],shoreX:[[4,6,1.0]],deep:1.4,noPads:true,noDock:true,noWillow:true,noMarsh:true,timber:0,weedScale:.2,snag:'bamboo',
+   zones:{lily:{ang:2.9,frac:.82,r:20,depth:1.4,str:.85},weeds:{ang:.25,frac:.78,r:18,depth:2.2,str:.8},dock:{ang:2.0,frac:.86,r:16,depth:3.2,str:.55},
+     stumps:{ang:-1.0,frac:.8,r:20,depth:4,str:.6},rocks:{ang:-2.2,frac:.78,r:20,depth:3.5,str:.7}},
+   ch:{x1:-80,z1:-60,x2:78,z2:56},chz:{x:76,z:56,r:22},fallAng:.63,
+   clear:[[2.0,8,15],[2.08,10,10],[1.92,10,10],[.63,4,12]],cliffs:[[.63,24,.22],[-2.2,9,.3]],
+   spots:{lily:['Bamboo Bank','Bamboo arching over the water along the shady bank, 1–2 m deep.'],weeds:['Rapids Tail','Where the white water off the falls slows and spreads, 1.5–3 m.'],
+     dock:['Kampung Jetty','Timber stilt houses, a plank jetty and sampans, 2–4 m.'],stumps:['Fallen Giants','Huge jungle trees toppled from the bank into the river, 3–5 m.'],
+     rocks:['Boulder Run','Smooth granite boulders the river has rolled down from the hills, 2–5 m.'],channel:['Waterfall Pool','The deep plunge pool under the falls: mahseer and redtail country, 8–14 m.']},
+   fish:{lily:{hs:5,ts:3,hb:2},weeds:{hb:5,ma:5},dock:{hs:4,ts:3,rc:3},stumps:{ts:5,rc:3,hb:2},rocks:{ma:6,hb:4},channel:{rc:6,ma:4}},
+   legend:['ma','ma',0],targets:[['ma',3],['hb',2],['rc',2],['ts',1],['hs',1]],
+   rivals:[['Azlan Hamid',1.05],['Tan Mei Ling',1.12],['Rajesh Kumar',.95],['Faizal Yusof',1.08],['Lim Ah Kow',.9],['Nurul Aina',1.0],['Hafiz Rahim',.88]],
+   weather:[['clear',22],['cloudy',30],['overcast',16],['mist',16],['rain',16]],
+   pal:{sand:[.62,.56,.44],mud:[.32,.27,.2],deep:[.12,.16,.12],weed:[.2,.32,.12],wet:[.45,.4,.32],rockUW:.6,landLo:[.12,.3,.1],landHi:[.26,.4,.14],meadow:[.4,.5,.2],rockLand:[.55,.53,.5],marsh:[.2,.34,.12],timber:[.34,.3,.22],high:[.14,.28,.12],
+     shallow:[.28,.5,.34],deepW:[.04,.2,.15],uw:[.1,.28,.2],hillA:[.08,.16,.1],hillB:[.18,.26,.18],grassMead:[.2,.55,.4],grass:[.22,.44,.26]},
+   hills:[[950,180,400,0],[1400,280,520,0]],haze:1.1,cliff:9,trees:'jungle',music:'sea'},
  amz:{id:'amz',name:'Rio Negro',where:'Amazonas, Brazil',accent:'#ff4d5e',
    blurb:'A blackwater lagoon off the Rio Negro: giant Victoria lilies, white sand, flooded forest and a stilt village.',
    shore:[19,1.1,9,2.2,7,.6],
@@ -690,7 +708,7 @@ const REGIONS={
      shallow:[.36,.22,.1],deepW:[.05,.025,.01],uw:[.14,.08,.03],hillA:[.06,.12,.07],hillB:[.12,.18,.12],grassMead:[.22,.55,.36],grass:[.24,.42,.24]},
    hills:[[1050,40,110,0],[1500,70,160,0]],haze:1.3,cliff:3,trees:'amazon',music:'amz'},
 };
-const REG_ORDER=['us','us2','nw','nw2','sea','amz'];
+const REG_ORDER=['us','us2','nw','nw2','sea','sea2','amz'];
 const REGION_ID=(()=>{try{const d=JSON.parse(localStorage.getItem('lunkerlake.save.v1')||'{}');const r=d.settings&&d.settings.region;return REGIONS[r]?r:'us';}catch(e){return 'us';}})();
 const RG=REGIONS[REGION_ID];const RBASE=RG.base||RG.id;  // lakes in the same region share species, aquarium tank and sounds
 
@@ -848,7 +866,7 @@ const SPECIES={
      tail:{k:'round',h:.13,len:.15},eye:{u:.905,t:.3,r:.028,col:'#c08a30'},mouth:{t:.54,len:.17,drop:.04}},
    pref:{popper:.6,buzz:.7,frog:.95,spinner:.75,square:.4,crank:.35,deep:.1,jerk:.5,worm:.4,jig:.3,swim:.7},
    about:'The toman. A huge, air-breathing ambush predator that rises to gulp air and guards its fry fiercely.',
-   where:'The Lotus Marsh and the Drowned Forest',tip:'Frogs and buzzbaits right on top of the cover. Watch for it surfacing to breathe.',fightTxt:'Brutal surges straight for the snags. Turn its head fast.'},
+   where:'Rimba Lotus Marsh and Drowned Forest; Sungai Deras fallen giants',tip:'Frogs and buzzbaits right on top of the cover. Watch for it surfacing to breathe.',fightTxt:'Brutal surges straight for the snags. Turn its head fast.'},
  hs:{reg:'sea',name:'Striped Snakehead',sci:'Channa striata',local:'Haruan',min:.3,max:7,k:.012,fight:1.1,jumps:.15,dep:[.1,.5],
    look:{back:'#3a3020',side:'#6a5a3c',side2:'#8a7a58',belly:'#d8d0b8',fin:'#4a3e2a',pat:'hs',sc:13,gill:.8,
      B:{H:.17,at:.5,ped:.11,pedL:0,top:.5,snY:0,blunt:2.5,sharp:1.4,W:.15,wAt:.7,flat:.25},
@@ -856,7 +874,7 @@ const SPECIES={
      tail:{k:'round',h:.13,len:.15},eye:{u:.905,t:.3,r:.026,col:'#b08030'},mouth:{t:.54,len:.15,drop:.04}},
    pref:{popper:.5,buzz:.5,frog:.9,spinner:.6,square:.35,crank:.3,deep:.05,jerk:.4,worm:.75,jig:.4,swim:.3},
    about:'The haruan. A common, tough snakehead with dark chevrons, found in every ditch, rice field and marsh.',
-   where:'The Lotus Marsh and the Hydrilla Beds',tip:'Frogs over the weeds and worms in the pockets.',fightTxt:'Short, muscular bursts into the weeds.'},
+   where:'Rimba Lotus Marsh and Hydrilla Beds; Sungai Deras bamboo bank',tip:'Frogs over the weeds and worms in the pockets.',fightTxt:'Short, muscular bursts into the weeds.'},
  hb:{reg:'sea',name:'Hampala Barb',sci:'Hampala macrolepidota',local:'Sebarau',min:.3,max:13,k:.016,fight:1.25,jumps:.2,dep:[.3,.8],
    look:{back:'#3a4a48',side:'#a8b4b0',side2:'#c8d0cc',belly:'#f0f0ea',fin:'#d0502a',pat:'hb',sc:18,metal:.45,gill:.76,
      B:{H:.3,at:.55,ped:.1,pedL:.06,top:.52,snY:.03,blunt:1.6,sharp:1.35,W:.13,wAt:.66},
@@ -865,7 +883,7 @@ const SPECIES={
      barbels:[{u:.955,t:.52,len:.03,a:-.4,r:.003}]},
    pref:{popper:.3,buzz:.3,frog:.05,spinner:.85,square:.7,crank:.8,deep:.4,jerk:.85,worm:.3,jig:.45,swim:.4},
    about:'The sebarau, a sporty silver barb with blood-red fins, black-edged tail and a dark bar on its side.',
-   where:'Limestone Karst and the Dam Basin',tip:'Crankbaits and jerkbaits fished fast along the rocks.',fightTxt:'Fast, darting runs that never stop.'},
+   where:'Sungai Deras: Rapids Tail and Boulder Run',tip:'Crankbaits and jerkbaits fished fast along the rocks.',fightTxt:'Fast, darting runs that never stop.'},
  ma:{reg:'sea',name:'Malaysian Mahseer',sci:'Tor tambroides',local:'Kelah',min:1,max:55,k:.0156,fight:1.6,jumps:.1,dep:[.5,1],
    look:{back:'#4a3a22',side:'#b88a50',side2:'#d0a870',belly:'#efe0c4',fin:'#c8603a',pat:'ma',sc:34,scEdge:'rgba(70,34,10,.38)',metal:.3,gill:.76,lip:'rgba(196,140,110,.9)',
      B:{H:.27,at:.56,ped:.1,pedL:.06,top:.53,snY:-.05,blunt:1.6,sharp:1.35,W:.15,wAt:.66},
@@ -874,7 +892,7 @@ const SPECIES={
      barbels:[{u:.965,t:.62,len:.05,a:-.6,r:.004},{u:.99,t:.45,len:.04,a:.2,r:.003}]},
    pref:{popper:.15,buzz:.1,frog:0,spinner:.6,square:.55,crank:.75,deep:.7,jerk:.55,worm:.6,jig:.7,swim:.5},
    about:'The kelah, "king of the river". A bronze, big-scaled giant with fleshy lips, prized above every other fish in the region.',
-   where:'The Dam Basin and Limestone Karst',tip:'Crankbaits and jigs in deep, clear water near the rocks.',fightTxt:'Unstoppable first run. Let the drag work.'},
+   where:'Sungai Deras: Boulder Run, rapids and the Waterfall Pool',tip:'Crankbaits and jigs in deep, clear water near the rocks.',fightTxt:'Unstoppable first run. Let the drag work.'},
  gg:{reg:'sea',name:'Giant Gourami',sci:'Osphronemus goramy',local:'Kaloi',min:1,max:20,k:.024,fight:.85,jumps:0,dep:[.2,.6],
    look:{back:'#4a4a42',side:'#8a8a7a',side2:'#a8a490',belly:'#dcd8c4',fin:'#6a6a5a',pat:'gg',sc:14,gill:.77,
      B:{H:.48,at:.48,ped:.12,pedL:.06,top:.55,snY:-.04,blunt:1.6,sharp:1.25,W:.14,wAt:.6,hump:.05,humpAt:.8},
@@ -882,7 +900,7 @@ const SPECIES={
      tail:{k:'round',h:.2,len:.2},eye:{u:.87,t:.4,r:.03,col:'#c0a070'},mouth:{t:.56,len:.05,drop:.02}},
    pref:{popper:.25,buzz:0,frog:.15,spinner:.2,square:.15,crank:.15,deep:.05,jerk:.15,worm:.85,jig:.3,swim:0},
    about:'A deep-bodied, slow-moving giant with thread-like feelers for pelvic fins. Mostly plants, but it will take a worm.',
-   where:'The Floating Village and the Hydrilla Beds',tip:'A worm left still near the village stilts.',fightTxt:'A heavy, wide-bodied tug-of-war.'},
+   where:'Rimba Reservoir: Floating Village, Hydrilla Beds and karst',tip:'A worm left still near the village stilts.',fightTxt:'A heavy, wide-bodied tug-of-war.'},
  br:{reg:'sea',name:'Barramundi',sci:'Lates calcarifer',local:'Siakap',min:1,max:80,k:.0137,fight:1.45,jumps:.7,dep:[.3,.8],
    look:{back:'#4a5a60',side:'#a8b4b8',side2:'#c8d0d0',belly:'#f0f2ee',fin:'#6a7478',pat:'br',sc:24,metal:.5,gill:.74,
      B:{H:.3,at:.52,ped:.11,pedL:.06,top:.56,snY:.14,blunt:1.25,sharp:1.15,W:.14,wAt:.62},
@@ -890,7 +908,7 @@ const SPECIES={
      tail:{k:'round',h:.18,len:.19},eye:{u:.86,t:.3,r:.036,col:'#e86a30'},mouth:{t:.42,len:.19,drop:.09}},
    pref:{popper:.6,buzz:.4,frog:.2,spinner:.6,square:.7,crank:.7,deep:.45,jerk:.85,worm:.35,jig:.5,swim:.85},
    about:'The siakap. A silver giant with glowing red eyes that ambushes from snags and is famous for leaping when hooked.',
-   where:'The Drowned Forest and the Dam Basin',tip:'Jerkbaits and swimbaits twitched past the timber, especially at dusk.',fightTxt:'Jumps and gill-rattles. Keep its head down.'},
+   where:'Rimba Reservoir: Dam Basin, Drowned Forest and karst',tip:'Jerkbaits and swimbaits twitched past the timber, especially at dusk.',fightTxt:'Jumps and gill-rattles. Keep its head down.'},
  rc:{reg:'sea',name:'Asian Redtail Catfish',sci:'Hemibagrus wyckioides',local:'Baung',min:.5,max:50,k:.0146,fight:1.35,jumps:0,dep:[.85,1],
    look:{back:'#3a4048',side:'#7a8288',side2:'#a0a6aa',belly:'#e8e8e2',fin:'#5a6064',pat:'rc',sc:0,gill:.8,
      B:{H:.2,at:.62,ped:.08,pedL:.05,top:.5,snY:-.05,blunt:1.6,sharp:1.25,W:.18,wAt:.8,flat:.35},
@@ -899,7 +917,7 @@ const SPECIES={
      barbels:[{u:.955,t:.42,len:.42,a:-.1,r:.004,droop:.25,spread:.4},{u:.985,t:.25,len:.06,a:.6,r:.003},{u:.97,t:.86,len:.1,a:-.9,r:.003,spread:.2},{u:.975,t:.76,len:.08,a:-.7,r:.003,spread:.3}]},
    pref:{popper:0,buzz:0,frog:0,spinner:.2,square:.15,crank:.25,deep:.5,jerk:.1,worm:.9,jig:.8,swim:.25},
    about:'The baung. A powerful catfish with very long whiskers and a fiery red tail that patrols the deep basin.',
-   where:'The Dam Basin, near the bottom',tip:'Worms and jigs dragged slowly along the deep bottom.',fightTxt:'Deep, heavy runs. Keep it out of the old dam rubble.'},
+   where:'Sungai Deras: Waterfall Pool and fallen giants, near the bottom',tip:'Worms and jigs dragged slowly along the deep bottom.',fightTxt:'Deep, heavy runs. Keep it out of the old dam rubble.'},
  fb:{reg:'sea',name:'Giant Featherback',sci:'Chitala lopis',local:'Belida',min:3,max:30,k:.0098,fight:1.1,jumps:.1,legend:true,dep:[.3,.7],
    look:{back:'#5a5a48',side:'#a8aa9a',side2:'#c8cabe',belly:'#eceee6',fin:'#8a8c7e',pat:'fb',sc:6,metal:.5,gill:.8,
      B:{H:.3,at:.62,ped:.03,pedL:0,top:.6,snY:-.18,blunt:1.6,sharp:1.3,W:.085,wAt:.7,hump:.03,humpAt:.7},
@@ -1842,6 +1860,26 @@ function buildLandmarksGlacier(){
       for(let k=0;k<2;k++){const e=rr(3,26),q=shorePt(a+rr(-.02,.02),e);const b=put('boulders',q.x,terrainH(q.x,q.z)-.4,q.z,R()*TAU,rr(.7,1.2));}}
   });
 }
+function buildLandmarksDeras(){
+  loadKit('models/deras_kit.glb',41,({K,R,rr,put,atShore,bend,spanLine,across})=>{
+    // the waterfall at the head of the pool
+    atShore('waterfall',RG.fallAng,4,-1,1.9);
+    // rope bridge across the narrows
+    {const F=RG.fallAng,Rf=SHORE(F)*.8,A=F+Math.PI/2,[p0,p1]=across({x:Math.cos(F)*Rf,z:Math.sin(F)*Rf},Math.cos(A),Math.sin(A),4),dx=p1.x-p0.x,dz=p1.z-p0.z,len=Math.hypot(dx,dz);
+      const m=put('rope_bridge',(p0.x+p1.x)/2,2,(p0.z+p1.z)/2,-Math.atan2(dz,dx));if(m)m.scale.x=len/60;}  // just below the falls, where the pool narrows
+    // kampung: stilt houses on the bank, plank jetty, sampans
+    {const A=ZBY.dock.ang;atShore('jetty',A,1,0);
+      for(const[da,e] of[[.07,11],[-.08,12],[.17,16],[-.19,15]]){const q=shorePt(A+da,e);atShore('kampung_house',A+da,e,terrainH(q.x,q.z)-.4,1,rr(-.2,.2));}
+      for(const[da,e] of[[.03,-8],[-.04,-6],[.05,-12]]){const q=shorePt(A+da,e),b=put('sampan',q.x,0,q.z,R()*TAU);if(b)SCN.bob.push({o:b,ph:R()*TAU,amp:.05});OBST.push({x:q.x,z:q.z,r:2.5});}}
+    // granite boulders: the Boulder Run, the rapids below the falls, and a few along the banks
+    for(const[a0,a1,n] of[[ZBY.rocks.ang-.3,ZBY.rocks.ang+.3,26],[ZBY.weeds.ang-.25,ZBY.weeds.ang+.3,14],[-Math.PI,Math.PI,18]])
+      for(let k=0;k<n;k++){const a=rr(a0,a1),e=rr(-12,3),q=shorePt(a,e);const d=depthAt(q.x,q.z);if(d>4)continue;put('river_boulders',q.x,-Math.max(0,d)*.55,q.z,R()*TAU,rr(.6,1.2));if(d>0)OBST.push({x:q.x,z:q.z,r:4});}
+    // fallen jungle giants
+    for(let k=0;k<7;k++)atShore('fallen_tree',ZBY.stumps.ang+(k-3)*.06+rr(-.015,.015),5,0,rr(.9,1.25),rr(-.35,.35));
+    // bamboo: thick along the Bamboo Bank, scattered elsewhere
+    for(let k=0;k<70;k++){const a=k<34?ZBY.lily.ang+rr(-.35,.35):rr(-Math.PI,Math.PI),e=rr(1,7),q=shorePt(a,e);if(inClear(q.x,q.z))continue;put('bamboo',q.x,terrainH(q.x,q.z)-.2,q.z,R()*TAU,rr(.8,1.2));}
+  });
+}
 function buildLandmarksRegion(){
   const R=mulberry(91);const rr=(a,b)=>a+R()*(b-a);const K=RG.id;
   const L=(c,o)=>new THREE.MeshLambertMaterial(Object.assign({color:c},o||{}));
@@ -1980,7 +2018,7 @@ function buildLandmarksRegion(){
   }
 }
 
-if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else if(RG.id==='nw2')buildLandmarksGlacier();else buildLandmarksRegion();
+if(RG.id==='us')buildLandmarksUS();else if(RG.id==='us2')buildLandmarksBluff();else if(RG.id==='nw2')buildLandmarksGlacier();else if(RG.id==='sea2')buildLandmarksDeras();else buildLandmarksRegion();
 function updScenery(){
   if(SCN.mill)SCN.mill.rotation.z=G.time*(.6+1.2*U.wind.value);
   for(const b of SCN.bob){b.o.position.y=Math.sin(G.time*1.3+b.ph)*b.amp*U.waveAmp.value;b.o.rotation.z=Math.sin(G.time*1.1+b.ph)*.06;b.o.rotation.x=Math.cos(G.time*.9+b.ph)*.05;}
