@@ -97,5 +97,6 @@ Each region is getting two lakes with 5 species each, so players travel to catch
 Progress: US (Bluff Reservoir, `bluff_kit.py`) done; Canada (Glacier Lake `nw2`, `glacier_kit.py`) done; Malaysia (Sungai Deras `sea2`, `deras_kit.py`) done; Amazon (Praia Branca `amz2`, `praia_kit.py`) done. All four regions have two lakes.
 New kits use `tools/env_kits/kitlib.py`; in the game `loadKit(url, seed, fn)` gives `put`, `atShore`, `bend`, `spanLine`, `across`.
 Lake flags added: `beaches` (bent white beach strips), `noMarsh`, `timber` (0 = no drowned trees or igapó), `snag` (snag banner word), `snow` (snow line on far hills), `rockSect`.
-Realism pass (Nov 15): Rimba `rimba_kit.py` (karst towers, drowned trees, raft houses) done; Rio Negro (praia kit beaches + riverboat) done; Loon Lake `shield_kit.py` (granite whalebacks, erratics, beaver lodge) done; Lunker Lake `midwest_kit.py` (weeping willows, private docks with lifts) + grey granite point done.
+Realism pass (Nov 15) — ALL 8 LAKES DONE: Rimba `rimba_kit.py` (karst towers, drowned trees, raft houses) done; Rio Negro (praia kit beaches + riverboat) done; Loon Lake `shield_kit.py` (granite whalebacks, erratics, beaver lodge) done; Lunker Lake `midwest_kit.py` (weeping willows, private docks with lifts) + grey granite point done.
 `loadKit` now shares one loader and caches each kit file, so several builders can use the same kit.
+Extras done: sharper catch-card fish (SPR_HI 1100), Glacier Lake gravel delta, Bluff Reservoir red cedars.
